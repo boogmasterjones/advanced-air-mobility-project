@@ -159,9 +159,22 @@ Python libraries available (pip): herbie-data, xarray, cfgrib, eccodes, ortools,
 
 We could not find a tool that compares car, drone and air taxi per incident with weather reliability and cited receipts. We make no strong novelty claim.
 
-## 10. Unresolved (check these on day 1)
+## 10. Hackathon rules (Florida Tech Showcase AI Hackathon) [official]
 
-1. Hackathon rules, rubric, deadline, allowed APIs. A search found no page for this event.
+Source: [rules page](https://drreacto.github.io/florida_poly_ai_hackathon/rules.html). The page is built with JavaScript, so open it in a browser if the text looks empty. Questions go to ai-hackathon@floridapoly.edu.
+
+- **Theme:** "Cleared for Takeoff: AI for Florida's Skies." Build an AI-powered solution with a working interface that makes Advanced Air Mobility in Florida safer, more efficient, or more accessible. The AI must do a real job; a chatbot added on top does not count.
+- **Dates:** development Nov 10 to Dec 2; registration closes Nov 30; **submission (demo video and GitHub repo) due Dec 2, 4:00 PM**; live presentation and judging Dec 3 (check-in 12:30 PM, judging 1:00 PM, awards 3:30 PM). Late submissions are not accepted.
+- **Must have:** an integrated LLM; **hosted on Google Cloud Platform with public access** (GCP credits provided); a user-friendly interface; a working prototype (mockups without a functional backend do not qualify); a public repository with clear documentation, complete setup instructions and an **open-source license**.
+- **Demo video:** 3 to 5 minutes, narrated; explains the problem, key features and the role of AI; includes a live walkthrough.
+- **Live day:** one laptop per team; a 4-foot table; judges ask a mandatory "Future Work" question about scalability and vision.
+- **Judging:** a 70-point rubric over 7 areas: demo video, live presentation and Q&A, technical feasibility and implementation, meets theme objectives, usability and user interface, creativity and innovation, future work and scalability. Prizes are to be announced.
+- **Other rules:** teams of 2 to 4; students enrolled in a Florida college or university; the team pays LLM credit costs; AI coding assistants are allowed, but copying an existing solution disqualifies; no secrets in the public repo; no real personal or sensitive data. Registration fee is $5 per participant (Florida Poly) or $10 (other Florida schools).
+- **Support:** workshops on Google Cloud basics, building with LLM APIs, and agentic workflows (LangChain); office hours with judges and mentors on the event Discord.
+
+## 11. Unresolved (check these on day 1)
+
+1. Whether GCP credits cover Vertex AI model usage (ask organizers).
 2. FDOT road-speed data (request pending).
 3. The 135.609 weather minimums table.
 4. The current trauma center list with coordinates (hand-build from floridahealth.gov).
@@ -176,6 +189,7 @@ We could not find a tool that compares car, drone and air taxi per incident with
 
 ## Sources
 
+- [Hackathon rules](https://drreacto.github.io/florida_poly_ai_hackathon/rules.html)
 - [Joby technology page](https://www.jobyaviation.com/technology)
 - [Beta aircraft page](https://beta.team/aircraft)
 - [Joby noise tests with NASA](https://ainonline.com/aviation-news/business-aviation/2022-05-10/joby-nasa-test-flights-prove-evtols-low-noise-levels)
