@@ -1,0 +1,40 @@
+"""Receipts ledger: every fact the app shows has an id, a source and a timestamp."""
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from typing import Literal
+
+from pydantic import BaseModel, Field
+
+Confidence = Literal["official", "reported", "estimate", "assumption", "simulated", "computed"]
+
+
+class Fact(BaseModel):
+    id: str
+    label: str
+    value: float | str | bool | None
+    unit: str = ""
+    source: str
+    fetched_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    confidence: Confidence
+
+
+class Ledger:
+    """Collects facts for one case. Ids are short (F1, F2, ...) so the LLM can cite them."""
+
+    def __init__(self) -> None:
+        self._facts: dict[str, Fact] = {}
+
+    def add(self, label: str, value, *, source: str, confidence: Confidence, unit: str = "",
+            fetched_at: datetime | None = None) -> str:
+        fact_id = f"F{len(self._facts) + 1}"
+        kwargs = {"fetched_at": fetched_at} if fetched_at else {}
+        self._facts[fact_id] = Fact(id=fact_id, label=label, value=value, unit=unit,
+                                    source=source, confidence=confidence, **kwargs)
+        return fact_id
+
+    def get(self, fact_id: str) -> Fact | None:
+        return self._facts.get(fact_id)
+
+    def all(self) -> list[Fact]:
+        return list(self._facts.values())

@@ -1,0 +1,26 @@
+{
+  "_note": "Each value carries a confidence tag. 'assumption' values are ours and must stay visible in the app. See RESEARCH.md section 2.",
+  "air_taxi_a": {
+    "label": "Air taxi A (Joby-like, simulated)",
+    "passengers": {"value": 4, "confidence": "official"},
+    "cruise_mph": {"value": 150, "confidence": "assumption", "note": "Below the official 200 mph maximum"},
+    "range_mi": {"value": 100, "confidence": "reported"},
+    "launch_delay_min_median": {"value": 15, "confidence": "assumption"},
+    "reserve_min": {"value": 20, "confidence": "official", "note": "FAA powered-lift rule, vertical landing capable"},
+    "needs_runway": false
+  },
+  "helicopter": {
+    "label": "Helicopter air ambulance (baseline)",
+    "cruise_mph": {"value": 140, "confidence": "assumption"},
+    "range_mi": {"value": 300, "confidence": "assumption"},
+    "launch_delay_min_median": {"value": 9, "confidence": "reported", "note": "Montana median lift-off time"},
+    "reserve_min": {"value": 20, "confidence": "official"},
+    "needs_runway": false
+  },
+  "ground_ambulance": {
+    "label": "Ground ambulance",
+    "avg_mph": {"value": 50, "confidence": "assumption", "note": "Replaced by routed times once OSRM caching lands"},
+    "detour_factor": {"value": 1.3, "confidence": "assumption"},
+    "dispatch_delay_min_median": {"value": 5, "confidence": "assumption"}
+  }
+}
