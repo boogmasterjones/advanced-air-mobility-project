@@ -1,6 +1,6 @@
 # Build plan: team "claude's plan"
 
-Working title: **Car or Air**. Rules: [Florida Tech Showcase AI Hackathon](https://drreacto.github.io/florida_poly_ai_hackathon/rules.html). Research is in `RESEARCH.md`.
+Working title: **Car or Air**. Rules: [Florida Tech Showcase AI Hackathon](https://drreacto.github.io/florida_poly_ai_hackathon/rules.html). Research is in `RESEARCH.md`. **Who does what, with dates: `docs/TASKS.md`. Team rules: `CLAUDE.md`.** Person A is boogmasterjones, Person B is Jaden.
 
 **Time we actually have:** Tue Nov 17 to **Wed Dec 2, 4:00 PM** is about 15 days. At 20 hours a week each, that is roughly **85 person-hours**. Thanksgiving (Nov 26) falls in the middle. This plan assumes you code with an AI assistant, which the rules allow.
 

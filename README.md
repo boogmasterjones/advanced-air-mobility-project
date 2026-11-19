@@ -22,11 +22,13 @@ Florida is the U.S. lightning capital, and air taxis are starting test flights h
 ## Repository layout
 
 ```
-backend/    FastAPI app: app/core (weather, decision, ledger, verifier), app/llm, tests
+backend/    FastAPI app: app/api (routes), app/contracts.py (API shapes), app/core (weather, decision, ledger, verifier), app/llm, tests
 frontend/   React + TypeScript + Vite + MapLibre
 data/       seeds/fl_heliports.csv (FAA, Oct 29 2026 cycle), seeds/stations.csv, aircraft_profiles.json
 eval/       evaluation datasets (prompt-injection cases so far)
 scripts/    check_data_access.py: tests every data source from your machine
+docs/       TASKS.md (task board and dates), JADEN_START_HERE.md (teammate onboarding)
+CLAUDE.md   team rules for humans and Claude sessions
 PLAN.md     build plan and calendar     RESEARCH.md   sourced research notes
 ```
 
@@ -39,7 +41,7 @@ Requirements: Python 3.11+ (3.13 tested), Node 20+ (22 tested).
 cd backend
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python -m pytest -q                 # 7 tests should pass
+python -m pytest -q                 # all tests should pass
 uvicorn app.main:app --reload --port 8000
 
 # 2. Frontend (terminal 2)

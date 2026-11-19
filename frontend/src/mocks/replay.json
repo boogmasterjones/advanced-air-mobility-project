@@ -1,0 +1,24 @@
+{
+  "_sample": "MOCK DATA for building the Time Machine screen before task A6 lands",
+  "as_of": "2024-07-15T19:00:00Z",
+  "then": {
+    "disclaimer": "PROTOTYPE. Not for real dispatch. Aircraft are simulated. Road times are modeled.",
+    "origin": {"faa_id": "61FL", "name": "TAMPA GENERAL HOSPITAL", "city": "TAMPA", "lat": 27.93926666, "lon": -82.45946666},
+    "dest": {"faa_id": "44FA", "name": "ORLANDO HEALTH LAKELAND", "city": "LAKELAND", "lat": 27.99444444, "lon": -81.91777777},
+    "options": [
+      {"strategy": "ground_only", "status": "OK", "p_by_deadline": 0.72, "median_min": 52.0, "range_min": [44.0, 66.0], "reasons": ["road time is modeled, not live traffic"], "fact_ids": ["F1", "F2"]},
+      {"strategy": "air_only", "status": "OK", "p_by_deadline": 0.41, "median_min": 31.0, "range_min": [27.0, 38.0], "reasons": ["storms likely after 3 pm"], "fact_ids": ["F1", "F3"]},
+      {"strategy": "air_and_ground", "status": "OK", "p_by_deadline": 0.84, "median_min": 40.0, "range_min": [28.0, 60.0], "reasons": ["ground backup always moving"], "fact_ids": ["F1", "F2", "F3"]}
+    ],
+    "recommended": "air_and_ground",
+    "facts": [
+      {"id": "F1", "label": "Straight-line distance", "value": 33.4, "unit": "mi", "source": "computed from FAA coordinates", "fetched_at": "2024-07-15T19:00:00Z", "confidence": "computed"},
+      {"id": "F2", "label": "Road congestion factor at 15:00", "value": 1.0, "unit": "", "source": "modeled (no live traffic data)", "fetched_at": "2024-07-15T19:00:00Z", "confidence": "assumption"},
+      {"id": "F3", "label": "Chance the corridor is flyable in the next 1 h", "value": 0.46, "unit": "", "source": "forecaster (sample)", "fetched_at": "2024-07-15T19:00:00Z", "confidence": "computed"}
+    ],
+    "decision_owner": "human dispatcher (approve / hold / override)"
+  },
+  "actual_flyable": false,
+  "actual_best_strategy": "air_and_ground",
+  "regret_min": 0.0
+}

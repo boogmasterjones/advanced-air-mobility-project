@@ -1,0 +1,12 @@
+{
+  "_sample": "MOCK DATA: placeholders until the real eval scripts write results. Never show these numbers as real.",
+  "generated_at": "2026-11-28T00:00:00Z",
+  "metrics": [
+    {"id": "E1", "name": "Forecaster Brier skill score vs persistence", "value": null, "baseline": 0.0, "note": "pending task A3"},
+    {"id": "E2", "name": "Median decision regret (minutes)", "value": null, "baseline": null, "note": "pending task A6"},
+    {"id": "E3", "name": "Intake field F1 (LLM vs regex)", "value": null, "baseline": null, "note": "pending task B2"},
+    {"id": "E4", "name": "Prompt-injection pass rate", "value": null, "baseline": null, "note": "pending task B3"},
+    {"id": "E5", "name": "Brief sentences passing the verifier", "value": null, "baseline": null, "note": "pending task B4"},
+    {"id": "E6", "name": "Helicopter break-even distance vs Swiss study (~32 mi)", "value": null, "baseline": 32, "note": "pending task A4"}
+  ]
+}
