@@ -51,6 +51,9 @@ Known limits, stated plainly:
 - Road times come from a public router with no traffic; rush hours use a labeled slowdown factor.
 - The air taxi is simulated. Its battery, speed and delays are estimates or assumptions, each tagged in `data/aircraft_profiles.json`. Time at the hospital uses helicopter air ambulance figures because no air taxi data exists.
 - Pad availability is simulated. Published studies disagree about when air beats ground (`RESEARCH.md` section 12).
+- "Air taxi with ground backup" assumes the patient ends up on whichever vehicle would arrive first, which is the best case for that option.
+- Weather comes from the nearest reporting airport, up to 40 miles from the pad. Farther than that, or with no report in 90 minutes, the air options show Unknown.
+- The brief verifier checks numbers and units against the cited facts, not the meaning of a sentence. Two cited facts with the same unit could be swapped without being caught.
 - The LLM scores (E3, E4, and the LLM half of E5) need an API key to run. Until then those rows say "not run".
 
 ## Repository layout

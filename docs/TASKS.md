@@ -7,8 +7,8 @@ boogmasterjones asked a Claude session to build as much as possible in one pass,
 | Task | State | Notes |
 |---|---|---|
 | A0 Deploy | **Blocked** | The Google Cloud billing account is closed (the free trial asks for a prepayment). The project `car-or-air` exists. Deploy as soon as billing works: the command is in the README. |
-| A1 to A7 | Done | Weather is all of 2019 to 2024 (not only summers) at 21 airports, so the forecaster also works in winter and the Time Machine can replay any 2024 date. |
-| A8 Always an Out | Not started | Stretch. |
+| A1 to A7 | Done | Weather is all of 2019 to 2024 (not only summers) at 41 airports, so the forecaster also works in winter and the Time Machine can replay any 2024 date. |
+| A8 Always an Out | First version | The map and the receipts show whether a landing place stays within energy reach along the flight. |
 | B1 Intake | First version | Works with the offline parser. The Anthropic path is written with the official SDK but **has never run against a real key**. Facility matching is in `backend/app/llm/match.py`. |
 | B2, B3 Evals | Scripts and data done | 100 intake cases and 30 injection cases. Only the regex baseline has scores. **Run both with a key** to fill in the LLM numbers. |
 | B4 Brief | First version | Offline template plus LLM path (same caveat). The verifier now also checks units. |

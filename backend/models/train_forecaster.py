@@ -33,6 +33,8 @@ from app.core.weather import THRESHOLDS
 from data_build import metrics
 from data_build.baselines import PROCESSED, RESULTS, TEST_YEAR, load_dataset
 
+from .season_report import add_seasons
+
 MODEL_DIR = Path(__file__).resolve().parent / "forecaster_v1"
 MODEL_NAME = "lightgbm-v1"
 P_MIN, P_MAX = 0.01, 0.99  # never claim certainty
@@ -119,6 +121,7 @@ def main() -> int:
             "trained_at": evidence["generated_at"], "lightgbm": lgb.__version__,
             "p_min": P_MIN, "p_max": P_MAX, "rounds": {}, "calibration": {}}
     models = {}
+    season_preds: dict[int, np.ndarray] = {}
 
     for j, h in enumerate(HORIZONS):
         y = ds["Y"][:, j].astype(int)
@@ -141,6 +144,8 @@ def main() -> int:
 
         te = test_rows & known
         p = apply_calibration(model.predict(X[te]), xs, ys)
+        season_preds[h] = np.full(len(y), np.nan)
+        season_preds[h][te] = p
         has_taf = ~np.isnan(base["taf"][te, j])
         block = {
             "flyable_rate": round(float(y[te].mean()), 4),
@@ -201,6 +206,7 @@ def main() -> int:
          "note": note + " Airports with an official forecast only; the forecast was calibrated "
                         "on the same training years."},
     ]
+    add_seasons(evidence, ds, base, season_preds)  # storm season against the rest of the year
     RESULTS.mkdir(parents=True, exist_ok=True)
     (RESULTS / "e1.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
     print(f"Saved models to {MODEL_DIR} and evidence to {RESULTS / 'e1.json'}")

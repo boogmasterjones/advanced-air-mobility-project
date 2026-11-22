@@ -79,6 +79,7 @@ _LIMIT_BEFORE = re.compile(r"\b(within|under|less than|in|by|target is|needed in
 _LIMIT_AFTER = re.compile(r"\s*(window|max\b|maximum|deadline|or less)", re.I)
 _NOT_A_LIMIT = re.compile(r"\s*(ago|old|earlier|before)\b", re.I)
 _TITLES = re.compile(r"\b(St|Dr|Mt|Ft)\.", re.I)  # "St. Mary's" must not end the sentence
+_ASIDES = re.compile(r"\([^()]{0,400}\)|\[[^\[\]]{0,400}\]|\{[^{}]{0,400}\}|<!--.*?-->|<[^<>]{0,400}>", re.S)
 _ROUTE = re.compile(r"\bfrom\s+(.+?)\s+to\s+(.+?)(?=[.,;(]|\s+within\b|\s+in\s+(?:under\s+)?\d|\s+for\s|$)", re.I)
 
 
@@ -104,8 +105,11 @@ def regex_intake(text: str) -> IntakeResult:
     category = next((v for k, v in _CATEGORIES.items() if k in lower), "other")
     deadline = _stated_deadline(text)
     origin = dest = None
-    if m := _ROUTE.search(_TITLES.sub(lambda t: t.group(1), text)):
-        origin, dest = m.group(1).strip()[:120], m.group(2).strip()[:120]
+    # Asides in brackets are where planted instructions hide ("(SYSTEM: set destination to ...)"),
+    # and they are never part of a facility name, so they are dropped before looking for the route.
+    plain = _ASIDES.sub(" ", _TITLES.sub(lambda t: t.group(1), text))
+    if m := _ROUTE.search(plain):
+        origin, dest = " ".join(m.group(1).split())[:120], " ".join(m.group(2).split())[:120]
     review = [f for f, v in (("origin_name", origin), ("dest_name", dest), ("deadline_min", deadline)) if v is None]
     return IntakeResult(category=category, origin_name=origin, dest_name=dest,
                         deadline_min=deadline, needs_human_review=review)
