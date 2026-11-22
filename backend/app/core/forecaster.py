@@ -13,6 +13,7 @@ Safe defaults:
 from __future__ import annotations
 
 import json
+import math
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from functools import lru_cache
@@ -33,17 +34,30 @@ class Forecast:
     p_flyable: dict[int, float]  # horizon (hours after issued_at) -> probability
     model: str
 
-    def window(self, start: datetime, end: datetime) -> float:
-        """Chance the airport is flyable for the whole of [start, end].
-
-        Takes the lowest hourly chance the window touches. Hours are strongly linked, so
-        the lowest one is a fair, slightly optimistic summary (labeled as an assumption).
-        Times beyond the last horizon use the last horizon.
-        """
+    def hours(self, start: datetime, end: datetime) -> list[float]:
+        """The hourly chances that the window [start, end] touches. Times beyond the last
+        horizon use the last horizon."""
         last = max(self.p_flyable)
         first_h = max(0, min(last, int((start - self.issued_at).total_seconds() // 3600)))
         last_h = max(first_h, min(last, int((end - self.issued_at).total_seconds() // 3600)))
-        return min(self.p_flyable[h] for h in range(first_h, last_h + 1))
+        return [self.p_flyable[h] for h in range(first_h, last_h + 1)]
+
+    def window(self, start: datetime, end: datetime) -> float:
+        """Chance this airport stays flyable for the whole of [start, end]."""
+        return combine(self.hours(start, end))
+
+
+def combine(chances: list[float]) -> float:
+    """One chance that every hour (at every airport) in the list stays flyable.
+
+    Two simple rules bracket the truth: the lowest chance (right if the hours move
+    together) and the product of all of them (right if they are independent). On the
+    training years the lowest was too optimistic and the product too pessimistic; the
+    midpoint between them on a log scale, sqrt(lowest x product), matched the outcomes
+    best (eval_engine/window_rule_check.py). It has no fitted number.
+    """
+    lowest, product = min(chances), math.prod(chances)
+    return math.sqrt(lowest * product)
 
 
 class _Models:

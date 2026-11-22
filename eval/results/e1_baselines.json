@@ -1,6 +1,6 @@
 {
   "task": "A2 baselines for E1",
-  "generated_at": "2026-11-22T21:58:34+00:00",
+  "generated_at": "2026-11-22T23:08:41+00:00",
   "what_is_predicted": "chance that every weather report in the 60 minutes starting h hours from now meets the flyable thresholds",
   "thresholds": {
     "min_visibility_mi": 3.0,
@@ -37,7 +37,27 @@
     "KVRB",
     "KFMY",
     "KLNA",
-    "KBCT"
+    "KBCT",
+    "KDJT",
+    "KAPF",
+    "KOCF",
+    "KFPR",
+    "KSUA",
+    "KPGD",
+    "KECP",
+    "KVPS",
+    "KCRG",
+    "KSPG",
+    "KISM",
+    "KLEE",
+    "KBKV",
+    "KOPF",
+    "KTMB",
+    "KFXE",
+    "KSEF",
+    "KOBE",
+    "KMTH",
+    "KTIX"
   ],
   "stations_with_taf": [
     "KTPA",
@@ -57,224 +77,239 @@
     "KPNS",
     "KEYW",
     "KVRB",
-    "KFMY"
+    "KFMY",
+    "KBCT",
+    "KDJT",
+    "KAPF",
+    "KFPR",
+    "KSUA",
+    "KPGD",
+    "KECP",
+    "KCRG",
+    "KISM",
+    "KLEE",
+    "KOPF",
+    "KTMB",
+    "KFXE",
+    "KMTH",
+    "KTIX"
   ],
   "taf_category_flyable_rate_in_training": {
     "0": {
       "prevailing_bad": {
-        "train_hours": 3906,
-        "flyable_rate": 0.3876
+        "train_hours": 51107,
+        "flyable_rate": 0.3416
       },
       "tempo_bad": {
-        "train_hours": 17330,
-        "flyable_rate": 0.5509
+        "train_hours": 55442,
+        "flyable_rate": 0.5277
       },
       "prob_bad": {
-        "train_hours": 0,
-        "flyable_rate": 0.9077
+        "train_hours": 4,
+        "flyable_rate": 0.9129
       },
       "vicinity_ts": {
-        "train_hours": 31635,
-        "flyable_rate": 0.7862
+        "train_hours": 71524,
+        "flyable_rate": 0.7805
       },
       "clean": {
-        "train_hours": 207131,
-        "flyable_rate": 0.9659
+        "train_hours": 1173395,
+        "flyable_rate": 0.9641
       }
     },
     "1": {
       "prevailing_bad": {
-        "train_hours": 3573,
-        "flyable_rate": 0.4503
+        "train_hours": 48965,
+        "flyable_rate": 0.3853
       },
       "tempo_bad": {
-        "train_hours": 14056,
-        "flyable_rate": 0.621
+        "train_hours": 43316,
+        "flyable_rate": 0.5927
       },
       "prob_bad": {
-        "train_hours": 0,
-        "flyable_rate": 0.9076
+        "train_hours": 4,
+        "flyable_rate": 0.913
       },
       "vicinity_ts": {
-        "train_hours": 35348,
-        "flyable_rate": 0.7788
+        "train_hours": 80088,
+        "flyable_rate": 0.774
       },
       "clean": {
-        "train_hours": 206701,
-        "flyable_rate": 0.9571
+        "train_hours": 1175508,
+        "flyable_rate": 0.9562
       }
     },
     "2": {
       "prevailing_bad": {
-        "train_hours": 3483,
-        "flyable_rate": 0.4691
+        "train_hours": 47973,
+        "flyable_rate": 0.4089
       },
       "tempo_bad": {
-        "train_hours": 11804,
-        "flyable_rate": 0.6373
+        "train_hours": 34543,
+        "flyable_rate": 0.616
       },
       "prob_bad": {
-        "train_hours": 0,
-        "flyable_rate": 0.9076
+        "train_hours": 4,
+        "flyable_rate": 0.913
       },
       "vicinity_ts": {
-        "train_hours": 38026,
-        "flyable_rate": 0.7824
+        "train_hours": 86379,
+        "flyable_rate": 0.7755
       },
       "clean": {
-        "train_hours": 206096,
-        "flyable_rate": 0.9536
+        "train_hours": 1175804,
+        "flyable_rate": 0.9524
       }
     },
     "3": {
       "prevailing_bad": {
-        "train_hours": 3478,
-        "flyable_rate": 0.4853
+        "train_hours": 47524,
+        "flyable_rate": 0.4237
       },
       "tempo_bad": {
-        "train_hours": 10569,
-        "flyable_rate": 0.6427
+        "train_hours": 29801,
+        "flyable_rate": 0.6241
       },
       "prob_bad": {
-        "train_hours": 1,
-        "flyable_rate": 0.9076
+        "train_hours": 5,
+        "flyable_rate": 0.913
       },
       "vicinity_ts": {
-        "train_hours": 39827,
-        "flyable_rate": 0.7826
+        "train_hours": 90813,
+        "flyable_rate": 0.7759
       },
       "clean": {
-        "train_hours": 205268,
-        "flyable_rate": 0.9527
+        "train_hours": 1173501,
+        "flyable_rate": 0.9507
       }
     }
   },
   "horizons": {
     "0": {
-      "flyable_rate": 0.8974,
+      "flyable_rate": 0.9087,
       "all_stations": {
         "persistence": {
-          "n": 58907,
-          "brier": 0.08751,
-          "auc": 0.7623
+          "n": 339100,
+          "brier": 0.06696,
+          "auc": 0.7983
         },
         "climatology": {
-          "n": 58907,
-          "brier": 0.08791,
-          "auc": 0.6878
+          "n": 339100,
+          "brier": 0.08077,
+          "auc": 0.6615
         }
       },
       "stations_with_taf": {
         "taf": {
-          "n": 52178,
-          "brier": 0.06958,
-          "auc": 0.7935
+          "n": 270019,
+          "brier": 0.05839,
+          "auc": 0.7847
         },
         "persistence": {
-          "n": 52178,
-          "brier": 0.08553,
-          "auc": 0.7604
+          "n": 270019,
+          "brier": 0.06524,
+          "auc": 0.7943
         },
         "climatology": {
-          "n": 52178,
-          "brier": 0.08563,
-          "auc": 0.6836
+          "n": 270019,
+          "brier": 0.07749,
+          "auc": 0.6555
         }
       }
     },
     "1": {
-      "flyable_rate": 0.8974,
+      "flyable_rate": 0.9087,
       "all_stations": {
         "persistence": {
-          "n": 58751,
-          "brier": 0.12352,
-          "auc": 0.6642
+          "n": 337817,
+          "brier": 0.09216,
+          "auc": 0.7224
         },
         "climatology": {
-          "n": 58751,
-          "brier": 0.08795,
-          "auc": 0.6878
+          "n": 337817,
+          "brier": 0.08073,
+          "auc": 0.6616
         }
       },
       "stations_with_taf": {
         "taf": {
-          "n": 52134,
-          "brier": 0.07455,
-          "auc": 0.7535
+          "n": 269197,
+          "brier": 0.06256,
+          "auc": 0.7501
         },
         "persistence": {
-          "n": 52134,
-          "brier": 0.1205,
-          "auc": 0.6626
+          "n": 269197,
+          "brier": 0.08924,
+          "auc": 0.7187
         },
         "climatology": {
-          "n": 52134,
-          "brier": 0.08569,
-          "auc": 0.6834
+          "n": 269197,
+          "brier": 0.07748,
+          "auc": 0.6554
         }
       }
     },
     "2": {
-      "flyable_rate": 0.8972,
+      "flyable_rate": 0.9087,
       "all_stations": {
         "persistence": {
-          "n": 58571,
-          "brier": 0.1422,
-          "auc": 0.6134
+          "n": 336638,
+          "brier": 0.10791,
+          "auc": 0.6749
         },
         "climatology": {
-          "n": 58571,
-          "brier": 0.08811,
-          "auc": 0.688
+          "n": 336638,
+          "brier": 0.08074,
+          "auc": 0.6615
         }
       },
       "stations_with_taf": {
         "taf": {
-          "n": 52090,
-          "brier": 0.0761,
-          "auc": 0.7383
+          "n": 268473,
+          "brier": 0.06435,
+          "auc": 0.7337
         },
         "persistence": {
-          "n": 52090,
-          "brier": 0.13805,
-          "auc": 0.6134
+          "n": 268473,
+          "brier": 0.10406,
+          "auc": 0.6721
         },
         "climatology": {
-          "n": 52090,
-          "brier": 0.08565,
-          "auc": 0.6834
+          "n": 268473,
+          "brier": 0.07748,
+          "auc": 0.6553
         }
       }
     },
     "3": {
-      "flyable_rate": 0.8971,
+      "flyable_rate": 0.9088,
       "all_stations": {
         "persistence": {
-          "n": 58423,
-          "brier": 0.15217,
-          "auc": 0.5858
+          "n": 335565,
+          "brier": 0.11837,
+          "auc": 0.6433
         },
         "climatology": {
-          "n": 58423,
-          "brier": 0.08816,
-          "auc": 0.6876
+          "n": 335565,
+          "brier": 0.08073,
+          "auc": 0.6613
         }
       },
       "stations_with_taf": {
         "taf": {
-          "n": 52050,
-          "brier": 0.07674,
-          "auc": 0.7333
+          "n": 267802,
+          "brier": 0.06535,
+          "auc": 0.7249
         },
         "persistence": {
-          "n": 52050,
-          "brier": 0.14767,
-          "auc": 0.5865
+          "n": 267802,
+          "brier": 0.11382,
+          "auc": 0.6414
         },
         "climatology": {
-          "n": 52050,
-          "brier": 0.08569,
-          "auc": 0.6836
+          "n": 267802,
+          "brier": 0.07748,
+          "auc": 0.6552
         }
       }
     }

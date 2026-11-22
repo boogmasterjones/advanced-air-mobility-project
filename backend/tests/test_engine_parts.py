@@ -10,14 +10,23 @@ MIN = timedelta(minutes=1)
 
 
 # ---- forecast window ------------------------------------------------------------------
-def test_window_takes_the_lowest_hour_it_touches():
+def test_window_uses_exactly_the_hours_the_flight_touches():
     fc = Forecast(issued_at=T0, p_flyable={0: 0.9, 1: 0.6, 2: 0.8, 3: 0.7}, model="test")
-    assert fc.window(T0 + 5 * MIN, T0 + 40 * MIN) == 0.9            # inside the first hour
-    assert fc.window(T0 + 30 * MIN, T0 + 90 * MIN) == 0.6           # first and second hour
-    assert fc.window(T0 + 70 * MIN, T0 + 170 * MIN) == 0.6          # second and third
-    assert fc.window(T0 + 130 * MIN, T0 + 150 * MIN) == 0.8         # third only
-    assert fc.window(T0 + 300 * MIN, T0 + 400 * MIN) == 0.7         # beyond the last hour: use the last
-    assert fc.window(T0 - 30 * MIN, T0 + 10 * MIN) == 0.9           # never looks before the first hour
+    assert fc.hours(T0 + 5 * MIN, T0 + 40 * MIN) == [0.9]           # inside the first hour
+    assert fc.hours(T0 + 30 * MIN, T0 + 90 * MIN) == [0.9, 0.6]     # first and second hour
+    assert fc.hours(T0 + 70 * MIN, T0 + 170 * MIN) == [0.6, 0.8]    # second and third
+    assert fc.hours(T0 + 130 * MIN, T0 + 150 * MIN) == [0.8]        # third only
+    assert fc.hours(T0 + 300 * MIN, T0 + 400 * MIN) == [0.7]        # beyond the last hour: use the last
+    assert fc.hours(T0 - 30 * MIN, T0 + 10 * MIN) == [0.9]          # never looks before the first hour
+    assert fc.window(T0 + 5 * MIN, T0 + 40 * MIN) == 0.9            # one hour: its own chance
+
+
+def test_combined_chance_sits_between_the_lowest_and_the_product():
+    from app.core.forecaster import combine
+    assert combine([0.8]) == 0.8 and combine([1.0, 1.0]) == 1.0 and combine([0.9, 0.0]) == 0.0
+    both = combine([0.9, 0.6])
+    assert 0.9 * 0.6 < both < 0.6 and abs(both - (0.6 * 0.54) ** 0.5) < 1e-12
+    assert combine([0.9, 0.6, 0.8, 0.7]) < both                      # more hours and airports: lower chance
 
 
 # ---- roads ----------------------------------------------------------------------------

@@ -93,11 +93,13 @@ def run_case(origin: dict, dest: dict, deadline: int, when: datetime) -> dict | 
     truth = replay.hindsight(built, origin, dest, deadline, flew)
     if any(o.status != "OK" for o in truth):
         return None  # out of range for the aircraft: nothing to compare
-    choices = {"ours": built.out["recommended"],
-               "weather_now": weather_now_choice(built, origin, dest, deadline, when),
-               "always_ground": "ground_only", "always_air": "air_only", "always_both": "air_and_ground"}
     weather_fact = next((f.value for f in built.out["facts"]
                          if f.label == "Chance the weather stays flyable for the flight"), None)
+    # Same information for both: where the app had no usable weather (silent or far-away
+    # airport) and fell back to ground, the old rule gets the same fallback.
+    rule_choice = weather_now_choice(built, origin, dest, deadline, when) if weather_fact is not None else "ground_only"
+    choices = {"ours": built.out["recommended"], "weather_now": rule_choice,
+               "always_ground": "ground_only", "always_air": "air_only", "always_both": "air_and_ground"}
     return {"when": when.isoformat(timespec="minutes"), "origin": origin["faa_id"], "dest": dest["faa_id"],
             "origin_name": origin["name"], "dest_name": dest["name"], "deadline_min": deadline,
             "actual_flyable": flew, "forecast_chance_pct": weather_fact,
@@ -145,6 +147,8 @@ def demo_days(cases: list[dict], path) -> list[dict]:
       saw it clearing the weather was bad at decision time, the old rule kept to ground,
                       the app sent the aircraft as well, and the flight got through"""
     def kind(c) -> str | None:
+        if c["forecast_chance_pct"] is None:
+            return None  # the app had no weather to forecast from: nothing to show off
         ours, rule = c["policies"]["ours"]["choice"], c["policies"]["weather_now"]["choice"]
         if not c["actual_flyable"] and ours == "ground_only" and rule != "ground_only":
             return "saw it coming"

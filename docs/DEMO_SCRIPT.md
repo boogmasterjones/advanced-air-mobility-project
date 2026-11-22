@@ -23,7 +23,8 @@ Before you start: open the app, check the yellow PROTOTYPE banner is visible, an
 1. Click one of the **Storm cases to try** chips (or enter a date from `docs/demo_days.md`).
 2. Left side: what the app said at that moment, using only the weather known then.
 3. Right side: what really happened, the best choice in hindsight, and the minutes lost.
-4. Say: the forecaster never saw this year in training. On the storm days the old "look at the weather right now" rule would have launched an aircraft for nothing; the forecaster saw it coming.
+4. Say: the forecaster never saw this year in training. In the "saw it clearing" case the weather looked bad at that moment, so a rule that only looks at the weather right now would have stayed on the ground and lost about half an hour; the forecaster gave a high chance that it would hold, and it did.
+5. Be straight about the trade-off (it is on the Evidence tab): across 200 replayed cases in active weather the app loses about 3 minutes on average against 4 for the old rule, but it sends an aircraft more often, and more of those launches end up not flying. How eager to be is a setting (`CLOSE_CALL` in `backend/app/core/decision.py`), and that choice belongs to the hospital.
 
 ## 4. Break it (30 seconds)
 

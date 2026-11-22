@@ -203,8 +203,9 @@ def build_case(*, origin: dict, dest: dict, deadline_min: int, now: datetime,
         weather_ids += _weather_facts(ledger, st, miles, role, w)
         reasons += [f"{st['icao']} now: {r}" for r in
                     weather.problems(w.visibility_mi, w.ceiling_ft, w.wind_kt, w.gust_kt, w.thunderstorm)]
-        p = w.forecast.window(start, end)
-        chances.append(p)
+        hourly = w.forecast.hours(start, end)
+        p = forecaster.combine(hourly)
+        chances.append(hourly)
         weather_ids.append(ledger.add(
             f"Chance {st['icao']} stays flyable during the flight", round(p * 100), unit="%",
             source=f"forecaster {w.forecast.model}, from the report above", confidence="computed",
@@ -214,7 +215,8 @@ def build_case(*, origin: dict, dest: dict, deadline_min: int, now: datetime,
                           "points": [{"hours_ahead": h, "p_flyable": round(v, 3)}
                                      for h, v in sorted(w.forecast.p_flyable.items())]})
 
-    p_weather = None if any(c is None for c in chances) else min(chances)
+    # Every hour the flight touches, at every airport, has to stay flyable (see forecaster.combine).
+    p_weather = None if any(c is None for c in chances) else forecaster.combine([p for c in chances for p in c])
     ground = decision.profiles()["ground_ambulance"]
     road = roads.route(origin, dest, ground)
     w0 = pickup_weather or StationWeather()
