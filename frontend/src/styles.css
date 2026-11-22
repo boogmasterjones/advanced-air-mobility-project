@@ -78,6 +78,15 @@ button.chip:hover { background: var(--series-soft); border-color: var(--series);
 .range-labels { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 13px; margin-top: 8px; color: var(--muted); }
 .range-labels strong { color: var(--ink); }
 
+.steps { margin: 10px 0 2px; }
+.steps-bar { display: flex; gap: 2px; height: 12px; margin: 8px 0; }
+.steps-bar div { min-width: 3px; border-radius: 2px; }
+.steps-bar div:first-child { border-radius: 4px 2px 2px 4px; } .steps-bar div:last-child { border-radius: 2px 4px 4px 2px; }
+.steps-list { list-style: none; margin: 0; padding: 0; font-size: 13px; }
+.steps-list li { display: grid; grid-template-columns: 12px 1fr auto; gap: 8px; align-items: center; padding: 2px 0; }
+.steps-list i { width: 12px; height: 12px; border-radius: 3px; }
+.steps-list strong { font-variant-numeric: tabular-nums; }
+
 .two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
 .brief p { font-size: 15px; }
 .forecast-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }

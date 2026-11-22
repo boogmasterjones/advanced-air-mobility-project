@@ -1,7 +1,7 @@
 // Building blocks shared by the case screen and the Time Machine.
 import { useEffect, useRef } from "react";
 import {
-  STATUS_LABEL, STRATEGY_LABEL, type Brief, type Fact, type Option, type StationForecast, type Strategy,
+  STATUS_LABEL, STRATEGY_LABEL, type Brief, type Fact, type Option, type StationForecast, type Step, type Strategy,
 } from "./api";
 
 const pct = (p: number) => `${Math.round(p * 100)}%`;
@@ -58,6 +58,9 @@ export function OptionCards({ options, recommended, deadline, onFact, suggestedL
                 <span aria-hidden="true">{o.status === "UNKNOWN" ? "?" : "×"}</span> {STATUS_LABEL[o.status]}
               </p>
             )}
+            {o.status === "OK" && o.steps && o.steps.length > 0 && (
+              <Steps steps={o.steps} flight={o.strategy !== "ground_only"} />
+            )}
             <ul className="reasons">{o.reasons.map((r) => <li key={r}>{r}</li>)}</ul>
             {onFact && (
               <p className="receipt-links">
@@ -74,6 +77,37 @@ export function OptionCards({ options, recommended, deadline, onFact, suggestedL
         Bars share one time scale. Dark tick: typical time. Band: 8 in 10 simulated trips. Red line: the deadline.
       </p>
     </div>
+  );
+}
+
+// One fixed color per kind of step, the same on every card (validated for color-blind
+// separation; every step is also listed in words with its minutes, so color is never alone).
+const STEP_COLOR: Record<Step["kind"], string> = {
+  wait: "#2a78d6", hospital: "#eb6834", travel: "#1baf7a", handoff: "#eda100", positioning: "#e87ba4",
+};
+
+/** Where the minutes go at typical values: a segmented bar plus the same data as a list. */
+function Steps({ steps, flight }: { steps: Step[]; flight: boolean }) {
+  const total = steps.reduce((sum, s) => sum + s.minutes, 0);
+  return (
+    <details className="steps" open>
+      <summary>Where the time goes{flight ? " when the flight happens" : ""} (about {Math.round(total)} min)</summary>
+      <div className="steps-bar" role="img" aria-label={steps.map((s) => `${s.label}: ${Math.round(s.minutes)} minutes`).join(", ")}>
+        {steps.map((s) => (
+          <div key={s.label} style={{ flexGrow: Math.max(s.minutes, 0.5), background: STEP_COLOR[s.kind] }}
+               title={`${s.label}: ${Math.round(s.minutes)} min`} />
+        ))}
+      </div>
+      <ul className="steps-list">
+        {steps.map((s) => (
+          <li key={s.label}>
+            <i style={{ background: STEP_COLOR[s.kind] }} aria-hidden="true" />
+            <span>{s.label}</span>
+            <strong>{Math.round(s.minutes)} min</strong>
+          </li>
+        ))}
+      </ul>
+    </details>
   );
 }
 

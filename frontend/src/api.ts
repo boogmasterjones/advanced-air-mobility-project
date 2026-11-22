@@ -16,7 +16,10 @@ export type Option = {
   range_min: [number, number] | null;
   reasons: string[];
   fact_ids: string[];
+  steps?: Step[]; // where the time goes at typical values
 };
+
+export type Step = { kind: "wait" | "positioning" | "hospital" | "travel" | "handoff"; label: string; minutes: number };
 
 export type Fact = {
   id: string; label: string; value: string | number | boolean | null; unit: string;

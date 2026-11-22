@@ -130,6 +130,16 @@ def test_every_option_fact_has_a_receipt():
         assert o.fact_ids and all(ledger.get(i) is not None for i in o.fact_ids)
 
 
+def test_steps_explain_where_the_time_goes():
+    by, _ = options(1.0, wind=energy.Wind(5, None, 0), temp_c=22)
+    ground = by["ground_only"]
+    assert [s["kind"] for s in ground.steps] == ["wait", "hospital", "travel", "handoff"]
+    assert abs(sum(s["minutes"] for s in ground.steps) - ground.median_min) < 0.15 * ground.median_min
+    assert by["air_only"].steps == by["air_and_ground"].steps
+    assert [s["kind"] for s in by["air_only"].steps] == ["wait", "hospital", "travel", "handoff"]  # no base given
+    assert all(s["minutes"] > 0 and s["label"] for o in by.values() for s in o.steps)
+
+
 def test_same_inputs_give_the_same_answer():
     assert options(0.7)[1] == options(0.7)[1]
 

@@ -53,19 +53,28 @@ class Option(BaseModel):
     range_min: tuple[float, float] | None
     reasons: list[str]
     fact_ids: list[str]
+    # Where the time goes at typical values: [{kind, label, minutes}]. For the air options
+    # these are the steps of the flight when it happens (the option's typical time above
+    # also counts the cases where the flight is called off).
+    steps: list[dict] = []
 
 
 def _lognormal(rng, median: float, sigma: float, n: int) -> np.ndarray:
     return rng.lognormal(np.log(median), sigma, n)
 
 
-def _summarize(name: str, times: np.ndarray, deadline_min: float, reasons: list[str], ids: list[str]) -> Option:
+def _step(kind: str, label: str, minutes: float) -> dict:
+    return {"kind": kind, "label": label, "minutes": round(float(minutes), 1)}
+
+
+def _summarize(name: str, times: np.ndarray, deadline_min: float, reasons: list[str], ids: list[str],
+               steps: list[dict]) -> Option:
     return Option(strategy=name, status="OK",
                   p_by_deadline=round(float(np.mean(times <= deadline_min)), 3),
                   median_min=round(float(np.median(times)), 1),
                   range_min=(round(float(np.percentile(times, 10)), 1),
                              round(float(np.percentile(times, 90)), 1)),
-                  reasons=reasons, fact_ids=ids)
+                  reasons=reasons, fact_ids=ids, steps=steps)
 
 
 def _blocked(name: str, status: str, reasons: list[str], ids: list[str]) -> Option:
@@ -112,7 +121,13 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
     ground_ids = [f_road, f_drive, f_cong, f_wait, f_gload, f_hand]
     ground_reasons = ["road time has no live traffic; rush hours use a modeled slowdown"
                       if road.routed else "road time is modeled from straight-line distance, not routed"]
-    options = [_summarize("ground_only", ground_t, deadline_min, ground_reasons, ground_ids)]
+    ground_steps = [
+        _step("wait", "Ambulance on its way to the sending hospital", _v(ground, "dispatch_delay_min_median")),
+        _step("hospital", "At the sending hospital", _v(ground, "load_min_median")),
+        _step("travel", "Drive", road.minutes * congestion),
+        _step("handoff", "Handoff at the receiving hospital", _v(ground, "handoff_min_median")),
+    ]
+    options = [_summarize("ground_only", ground_t, deadline_min, ground_reasons, ground_ids, ground_steps)]
 
     # ---- Air ------------------------------------------------------------------------
     flight_mi = haversine_mi(origin["lat"], origin["lon"], dest["lat"], dest["lon"])
@@ -193,13 +208,21 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
         if out["always_reachable"] else
         f"around mile {round(out['worst_at_mile'])} of the flight, no landing place is within reach without using the reserve")
     late_min = round(float(np.median(late)))
+    air_steps = [_step("wait", "Call to lift-off at the base", _v(air, "launch_delay_min_median"))]
+    if base is not None:
+        air_steps.append(_step("positioning", "Flight from the base to the pick-up pad", np.median(power.leg_minutes[0])))
+    air_steps += [
+        _step("hospital", "At the sending hospital", _v(air, "load_min_median")),
+        _step("travel", "Flight", np.median(power.leg_minutes[-1])),
+        _step("handoff", "Landing to handover", _v(air, "unload_min_median")),
+    ]
     options.append(_summarize("air_only", np.where(flies, air_t, late + ground_t), deadline_min,
                               air_reasons + [f"if the flight is called off, an ambulance starts about {late_min} min late"],
-                              air_ids + ground_ids))
+                              air_ids + ground_ids, air_steps))
     options.append(_summarize("air_and_ground", np.where(flies, np.minimum(air_t, ground_t), ground_t),
                               deadline_min,
                               ["ambulance leaves right away as the backup; uses two vehicles"] + air_reasons,
-                              air_ids + ground_ids))
+                              air_ids + ground_ids, air_steps))
     return options
 
 

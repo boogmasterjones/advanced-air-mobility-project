@@ -38,6 +38,7 @@ class OptionOut(BaseModel):
     range_min: tuple[float, float] | None
     reasons: list[str]
     fact_ids: list[str]
+    steps: list[dict] = []  # optional: where the time goes, [{kind, label, minutes}] at typical values
 
 
 class CaseOut(BaseModel):
