@@ -1,8 +1,9 @@
-"""Live airport weather and a simple, rule-based "flyable now" check.
+"""Airport weather reports and the rule that says whether one report is "flyable".
 
-The thresholds below are labeled assumptions (real air taxi limits are unpublished).
-The ML forecaster that predicts the next 0-3 hours will replace `flyable_now` as the
-input to the decision engine; this module stays as the observation layer.
+This is the observation layer. The thresholds below are labeled assumptions (real air taxi
+limits are unpublished). The same rule is used to judge live reports, to label the
+training data for the forecaster, and to score the official forecast, so there is exactly
+one definition of "flyable" in the whole project.
 """
 from __future__ import annotations
 
@@ -33,6 +34,41 @@ class Observation:
     gust_kt: float | None
     thunderstorm: bool
     raw: str
+    temp_c: float | None = None
+    dewpoint_c: float | None = None
+    altimeter_hpa: float | None = None
+    wind_dir: float | None = None
+    precip_in: float | None = None
+
+
+def problems(visibility_mi: float | None, ceiling_ft: float | None, wind_kt: float | None,
+             gust_kt: float | None, thunderstorm: bool) -> list[str]:
+    """Plain-language reasons a report fails the thresholds. Empty list means flyable."""
+    reasons = []
+    if thunderstorm:
+        reasons.append("thunderstorm reported")
+    if visibility_mi is not None and visibility_mi < THRESHOLDS["min_visibility_mi"]:
+        reasons.append(f"visibility {visibility_mi:g} mi")
+    if ceiling_ft is not None and ceiling_ft < THRESHOLDS["min_ceiling_ft"]:
+        reasons.append(f"cloud ceiling {ceiling_ft:g} ft")
+    strongest = max((w for w in (wind_kt, gust_kt) if w is not None), default=None)
+    if strongest is not None and strongest > THRESHOLDS["max_gust_kt"]:
+        reasons.append(f"wind gusts {strongest:g} kt")
+    return reasons
+
+
+def report_is_flyable(obs: Observation) -> bool | None:
+    """True or False for one report; None when the report lacks visibility (unusable)."""
+    if obs.visibility_mi is None:
+        return None
+    return not problems(obs.visibility_mi, obs.ceiling_ft, obs.wind_kt, obs.gust_kt, obs.thunderstorm)
+
+
+def _num(value) -> float | None:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def parse_metar_json(item: dict) -> Observation:
@@ -41,7 +77,7 @@ def parse_metar_json(item: dict) -> Observation:
         vis = float(vis.rstrip("+")) if vis.rstrip("+").replace(".", "", 1).isdigit() else None
     ceiling = None
     for layer in item.get("clouds") or []:
-        if layer.get("cover") in ("BKN", "OVC", "OVX") and layer.get("base") is not None:
+        if layer.get("cover") in ("BKN", "OVC", "OVX", "VV") and layer.get("base") is not None:
             ceiling = layer["base"] if ceiling is None else min(ceiling, layer["base"])
     wx = item.get("wxString") or ""
     return Observation(
@@ -53,14 +89,35 @@ def parse_metar_json(item: dict) -> Observation:
         gust_kt=item.get("wgst"),
         thunderstorm="TS" in wx,
         raw=item.get("rawOb", ""),
+        temp_c=_num(item.get("temp")),
+        dewpoint_c=_num(item.get("dewp")),
+        altimeter_hpa=_num(item.get("altim")),
+        wind_dir=_num(item.get("wdir")),  # "VRB" becomes None
+        precip_in=_num(item.get("precip")),
     )
 
 
-def fetch_observations(stations: list[str], timeout: float = 15.0) -> dict[str, Observation]:
-    resp = httpx.get(AWC_URL, params={"ids": ",".join(stations), "format": "json"},
+def fetch_history(stations: list[str], hours: int = 8, timeout: float = 15.0) -> dict[str, list[Observation]]:
+    """Every report from the last `hours` hours for each station, oldest first."""
+    resp = httpx.get(AWC_URL, params={"ids": ",".join(stations), "format": "json", "hours": hours},
                      headers={"User-Agent": USER_AGENT}, timeout=timeout)
     resp.raise_for_status()
-    return {o.station: o for o in map(parse_metar_json, resp.json())}
+    out: dict[str, list[Observation]] = {s: [] for s in stations}
+    for item in resp.json() if resp.content else []:
+        try:
+            o = parse_metar_json(item)
+        except (KeyError, TypeError, ValueError):
+            continue  # one malformed report must not hide the rest
+        out.setdefault(o.station, []).append(o)
+    for reports in out.values():
+        reports.sort(key=lambda o: o.observed_at)
+    return out
+
+
+def fetch_observations(stations: list[str], timeout: float = 15.0) -> dict[str, Observation]:
+    """Latest report per station (kept for callers that only need 'now')."""
+    history = fetch_history(stations, hours=3, timeout=timeout)
+    return {s: reports[-1] for s, reports in history.items() if reports}
 
 
 def flyable_now(obs: Observation | None, now: datetime | None = None) -> tuple[str, list[str]]:
@@ -71,15 +128,7 @@ def flyable_now(obs: Observation | None, now: datetime | None = None) -> tuple[s
     age_min = (now - obs.observed_at).total_seconds() / 60
     if age_min > THRESHOLDS["max_obs_age_min"]:
         return "UNKNOWN", [f"weather report is {age_min:.0f} min old"]
-    reasons = []
-    if obs.thunderstorm:
-        reasons.append("thunderstorm reported")
-    if obs.visibility_mi is not None and obs.visibility_mi < THRESHOLDS["min_visibility_mi"]:
-        reasons.append(f"visibility {obs.visibility_mi} mi")
-    if obs.ceiling_ft is not None and obs.ceiling_ft < THRESHOLDS["min_ceiling_ft"]:
-        reasons.append(f"cloud ceiling {obs.ceiling_ft} ft")
-    if obs.gust_kt is not None and obs.gust_kt > THRESHOLDS["max_gust_kt"]:
-        reasons.append(f"gusts {obs.gust_kt} kt")
     if obs.visibility_mi is None:
         return "UNKNOWN", ["visibility missing from report"]
+    reasons = problems(obs.visibility_mi, obs.ceiling_ft, obs.wind_kt, obs.gust_kt, obs.thunderstorm)
     return ("NOT_FLYABLE", reasons) if reasons else ("FLYABLE", [])

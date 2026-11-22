@@ -4,3 +4,6 @@ frontend/dist
 **/.pytest_cache
 .git
 .env
+.venv
+data/raw
+data/processed

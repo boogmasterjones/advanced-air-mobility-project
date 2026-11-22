@@ -1,0 +1,4 @@
+# Extra packages needed only to rebuild the dataset and retrain the forecaster.
+# The running app and the tests need only requirements.txt.
+-r requirements.txt
+scikit-learn==1.9.1

@@ -1,0 +1,37 @@
+name,level,city,faa_id,lat,lon,source_url
+Ascension Sacred Heart Bay,II,Panama City,8FL4,30.15783888,-85.64965555,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Ascension Sacred Heart Pensacola,I,Pensacola,9FD1,30.47448333,-87.21216666,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Baptist Hospital,II,Pensacola,99FL,30.46873055,-87.23018888,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Broward Health Medical Center,I,Fort Lauderdale,6FD8,26.10336944,-80.14047222,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Broward Health North,II,Pompano Beach,28FA,26.27841361,-80.12198861,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Delray Medical Center,I,Delray Beach,48FD,26.43805555,-80.12777777,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Gulf Coast Medical Center,II,Fort Myers,67FD,26.54364444,-81.84881388,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Halifax Health Medical Center of Daytona Beach,II,Daytona Beach,29FL,29.20137027,-81.053945,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+HCA Florida Aventura Hospital,II,Aventura,1FD5,25.970475,-80.14539444,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+HCA Florida Bayonet Point Hospital,II,Hudson,FL32,28.362425,-82.68802222,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+HCA Florida Blake Hospital,II,Bradenton,5FL2,27.48208055,-82.62179722,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+HCA Florida Fort Walton-Destin Hospital,II,Fort Walton Beach,FD45,30.45514166,-86.63267222,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+HCA Florida Kendall Hospital,I,Miami,70FL,25.73111111,-80.38611111,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+HCA Florida Lake Monroe Hospital,II,Sanford,2FA8,28.81368055,-81.28373055,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+HCA Florida Lawnwood Hospital,II,Fort Pierce,FD19,27.43288888,-80.34604166,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+HCA Florida Memorial Hospital,II,Jacksonville,FA65,30.28934722,-81.60149166,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+HCA Florida Ocala Hospital,II,Ocala,3FD1,29.17555555,-82.13666666,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+HCA Florida Orange Park Hospital,II,Orange Park,20FA,30.16527777,-81.73625,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+HCA Florida Osceola Hospital,II,Kissimmee,12FD,28.29853611,-81.41024722,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Holmes Regional Medical Center,II,Melbourne,3FD3,28.08898055,-80.61393333,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Jackson Memorial Hospital,I,Miami,25FA,25.79286111,-80.21146944,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Jackson South Medical Center,II,Miami,FL91,25.62995,-80.34420555,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Johns Hopkins All Children's Hospital,Pediatric,Saint Petersburg,FL14,27.76521666,-82.64046388,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Lakeland Regional Health Medical Center,I,Lakeland,7FD7,28.06220833,-81.95425555,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Memorial Regional Hospital,I,Hollywood,77FD,26.01876111,-80.181325,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Nicklaus Children's Hospital,Pediatric,Miami,FA76,25.74093888,-80.29466666,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Orlando Health Bayfront Hospital,II,Saint Petersburg,2FD3,27.76302777,-82.6423,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Orlando Health Orlando Regional Medical Center,I,Orlando,FD28,28.52528027,-81.37701416,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Sarasota Memorial Hospital,II,Sarasota,FA23,27.31784722,-82.53039444,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+St. Joseph's Hospital,II+Pediatric,Tampa,FL38,27.9830,-82.491775,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+St. Mary's Medical Center,I,West Palm Beach,64FD,26.75643888,-80.06126666,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Tallahassee Memorial Hospital,II,Tallahassee,FD18,30.45726111,-84.26107222,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Tampa General Hospital,I,Tampa,61FL,27.93926666,-82.45946666,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+UF Health Jacksonville,I,Jacksonville,FA61,30.34955277,-81.665475,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+UF Health Shands Hospital,I,Gainesville,FA12,29.64039444,-82.34265833,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
+Wolfson Children's Hospital,Pediatric,Jacksonville,,30.315562,-81.663810,https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf
