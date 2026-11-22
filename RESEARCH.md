@@ -226,6 +226,36 @@ US and European figures differ a lot (46 min against 15 min before departure), s
 
 **What this means for us:** air is not automatically faster for short hospital-to-hospital trips. Most of the time is spent waiting and at the bedside, not travelling. No data exists for air taxis, so the simulated air taxi uses the helicopter figures, labeled as an assumption.
 
+## 13. Rush-hour road slowdown (added 2026-11-22)
+
+Why this was added: the first version multiplied drive times by hour-of-day factors we made up (up to 1.45 at 5 PM, everywhere in the state). These published figures replaced them in `data/congestion.json`.
+
+**Travel Time Index** (peak travel time divided by free-flow travel time):
+
+| Area | Urban Mobility Report, 2024 data | FHWA Urban Congestion Report, Jul to Sep 2025 |
+|---|---|---|
+| Miami urban area | 1.45 | 1.37 |
+| Tampa and St. Petersburg | 1.29 | 1.29 |
+| Orlando | 1.23 | 1.18 |
+| Jacksonville | 1.24 | 1.14 |
+| Cape Coral | 1.18 | not listed |
+| Sarasota and Bradenton | 1.18 | not listed |
+| Pensacola | 1.11 | not listed |
+| 393 smaller areas (group average) | 1.12 | not listed |
+
+- We use the [Urban Mobility Report](https://static.tti.tamu.edu/tti.tamu.edu/documents/mobility-report-2025.pdf) (Texas A&M Transportation Institute, 2025 edition). Its free-flow is the overnight speed, which is the closest match to a router's no-traffic time. [reported]
+- The [FHWA report](https://ops.fhwa.dot.gov/perf_measurement/ucr/reports/fy2025_q4.pdf) covers National Highway System roads only and uses a daytime off-peak reference, so its values run lower. [reported]
+- Peak windows in the Urban Mobility Report: 6 to 10 a.m. and 3 to 7 p.m. It gives one index for both peaks, not one per hour. [reported]
+- **Rural roads:** FDOT's statewide rural Planning Time Index is 1.12 at the peak hour and 1.12 across the day ([FDOT Source Book](https://fdotsourcebook.com/assets/download/performance-measures/2023-data/planning-time-index-2025-1793408398.xlsx)), so there is no measurable peak effect. [reported]
+- FDOT's urban Planning Time Index (a bad-day bound, the 95th-percentile travel time) is much higher: 1.60 statewide at the peak hour, 1.87 in Miami-Dade, 1.97 in Hillsborough. We do not use it for typical times. [reported]
+
+**Ambulances against general traffic:**
+
+- Lights and sirens made transports 3.1 min (47%) shorter for short trips and 5.3 min (28%) shorter for longer ones in Multnomah County, Oregon (48,308 transports, [Fleischman 2013](https://pmc.ncbi.nlm.nih.gov/articles/PMC4288957)). Rush hour slowed trips without lights and sirens and had no significant effect with them. [reported]
+- Interfacility critical-care transports were 19.5% shorter with lights and sirens in one urban system (Jansson 2020, PMID 32741576, abstract only). [reported]
+
+**What this means for us:** the drive time is multiplied by the metro area's index only for the share of the route inside that area, only on weekdays 6 to 10 a.m. and 3 to 7 p.m. The circles that mark each metro area are our assumption. We do not apply a lights-and-sirens discount, because interfacility transfers often run without them and the two studies cover single systems. Still no live traffic.
+
 ## Sources
 
 - [Hackathon rules](https://drreacto.github.io/florida_poly_ai_hackathon/rules.html)

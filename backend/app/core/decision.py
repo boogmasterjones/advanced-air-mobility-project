@@ -20,15 +20,13 @@ import numpy as np
 from pydantic import BaseModel
 
 from . import alternates, energy, roads
+from . import congestion as slowdown
 from .geo import DATA_DIR, bearing_deg, haversine_mi
 from .ledger import Ledger
 
 N_DRAWS = 2000
 CLOSE_CALL = 0.02  # options within 2 points of the best count as tied
 SPREAD = 0.4       # log-scale spread of time spent waiting and at the sending hospital
-
-# Assumption: congestion multiplier by local hour (rush hours slower). Labeled in the UI.
-CONGESTION = {h: 1.0 for h in range(24)} | {7: 1.35, 8: 1.4, 9: 1.2, 16: 1.3, 17: 1.45, 18: 1.3}
 
 # The order used to break close calls: ground alone first, then air with the ambulance
 # already moving. Air alone is never better on the deadline than air with a ground backup
@@ -86,10 +84,10 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
              p_weather: float | None, weather_reasons: list[str], ledger: Ledger,
              road: roads.Route | None = None, base: dict | None = None,
              wind: energy.Wind | None = None, temp_c: float | None = None,
-             aircraft: str = "air_taxi_a", seed: int = 7) -> list[Option]:
+             aircraft: str = "air_taxi_a", seed: int = 7, weekday: bool = True) -> list[Option]:
     """p_weather: chance the weather stays flyable for the flight, or None when unknown.
     base: where the aircraft starts (dict with name, lat, lon); None means it is already
-    at the pick-up pad."""
+    at the pick-up pad. local_hour and weekday decide whether the rush-hour slowdown applies."""
     rng = np.random.default_rng(seed)
     prof = profiles()
     ground, air = prof["ground_ambulance"], prof[aircraft]
@@ -101,9 +99,11 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
                         confidence=road.confidence, fetched_at=road.fetched_at)
     f_drive = ledger.add("Drive time with clear roads", road.minutes, unit="min", source=road.source,
                          confidence=road.confidence, fetched_at=road.fetched_at)
-    congestion = CONGESTION.get(local_hour, 1.0)
-    f_cong = ledger.add(f"Road congestion factor at {local_hour:02d}:00", congestion,
-                        source="modeled by hour of day (no live traffic data)", confidence="assumption")
+    congestion, why_congestion = slowdown.factor(origin, dest, road.geometry, local_hour, weekday)
+    f_cong = ledger.add(f"Rush-hour multiplier on the drive time at {local_hour:02d}:00 ({why_congestion})", congestion,
+                        source="Urban Mobility Report 2025 travel time index by metro area; metro boundaries "
+                               "are our assumption; no live traffic (data/congestion.json)",
+                        confidence="estimate")
     drive = road.minutes * congestion * _lognormal(rng, 1.0, 0.15, n)
     f_wait = ledger.add("Typical wait for the ambulance to reach the sending hospital",
                         _v(ground, "dispatch_delay_min_median"), unit="min", source="aircraft_profiles.json",
@@ -119,8 +119,10 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
                         unit="min", source="aircraft_profiles.json",
                         confidence=ground["handoff_min_median"]["confidence"])
     ground_ids = [f_road, f_drive, f_cong, f_wait, f_gload, f_hand]
-    ground_reasons = ["road time has no live traffic; rush hours use a modeled slowdown"
-                      if road.routed else "road time is modeled from straight-line distance, not routed"]
+    ground_reasons = ["road time has no live traffic" if road.routed
+                      else "road time is modeled from straight-line distance, not routed",
+                      (f"drive time raised {round((congestion - 1) * 100)}% for rush hour: {why_congestion}"
+                       if congestion > 1 else f"no rush-hour slowdown: {why_congestion}")]
     ground_steps = [
         _step("wait", "Ambulance on its way to the sending hospital", _v(ground, "dispatch_delay_min_median")),
         _step("hospital", "At the sending hospital", _v(ground, "load_min_median")),

@@ -1,0 +1,24 @@
+{
+  "_note": "Peak-hour road slowdown by metro area. 'index' is the Travel Time Index: peak travel time divided by free-flow travel time, where free-flow is the overnight speed, which is what a router's no-traffic time is closest to. The index values are published; the circles that say where each metro area is are OUR assumption. See RESEARCH.md section 13.",
+  "source": "Texas A&M Transportation Institute, Urban Mobility Report 2025 (2024 data), https://static.tti.tamu.edu/tti.tamu.edu/documents/mobility-report-2025.pdf",
+  "peak_hours_local": {"am": [6, 10], "pm": [15, 19], "weekdays_only": true,
+                       "note": "The report's own peak windows: 6 to 10 a.m. and 3 to 7 p.m. It publishes one index for both peaks, not one per hour."},
+  "outside_metro_index": 1.0,
+  "outside_metro_note": "FDOT's rural Planning Time Index is the same at the peak hour and across the day (1.12 and 1.12), so rural roads get no peak slowdown.",
+  "areas": [
+    {"name": "Miami", "index": 1.45, "lat": 25.77, "lon": -80.19, "radius_mi": 18},
+    {"name": "Fort Lauderdale (Miami urban area)", "index": 1.45, "lat": 26.12, "lon": -80.14, "radius_mi": 14},
+    {"name": "West Palm Beach (Miami urban area)", "index": 1.45, "lat": 26.71, "lon": -80.06, "radius_mi": 14},
+    {"name": "Tampa", "index": 1.29, "lat": 27.95, "lon": -82.46, "radius_mi": 20},
+    {"name": "St. Petersburg (Tampa urban area)", "index": 1.29, "lat": 27.77, "lon": -82.64, "radius_mi": 12},
+    {"name": "Orlando", "index": 1.23, "lat": 28.54, "lon": -81.38, "radius_mi": 20},
+    {"name": "Jacksonville", "index": 1.24, "lat": 30.33, "lon": -81.66, "radius_mi": 18},
+    {"name": "Cape Coral and Fort Myers", "index": 1.18, "lat": 26.6, "lon": -81.9, "radius_mi": 14},
+    {"name": "Sarasota and Bradenton", "index": 1.18, "lat": 27.4, "lon": -82.53, "radius_mi": 14},
+    {"name": "Pensacola", "index": 1.11, "lat": 30.42, "lon": -87.22, "radius_mi": 12},
+    {"name": "Gainesville (smaller areas average)", "index": 1.12, "lat": 29.65, "lon": -82.32, "radius_mi": 10},
+    {"name": "Tallahassee (smaller areas average)", "index": 1.12, "lat": 30.44, "lon": -84.28, "radius_mi": 10},
+    {"name": "Lakeland (smaller areas average)", "index": 1.12, "lat": 28.04, "lon": -81.95, "radius_mi": 10},
+    {"name": "Ocala (smaller areas average)", "index": 1.12, "lat": 29.19, "lon": -82.14, "radius_mi": 10}
+  ]
+}

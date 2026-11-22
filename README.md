@@ -12,7 +12,7 @@ Florida is the U.S. lightning capital, and air taxis are starting test flights h
 
 ## The three screens
 
-1. **New case.** Paste a transfer request or fill the form. The app compares the three options on one time scale, shows the weather outlook, writes a short brief where every number links to its receipt, and logs your Approve / Hold / Override decision with a reason.
+1. **New case.** Paste a transfer request or fill the form. The app compares the three options on one time scale, shows where the minutes go (waiting, time at the hospital, travel, handoff), draws the road route, the flight path and the landing places within reach, shows the weather outlook, writes a short brief where every number links to its receipt, and logs your Approve / Hold / Override decision with a reason. A labeled demo mode answers from saved weather when the live feed or the network is down.
 2. **Time Machine.** Pick any moment in 2024. The app answers using only the weather known at that moment, then shows what really happened and how many minutes its suggestion lost against the best choice in hindsight.
 3. **Evidence.** The test results below, read straight from the result files, plus a chart of how well the forecaster's percentages hold up.
 
@@ -48,7 +48,7 @@ Every number comes from a script in this repository and is shown as it came out.
 
 Known limits, stated plainly:
 
-- Road times come from a public router with no traffic; rush hours use a labeled slowdown factor.
+- Road times come from a public router with no live traffic. On weekdays from 6 to 10 a.m. and 3 to 7 p.m. the part of the route inside a metro area is slowed by that area's published travel time index (`RESEARCH.md` section 13); where each metro area starts and ends is our assumption.
 - The air taxi is simulated. Its battery, speed and delays are estimates or assumptions, each tagged in `data/aircraft_profiles.json`. Time at the hospital uses helicopter air ambulance figures because no air taxi data exists.
 - Pad availability is simulated. Published studies disagree about when air beats ground (`RESEARCH.md` section 12).
 - "Air taxi with ground backup" assumes the patient ends up on whichever vehicle would arrive first, which is the best case for that option.

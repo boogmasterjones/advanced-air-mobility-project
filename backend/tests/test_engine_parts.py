@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 from app.core import decision, history, replay, roads
 from app.core.forecaster import Forecast
 from app.core.geo import heliports, station_neighbors, stations_near
+from app.core.ledger import Ledger
 
 T0 = datetime(2024, 7, 15, 18, 0, tzinfo=timezone.utc)
 MIN = timedelta(minutes=1)
@@ -31,6 +32,36 @@ def test_unsaved_route_falls_back_to_a_labeled_model():
     r = roads.route(pads["9FA2"], pads["FD18"], decision.profiles()["ground_ambulance"])  # to Tallahassee
     assert not r.routed and r.confidence == "assumption" and "modeled" in r.source and r.geometry == []
     assert r.fetched_at is None and r.miles > 300
+
+
+# ---- rush hour ------------------------------------------------------------------------
+def test_rush_hour_slowdown_follows_the_published_indexes():
+    from app.core import congestion
+    assert congestion.is_peak(8, True) and congestion.is_peak(17, True)
+    assert not congestion.is_peak(12, True) and not congestion.is_peak(19, True)   # 3 to 7 p.m. ends at 7
+    assert not congestion.is_peak(8, False)                                        # weekends: no peak
+    miami, rural = {"lat": 25.77, "lon": -80.19}, {"lat": 27.2, "lon": -81.3}
+    assert congestion.index_at(**miami) == (1.45, "Miami") and congestion.index_at(**rural) == (1.0, None)
+    assert congestion.factor(miami, miami, [], 17, True)[0] == 1.45
+    assert congestion.factor(miami, miami, [], 13, True)[0] == 1.0                 # off-peak
+    assert congestion.factor(miami, miami, [], 17, False)[0] == 1.0                # Saturday
+    assert congestion.factor(rural, rural, [], 17, True) == (
+        1.0, "peak hour, but the route stays outside the metro areas, where no peak slowdown is measured")
+    assert 1.2 < congestion.factor(miami, rural, [], 17, True)[0] < 1.25          # no route line: half and half
+    # With a route line the slowdown is weighted by the miles inside the metro area.
+    line = [[-80.19, 25.77], [-80.19, 25.90], [-80.60, 26.90], [-81.30, 27.20]]    # leaves Miami early
+    mostly_rural, why = congestion.factor(miami, rural, line, 17, True)
+    assert 1.0 < mostly_rural < 1.1 and "Miami" in why
+
+
+def test_rush_hour_changes_the_ground_option_only_at_peak():
+    pads = heliports()
+
+    def ground(hour, weekday):
+        opts = decision.evaluate(origin=pads["64FD"], dest=pads["48FD"], deadline_min=120, local_hour=hour,
+                                 weekday=weekday, p_weather=None, weather_reasons=[], ledger=Ledger())
+        return opts[0].median_min                                                  # West Palm Beach to Delray
+    assert ground(17, True) > ground(13, True) == ground(17, False) == ground(3, True)
 
 
 # ---- stations -------------------------------------------------------------------------

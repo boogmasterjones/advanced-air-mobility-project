@@ -142,6 +142,7 @@ class Built:
     wind: Wind
     temp_c: float | None
     local_hour: int
+    weekday: bool
     stations: list[dict]
     flight_start: datetime
     flight_end: datetime
@@ -218,10 +219,11 @@ def build_case(*, origin: dict, dest: dict, deadline_min: int, now: datetime,
     road = roads.route(origin, dest, ground)
     w0 = pickup_weather or StationWeather()
     wind = Wind(w0.wind_kt, w0.gust_kt, w0.wind_dir)
-    local_hour = now.astimezone(local_zone(origin["lon"])).hour
+    local = now.astimezone(local_zone(origin["lon"]))
+    local_hour, weekday = local.hour, local.weekday() < 5
     options = decision.evaluate(
         origin=origin, dest=dest, deadline_min=deadline_min,
-        local_hour=local_hour, p_weather=p_weather, weather_reasons=reasons,
+        local_hour=local_hour, weekday=weekday, p_weather=p_weather, weather_reasons=reasons,
         ledger=ledger, road=road, base=base, wind=wind, temp_c=w0.temp_c)
     for o in options:
         if o.strategy != "ground_only":
@@ -243,5 +245,5 @@ def build_case(*, origin: dict, dest: dict, deadline_min: int, now: datetime,
                 "landing_places": outs["sites"] if outs else [],
                 "min_margin_min": outs["min_margin_min"] if outs else None},
     }
-    return Built(out=out, road=road, base=base, wind=wind, temp_c=w0.temp_c, local_hour=local_hour,
+    return Built(out=out, road=road, base=base, wind=wind, temp_c=w0.temp_c, local_hour=local_hour, weekday=weekday,
                  stations=[st for st, _, _ in ends], flight_start=start, flight_end=end)

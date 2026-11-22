@@ -23,6 +23,7 @@ def hindsight(built: Built, origin: dict, dest: dict, deadline_min: int, flew: b
     """The same case with the weather outcome known."""
     return decision.evaluate(
         origin=origin, dest=dest, deadline_min=deadline_min, local_hour=built.local_hour,
+        weekday=built.weekday,
         p_weather=1.0 if flew else 0.0, weather_reasons=[], ledger=Ledger(),
         road=built.road, base=built.base, wind=built.wind, temp_c=built.temp_c)
 

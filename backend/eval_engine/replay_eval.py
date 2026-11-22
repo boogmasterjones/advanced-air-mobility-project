@@ -78,6 +78,7 @@ def weather_now_choice(built, origin, dest, deadline, when) -> str:
         statuses.append(not weather.problems(w.visibility_mi, w.ceiling_ft, w.wind_kt, w.gust_kt, w.thunderstorm))
     options = decision.evaluate(
         origin=origin, dest=dest, deadline_min=deadline, local_hour=built.local_hour,
+        weekday=built.weekday,
         p_weather=0.9 if all(statuses) else 0.0, weather_reasons=[], ledger=Ledger(),
         road=built.road, base=built.base, wind=built.wind, temp_c=built.temp_c)
     return decision.recommend(options)
