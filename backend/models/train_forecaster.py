@@ -99,7 +99,8 @@ def main() -> int:
         raise SystemExit("Run first: python -m data_build.baselines")
     base = np.load(base_path)
     X, years = ds["X"], ds["year"]
-    train_rows, test_rows = years < TEST_YEAR, years == TEST_YEAR
+    # label_year: no training row may have a label that looks into the test year.
+    train_rows, test_rows = ds["label_year"] < TEST_YEAR, years == TEST_YEAR
 
     evidence = {
         "id": "E1", "model": MODEL_NAME,

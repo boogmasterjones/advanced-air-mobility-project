@@ -16,6 +16,7 @@ from dataclasses import dataclass
 import numpy as np
 
 KT_TO_MPH = 1.15078
+UNKNOWN_WIND_KT = 25.0  # assumed surface wind when the report has none (the gust limit in weather.py)
 
 
 @dataclass
@@ -36,6 +37,7 @@ class EnergyCheck:
     headwind_mph: float             # median headwind on the last leg (negative = tailwind)
     heat_loss: float                # share of usable energy lost to heat
     temp_known: bool
+    wind_known: bool = True
 
 
 def _v(profile: dict, key: str) -> float:
@@ -57,8 +59,12 @@ def check(profile: dict, legs: list[tuple[float, float]], wind: Wind, temp_c: fl
     cruise_kw = _v(profile, "cruise_kwh_per_mi") * cruise_mph
 
     # Wind at cruise height: between the sustained wind and the gust, scaled up from the surface.
-    base = wind.speed_kt or 0.0
-    top = max(base, wind.gust_kt or 0.0, base * 1.3)
+    wind_known = wind.speed_kt is not None or wind.gust_kt is not None
+    if wind_known:
+        base = wind.speed_kt if wind.speed_kt is not None else wind.gust_kt
+        top = max(base, wind.gust_kt or 0.0, base * 1.3)
+    else:  # no wind report: assume a strong wind from any direction, never calm
+        base, top, wind = UNKNOWN_WIND_KT, UNKNOWN_WIND_KT * 1.3, Wind()
     speed_mph = rng.uniform(base, top, n) * _v(profile, "wind_aloft_factor") * KT_TO_MPH
     if wind.from_deg is None:
         from_deg = rng.uniform(0, 360, n)          # variable or unknown: any direction
@@ -73,7 +79,7 @@ def check(profile: dict, legs: list[tuple[float, float]], wind: Wind, temp_c: fl
         minutes = miles / ground_speed * 60 * rng.lognormal(0, 0.05, n)
         hover_min = _v(profile, "hover_min_per_leg") * rng.lognormal(0, 0.2, n)
         need += _v(profile, "hover_kw") * hover_min / 60 + cruise_kw * minutes / 60
-        leg_minutes.append(minutes)
+        leg_minutes.append(minutes + hover_min)  # the clock runs during take-off and landing too
     need += cruise_kw * _v(profile, "reserve_min") / 60
 
     loss = heat_loss(profile, temp_c)
@@ -85,4 +91,5 @@ def check(profile: dict, legs: list[tuple[float, float]], wind: Wind, temp_c: fl
         need_kwh=float(np.median(need)), have_kwh=float(np.median(have)),
         spare_min=float(np.median((have - need) / cruise_kw * 60)),
         headwind_mph=float(np.median(headwind)), heat_loss=loss, temp_known=temp_c is not None,
+        wind_known=wind_known,
     )

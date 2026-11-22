@@ -21,7 +21,7 @@ from pathlib import Path
 import numpy as np
 
 from .features import FEATURE_NAMES, HORIZONS, HourRecord, Neighbor, build_features, hour_buckets
-from .weather import THRESHOLDS, Observation
+from .weather import THRESHOLDS, Observation, report_is_flyable
 
 MODEL_DIR = Path(__file__).resolve().parents[2] / "models" / "forecaster_v1"
 RULE_MODEL = "rule-v0"
@@ -102,7 +102,7 @@ def from_reports(reports: list[Observation], lat: float, lon: float, now: dateti
     """Forecast from raw reports. Anchored at the newest usable report, which must be
     fresher than the staleness limit; otherwise None (UNKNOWN).
     nearby: (miles, reports) for the nearest other airports."""
-    usable = [r for r in reports if r.visibility_mi is not None and r.observed_at <= now]
+    usable = [r for r in reports if report_is_flyable(r) is not None and r.observed_at <= now]
     if not usable:
         return None
     newest = max(usable, key=lambda r: r.observed_at)

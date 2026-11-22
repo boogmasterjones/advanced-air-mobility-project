@@ -16,7 +16,7 @@ client = TestClient(app)
 
 def draft(**kw):
     base = dict(category="stroke", origin_name="Lakeside Medical Center", dest_name="Delray Medical Center",
-                deadline_min=90, people=1, notes="", needs_human_review=[])
+                deadline_value=90, deadline_unit="minutes", people=1, notes="", needs_human_review=[])
     return IntakeDraft(**(base | kw))
 
 
@@ -67,11 +67,50 @@ def test_finalize_keeps_good_values():
 
 
 def test_finalize_sends_bad_values_to_a_human():
-    r = finalize(draft(deadline_min=9999, people=40, category="teleport", origin_name="   "))
+    r = finalize(draft(deadline_value=9999, people=40, category="teleport", origin_name="   "))
     assert r.deadline_min is None and r.people is None and r.category == "other" and r.origin_name is None
     assert set(r.needs_human_review) == {"deadline_min", "people", "category", "origin_name"}
-    assert finalize(draft(deadline_min=0)).deadline_min is None
-    assert finalize(draft(deadline_min=-5)).deadline_min is None
+    assert finalize(draft(deadline_value=0)).deadline_min is None
+    assert finalize(draft(deadline_value=-5)).deadline_min is None
+    assert finalize(draft(deadline_value=float("inf"))).deadline_min is None
+    assert finalize(draft(deadline_value=90, deadline_unit="parsecs")).deadline_min is None
+    assert finalize(draft(deadline_value=90, deadline_unit=None)).deadline_min is None
+
+
+def test_hours_become_minutes_in_code_not_in_the_llm():
+    """The LLM copies the number and the unit; the multiplication happens here."""
+    assert finalize(draft(deadline_value=1.5, deadline_unit="hours")).deadline_min == 90
+    assert finalize(draft(deadline_value=4, deadline_unit="Hours")).deadline_min == 240
+    assert finalize(draft(deadline_value=45, deadline_unit="min")).deadline_min == 45
+
+
+@pytest.mark.parametrize("text, minutes", [
+    ("Stroke, last known well 2 hours ago. Send from A Hospital to B Hospital within 45 minutes.", 45),
+    ("67 year old, from A Hospital to B Hospital within 1 hour.", 60),
+    ("Trauma from A Hospital to B Hospital, 30 min window.", 30),
+    ("Organ from A Hospital to B Hospital 4 hrs MAX", 240),
+    ("From A Hospital to B Hospital. Either 30 minutes or 2 hours, not sure.", None),   # two candidates: ask
+    ("From A Hospital to B Hospital as fast as possible.", None),
+    ("From A Hospital to B Hospital within " + "9" * 400 + " hours", None),             # used to crash
+])
+def test_offline_parser_reads_only_a_clear_deadline(text, minutes):
+    r = provider.regex_intake(text)
+    assert r.deadline_min == minutes
+    assert ("deadline_min" in r.needs_human_review) == (minutes is None)
+
+
+def test_offline_parser_keeps_names_with_a_title_dot():
+    r = provider.regex_intake("Stroke patient from Jupiter Medical Center to St. Mary's Medical Center within 60 minutes.")
+    assert r.dest_name == "St Mary's Medical Center" and r.origin_name == "Jupiter Medical Center"
+    assert match.candidates(r.dest_name)[0]["faa_id"] == "64FD"
+
+
+def test_shared_or_far_away_names_are_never_preselected():
+    for name in ("Orlando Health", "UF Health", "Tampa General Hospital", "Shands",
+                 "St. Mary's Medical Center in Evansville", "Orlando Health ORMC"):
+        assert not match.confident(match.candidates(name)), name
+    for name in ("Lakeside Medical Center", "Delray Medical Center", "Jackson Memorial Hospital"):
+        assert match.confident(match.candidates(name)), name
     assert len(finalize(draft(notes="x" * 5000)).notes) <= 300
     assert finalize(draft(needs_human_review=["made_up_field", "people"])).needs_human_review == ["people"]
 
@@ -177,6 +216,30 @@ def test_verifier_checks_units_not_just_digits():
     assert verify(f"The numbers are 32 and 45 {cites}.", ledger).kept   # no unit written: either fact
     flag = ledger.add("Thunderstorm reported", True, source="t", confidence="official")
     assert not verify(f"There is 1 storm [{flag}].", ledger).kept       # True is not the number 1
+
+
+def test_verifier_cases_found_by_the_independent_review():
+    ledger = Ledger()
+    t = ledger.add("Deadline", 45, unit="min", source="t", confidence="reported")
+    c = ledger.add("Cloud ceiling", 1200, unit="ft", source="t", confidence="official")
+    v = ledger.add("Visibility", 2.5, unit="mi", source="t", confidence="official")
+    p = ledger.add("Chance", 87, unit="%", source="t", confidence="computed")
+    bad = ledger.add("Broken", "nan", source="t", confidence="computed")
+    kept = lambda s: bool(verify(s, ledger).kept)  # noqa: E731
+    # wrong unit, numbers as words, and loose rounding no longer pass
+    assert not kept(f"Time is 45 hours [{t}].")
+    assert not kept(f"The chance is ninety-nine percent [{p}].") and not kept(f"It is twice as fast [{p}].")
+    assert not kept(f"The chance is .99 [{p}].") and not kept(f"About ½ of flights [{p}].")
+    assert not kept(f"Ceiling 1190 ft [{c}].") and kept(f"Ceiling 1200 ft [{c}].") and kept(f"Ceiling 1,200 ft [{c}].")
+    assert kept(f"Visibility 2.5 mi [{v}].") and not kept(f"Visibility 2.6 mi [{v}].")
+    # writing styles that used to be removed by mistake
+    assert kept(f"Deadline 45 min and an 87% chance [{t}, {p}].")
+    out = verify(f"The chance is 87%. [{p}] The deadline is 45 min [{t}].", ledger)
+    assert len(out.kept) == 2 and not out.removed
+    # a broken fact value must not crash or match anything
+    assert not kept(f"The value is 3 [{bad}].")
+    inf = ledger.add("Broken too", "inf", source="t", confidence="computed")
+    assert not kept(f"The value is 3 [{inf}].")
 
 
 # ---- evidence -------------------------------------------------------------------------

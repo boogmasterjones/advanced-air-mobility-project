@@ -38,9 +38,13 @@ def load_dataset() -> dict:
         raise SystemExit("data/processed/dataset.npz is missing. Run: python -m data_build.build_dataset")
     d = np.load(path, allow_pickle=False)
     times = d["t"].astype("datetime64[s]")
+    last_label = (d["t"] + (max(HORIZONS) + 1) * 3600).astype("datetime64[s]")
     return {"X": d["X"], "Y": d["Y"], "station": d["station"], "t": d["t"],
             "stations": [str(s) for s in d["stations"]],
             "year": times.astype("datetime64[Y]").astype(int) + 1970,
+            # Year of the latest hour any of the row's labels looks at. A row from the last
+            # hours of Dec 31 has labels in the next year, so it must not train with them.
+            "label_year": last_label.astype("datetime64[Y]").astype(int) + 1970,
             "month": times.astype("datetime64[M]").astype(int) % 12 + 1,
             "hour": (d["t"] // 3600) % 24}
 
@@ -116,7 +120,7 @@ def score_block(p: np.ndarray, y: np.ndarray) -> dict:
 
 def main() -> int:
     ds = load_dataset()
-    train, test = ds["year"] < TEST_YEAR, ds["year"] == TEST_YEAR
+    train, test = ds["label_year"] < TEST_YEAR, ds["year"] == TEST_YEAR
     pers = persistence(ds)
     clim = climatology(ds, train)
     cats = taf_categories(ds)

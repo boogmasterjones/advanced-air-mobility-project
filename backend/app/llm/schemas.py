@@ -2,7 +2,9 @@
 
 Two shapes on purpose:
   IntakeDraft   what the LLM is asked to fill in. Loose types only, because the
-                structured-output feature does not enforce number ranges.
+                structured-output feature does not enforce number ranges. The deadline is
+                copied as a number plus its unit; converting hours to minutes is done in
+                code, so the LLM never calculates.
   IntakeResult  what the rest of the app trusts. Built from a draft by `finalize`, which
                 checks every field in code and sends anything odd to human review.
 """
@@ -23,7 +25,10 @@ class IntakeDraft(BaseModel):
     category: str = Field(description="One of: stroke, trauma, heart_attack, organ, supplies, other")
     origin_name: str | None = Field(description="Sending facility, copied as written. null if not stated")
     dest_name: str | None = Field(description="Receiving facility, copied as written. null if not stated")
-    deadline_min: int | None = Field(description="Time limit in whole minutes, only if the request states one. null otherwise")
+    deadline_value: float | None = Field(description="The transport time limit as a number, exactly as written "
+                                                     "(for '1.5 hours' give 1.5). null if no limit is stated")
+    deadline_unit: str | None = Field(description="Unit of deadline_value as written: 'minutes' or 'hours'. "
+                                                  "null if no limit is stated")
     people: int | None = Field(description="People to carry, only if stated. null otherwise")
     notes: str = Field(description="Other transport details from the request, one short sentence. Empty if none")
     needs_human_review: list[str] = Field(description="Names of fields that were unclear, missing or conflicting")
@@ -40,6 +45,19 @@ class IntakeResult(BaseModel):
                                           description="Fields the model was not sure about")
 
 
+def to_minutes(value: float | None, unit: str | None) -> int | None:
+    """Hours to minutes happens here, in code: the LLM copies the number and the unit and
+    never does arithmetic. An unknown unit or a nonsense number gives None (ask a human)."""
+    if value is None or unit is None or value != value or abs(value) > 1e6:
+        return None
+    unit = unit.strip().lower()
+    if unit in ("minutes", "minute", "min", "mins"):
+        return round(value)
+    if unit in ("hours", "hour", "hr", "hrs", "h"):
+        return round(value * 60)
+    return None
+
+
 def _name(value: str | None) -> str | None:
     value = " ".join((value or "").split())
     return value[:MAX_NAME_LEN] or None
@@ -52,7 +70,7 @@ def finalize(draft: IntakeDraft) -> IntakeResult:
     if category not in get_args(Category):
         category = "other"
         review.append("category")
-    deadline = draft.deadline_min
+    deadline = to_minutes(draft.deadline_value, draft.deadline_unit)
     if deadline is not None and not 1 <= deadline <= MAX_DEADLINE_MIN:
         deadline = None
     people = draft.people

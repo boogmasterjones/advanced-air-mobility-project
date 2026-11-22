@@ -62,6 +62,47 @@ def test_stale_weather_is_unknown(monkeypatch):
     assert out["recommended"] == "ground_only"
 
 
+def test_weather_station_too_far_away_is_unknown(monkeypatch):
+    """A report from far away says little about the pad, so it must not produce a number."""
+    from app.core import case
+    monkeypatch.setattr(weather, "fetch_history", fake_reports())
+    monkeypatch.setattr(case, "MAX_STATION_MI", 1.0)
+    out = client.post("/api/cases/evaluate", json=CASE).json()
+    by = {o["strategy"]: o for o in out["options"]}
+    assert by["air_only"]["status"] == "UNKNOWN" and out["recommended"] == "ground_only"
+    assert any("too far" in r for r in by["air_only"]["reasons"])
+
+
+def test_a_storm_report_without_visibility_is_not_ignored(monkeypatch):
+    def fetch(stations, hours=8, timeout=15.0):
+        reports = fake_reports()(stations)
+        for station_reports in reports.values():   # newest report: thunderstorm, visibility missing
+            station_reports[-1].visibility_mi, station_reports[-1].thunderstorm = None, True
+        return reports
+    monkeypatch.setattr(weather, "fetch_history", fetch)
+    out = client.post("/api/cases/evaluate", json=CASE).json()
+    assert any("thunderstorm" in r for o in out["options"] for r in o["reasons"])
+    assert any(f["label"].startswith("Thunderstorm reported") for f in out["facts"])
+
+
+def test_silent_nearest_airport_falls_back_to_the_next_one(monkeypatch):
+    from app.core.geo import heliports, stations_near
+    pad = heliports()["48FD"]
+    options = stations_near(pad["lat"], pad["lon"])
+    if len(options) < 2:
+        return  # nothing to fall back to for this pad with the current station list
+    silent = options[0][0]["icao"]
+
+    def fetch(stations, hours=8, timeout=15.0):
+        reports = fake_reports()(stations)
+        reports[silent] = []
+        return reports
+    monkeypatch.setattr(weather, "fetch_history", fetch)
+    out = client.post("/api/cases/evaluate", json=CASE).json()
+    assert {o["strategy"]: o["status"] for o in out["options"]}["air_only"] == "OK"
+    assert any(f"{silent} has no fresh report" in r for o in out["options"] for r in o["reasons"])
+
+
 def test_good_weather_gives_numbers_with_receipts(monkeypatch):
     monkeypatch.setattr(weather, "fetch_history", fake_reports())
     out = client.post("/api/cases/evaluate", json=CASE).json()

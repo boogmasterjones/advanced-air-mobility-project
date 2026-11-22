@@ -19,6 +19,13 @@ from .geo import haversine_mi, station_neighbors, stations_near
 from .ledger import Ledger
 
 FLORIDA = ZoneInfo("America/New_York")
+PANHANDLE = ZoneInfo("America/Chicago")
+PANHANDLE_WEST_OF_LON = -85.0   # roughly the Apalachicola River; west of it Florida is on Central time
+MAX_STATION_MI = 40.0           # beyond this, an airport's weather does not stand in for the pad
+
+
+def local_zone(lon: float) -> ZoneInfo:
+    return PANHANDLE if lon < PANHANDLE_WEST_OF_LON else FLORIDA
 DISCLAIMER = "PROTOTYPE. Not for real dispatch. Aircraft are simulated. Road times are modeled."
 DECISION_OWNER = "human dispatcher (approve / hold / override)"
 
@@ -55,7 +62,7 @@ class LiveWeather:
 
     def station(self, station: dict, now: datetime) -> StationWeather:
         reports = self.reports.get(station["icao"], [])
-        usable = [r for r in reports if r.visibility_mi is not None and r.observed_at <= now]
+        usable = [r for r in reports if weather.report_is_flyable(r) is not None and r.observed_at <= now]
         if not usable:
             return StationWeather(source=self.source)
         o = max(usable, key=lambda r: r.observed_at)
@@ -71,7 +78,7 @@ class LiveWeather:
 def from_hour_record(rec: HourRecord, hour_end: datetime, forecast, source: str) -> StationWeather:
     nan = lambda v: None if v != v else v  # noqa: E731  (NaN -> None)
     return StationWeather(
-        observed_at=hour_end, visibility_mi=rec.vis_min,
+        observed_at=hour_end, visibility_mi=nan(rec.vis_min),
         ceiling_ft=None if rec.ceil_min >= CEILING_CAP_FT else rec.ceil_min,
         wind_kt=rec.wind_max, gust_kt=rec.gust_max, wind_dir=nan(rec.wind_dir),
         thunderstorm=rec.ts, temp_c=nan(rec.temp_c), forecast=forecast, source=source)
@@ -90,7 +97,9 @@ def flight_minutes(origin: dict, dest: dict, base: dict | None, aircraft: str = 
 def _weather_facts(ledger: Ledger, st: dict, miles: float, role: str, w: StationWeather) -> list[str]:
     where = f"at {st['icao']} ({miles:.0f} mi from {role})"
     kw = dict(source=w.source, confidence="official", fetched_at=w.observed_at)
-    ids = [ledger.add(f"Visibility {where}", w.visibility_mi, unit="mi", **kw)]
+    ids = []
+    if w.visibility_mi is not None:
+        ids.append(ledger.add(f"Visibility {where}", w.visibility_mi, unit="mi", **kw))
     if w.ceiling_ft is not None:
         ids.append(ledger.add(f"Cloud ceiling {where}", w.ceiling_ft, unit="ft", **kw))
     strongest = max((x for x in (w.wind_kt, w.gust_kt) if x is not None), default=None)
@@ -173,6 +182,15 @@ def build_case(*, origin: dict, dest: dict, deadline_min: int, now: datetime,
     ends = [(st, miles, role) for st, miles, _, role in picked]
     pickup_weather = picked[0][2]
     for st, miles, w, role in picked:
+        if miles > MAX_STATION_MI:
+            # A report from that far away says little about the pad. Unknown, not a guess.
+            reasons.append(f"the nearest weather station to the {role} pad ({st['icao']}) is {miles:.0f} mi away, "
+                           f"too far to rely on")
+            weather_ids.append(ledger.add(f"Distance from the {role} pad to the nearest weather station ({st['icao']})",
+                                          round(miles), unit="mi", source="computed from FAA coordinates",
+                                          confidence="computed"))
+            chances.append(None)
+            continue
         if w.observed_at is None or w.forecast is None:
             age = "" if w.observed_at is None else f" (newest is {(now - w.observed_at).total_seconds() / 60:.0f} min old)"
             reasons.append(f"{st['icao']}: no fresh weather report{age}")
@@ -199,7 +217,8 @@ def build_case(*, origin: dict, dest: dict, deadline_min: int, now: datetime,
     ground = decision.profiles()["ground_ambulance"]
     road = roads.route(origin, dest, ground)
     w0 = pickup_weather or StationWeather()
-    wind, local_hour = Wind(w0.wind_kt, w0.gust_kt, w0.wind_dir), now.astimezone(FLORIDA).hour
+    wind = Wind(w0.wind_kt, w0.gust_kt, w0.wind_dir)
+    local_hour = now.astimezone(local_zone(origin["lon"])).hour
     options = decision.evaluate(
         origin=origin, dest=dest, deadline_min=deadline_min,
         local_hour=local_hour, p_weather=p_weather, weather_reasons=reasons,

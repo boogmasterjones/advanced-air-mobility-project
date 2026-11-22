@@ -29,7 +29,7 @@ def _float(text: str) -> float:
 
 def _record(row: dict) -> HourRecord:
     return HourRecord(
-        vis_min=float(row["vis_min"]), ceil_min=float(row["ceil_min"]), wind_max=float(row["wind_max"]),
+        vis_min=_float(row["vis_min"]), ceil_min=float(row["ceil_min"]), wind_max=float(row["wind_max"]),
         gust_max=float(row["gust_max"]), ts=row["ts"] == "1", flyable=row["flyable"] == "1",
         temp_c=_float(row["temp_c"]), dewpoint_c=_float(row["dewpoint_c"]),
         altimeter_hpa=_float(row["altimeter_hpa"]), precip_in=float(row["precip_in"] or 0),

@@ -51,6 +51,29 @@ def test_parse_metar_json_ceiling_and_visibility():
     assert o.wind_dir is None and o.temp_c == 31.1 and o.altimeter_hpa == 1016.2
 
 
+def test_storm_report_without_visibility_still_counts():
+    """Found by the independent review: such a report used to be thrown away whole."""
+    from app.core.features import summarize_hour
+    storm = obs(visibility_mi=None, thunderstorm=True)
+    assert weather.report_is_flyable(storm) is False
+    assert weather.report_is_flyable(obs(visibility_mi=None)) is None           # cannot be judged
+    assert weather.report_is_flyable(obs(wind_kt=None, gust_kt=None)) is None   # no wind: cannot be judged
+    assert weather.flyable_now(storm, NOW)[0] == "NOT_FLYABLE"
+    mixed = summarize_hour([storm, obs(observed_at=NOW - timedelta(minutes=30))])
+    assert mixed is not None and mixed.ts and not mixed.flyable and mixed.vis_min == 10
+    alone = summarize_hour([storm])
+    assert alone is not None and not alone.flyable and alone.vis_min != alone.vis_min   # NaN, not a made-up value
+    assert summarize_hour([obs(visibility_mi=None)]) is None
+
+
+def test_feed_values_of_the_wrong_type_do_not_crash():
+    item = {"icaoId": "KMCO", "obsTime": 1794966780, "visib": "abc", "wspd": "12", "wgst": "strong",
+            "wdir": None, "temp": "hot", "clouds": None, "wxString": None}
+    o = weather.parse_metar_json(item)
+    assert o.wind_kt == 12 and o.gust_kt is None and o.visibility_mi is None and o.temp_c is None
+    assert weather.report_is_flyable(o) is None
+
+
 # ---- decision engine ------------------------------------------------------------------
 def test_unknown_weather_never_recommends_air():
     by, opts = options(None)

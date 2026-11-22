@@ -26,9 +26,15 @@ VIS_CAP_MI = 10.0
 NAN = float("nan")
 
 
+def nan_min(values) -> float:
+    """Smallest value, ignoring NaN; NaN when nothing is known."""
+    known = [v for v in values if v == v]
+    return min(known) if known else NAN
+
+
 @dataclass(slots=True)
 class HourRecord:
-    vis_min: float
+    vis_min: float             # statute miles, capped; NaN in the rare hour where no report gave it
     ceil_min: float            # feet; CEILING_CAP_FT when no ceiling was reported
     wind_max: float            # sustained wind, knots
     gust_max: float            # strongest of gust and sustained wind, knots
@@ -48,7 +54,7 @@ def _or_nan(v: float | None) -> float:
 
 def summarize_hour(reports: list[Observation]) -> HourRecord | None:
     """Summarize the reports that fall inside one hour. None means no usable report."""
-    usable = [r for r in reports if r.visibility_mi is not None]
+    usable = [r for r in reports if report_is_flyable(r) is not None]
     if not usable:
         return None
     newest = max(usable, key=lambda r: r.observed_at)
@@ -56,8 +62,9 @@ def summarize_hour(reports: list[Observation]) -> HourRecord | None:
     gusts = winds + [r.gust_kt for r in usable if r.gust_kt is not None]
     ceilings = [r.ceiling_ft for r in usable if r.ceiling_ft is not None]
     precip = [r.precip_in for r in usable if r.precip_in is not None]
+    visibilities = [r.visibility_mi for r in usable if r.visibility_mi is not None]
     return HourRecord(
-        vis_min=min(min(r.visibility_mi for r in usable), VIS_CAP_MI),
+        vis_min=min(min(visibilities), VIS_CAP_MI) if visibilities else NAN,  # a storm report may lack it
         ceil_min=min(min(ceilings), CEILING_CAP_FT) if ceilings else CEILING_CAP_FT,
         wind_max=max(winds, default=0.0),
         gust_max=max(gusts, default=0.0),
@@ -117,7 +124,7 @@ def neighbor_features(neighbors: list[Neighbor]) -> list[float]:
     first_d, first = min(current, key=lambda x: x[0])
     return [
         float(len(current)), float(any(r.ts for _, r in current)), float(sum(r.ts for r in recent)),
-        float(sum(not r.flyable for _, r in current)), min(r.vis_min for _, r in current),
+        float(sum(not r.flyable for _, r in current)), nan_min(r.vis_min for _, r in current),
         max(r.gust_max for _, r in current), first_d, float(first.ts), float(first.flyable),
     ]
 
@@ -169,7 +176,7 @@ def build_features(history: list[HourRecord | None], lat: float, lon: float, t: 
         sum(h.flyable for h in known) / len(known),
         float(sum(h.ts for h in known)),
         hours_since("ts", True), hours_since("flyable", False),
-        max(h.gust_max for h in known), min(h.vis_min for h in known),
+        max(h.gust_max for h in known), nan_min(h.vis_min for h in known),
         min(h.ceil_min for h in known), sum(h.precip_in for h in known),
         max(temps) if temps else NAN, float(len(known)),
         math.sin(hour_angle), math.cos(hour_angle), math.sin(doy_angle), math.cos(doy_angle),

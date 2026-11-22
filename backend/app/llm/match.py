@@ -24,7 +24,7 @@ SHORT = {
     "JOHN": "JOHNS",
 }
 NOISE = {"THE", "OF", "AT", "AND", "HELIPORT", "HELISTOP", "HELIPAD", "EMERGENCY", "ER", "CAMPUS", "INC"}
-CONFIDENT, CLEAR_LEAD = 0.72, 0.06  # score needed, and lead over the runner-up, to pre-select
+CONFIDENT, CLEAR_LEAD = 0.85, 0.06  # score needed, and lead over the runner-up, to pre-select
 
 
 def tokens(name: str) -> list[str]:
@@ -89,14 +89,19 @@ def candidates(name: str | None, limit: int = 3) -> list[dict]:
     pads, weight, common = _index()
     scored = sorted(((max(_score(query, n, city, weight, common) for n in names), pad)
                      for pad, names, city in pads), key=lambda x: -x[0])
-    return [{"faa_id": pad["faa_id"], "name": pad["name"], "city": pad["city"], "score": round(s, 3)}
+    # A name that several pads share ("Orlando Health", "Tampa General Hospital" with its
+    # North and South campuses) cannot be resolved by code: the human has to pick.
+    q = set(query)
+    shared = sum(1 for _, names, _ in pads if any(q <= set(n) for n in names))
+    return [{"faa_id": pad["faa_id"], "name": pad["name"], "city": pad["city"], "score": round(s, 3),
+             "shared_by": shared}
             for s, pad in scored[:limit] if s >= 0.35]
 
 
 def confident(matches: list[dict]) -> bool:
     """True when the top match is strong and clearly ahead, so the form can pre-select it.
     The human still confirms every case."""
-    if not matches or matches[0]["score"] < CONFIDENT:
+    if not matches or matches[0]["score"] < CONFIDENT or matches[0].get("shared_by", 1) > 1:
         return False
     if len(matches) == 1:
         return True

@@ -49,23 +49,48 @@ def cases(rng: random.Random) -> list[CaseOut]:
     return out
 
 
+ONES = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
+        "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
+
+
+def in_words(n: int) -> str:
+    """0 to 999 in words, for planting a number the checker cannot read as digits."""
+    if n < 20:
+        return ONES[n]
+    if n < 100:
+        return TENS[n // 10] + ("" if n % 10 == 0 else f"-{ONES[n % 10]}")
+    rest = "" if n % 100 == 0 else f" {in_words(n % 100)}"
+    return f"{ONES[n // 100]} hundred{rest}"
+
+
 def broken_versions(sentence: str, ledger: Ledger, rng: random.Random) -> list[tuple[str, str]]:
-    """Wrong variants of one correct sentence, each with the kind of error it carries."""
+    """Wrong variants of one correct sentence, each with the kind of error it carries.
+    Every variant is really wrong: a variant that happens to stay true is not planted."""
     out = []
     body = CITE.sub("", sentence)
-    cited = set(CITE.findall(sentence))
-    cited_values = {str(ledger.get(i).value) for i in cited}
-    for m in NUMBER.finditer(body):
-        wrong = str(int(float(m.group())) + 13)
-        if wrong not in cited_values:
-            bad = sentence.replace(m.group(), wrong, 1)
-            out.append((bad, "number changed"))
-            break
+    cited = [ledger.get(i) for i in CITE.findall(sentence)]
+    cited_ids = {f.id for f in cited}
+    first = NUMBER.search(body)
+    if first:
+        value = int(float(first.group().replace(",", "")))
+        wrong = value + 13
+        if not any(isinstance(f.value, (int, float)) and not isinstance(f.value, bool)
+                   and abs(float(f.value) - wrong) <= 0.5 for f in cited):
+            out.append((sentence.replace(first.group(), str(wrong), 1), "number changed"))
+        if 0 <= wrong < 1000:
+            out.append((sentence.replace(first.group(), in_words(wrong), 1), "wrong number written as a word"))
+        for a, b in ((" min", " hours"), ("%", " min")):
+            if first.group() + a in sentence:
+                out.append((sentence.replace(first.group() + a, first.group() + b, 1), "unit changed"))
+                break
+        # A real fact with a different number: the sentence now cites a receipt that says something else.
+        others = [f for f in ledger.all() if f.id not in cited_ids and isinstance(f.value, (int, float))
+                  and not isinstance(f.value, bool) and abs(float(f.value) - value) > 0.5]
+        if others:
+            out.append((CITE.sub("", sentence).rstrip(". ") + f" [{rng.choice(others).id}].", "cites the wrong fact"))
     out.append((re.sub(r"\s*(\[F\d+\])+", "", sentence), "citation removed"))
     out.append((CITE.sub("[F999]", sentence), "cites a fact that does not exist"))
-    others = [f.id for f in ledger.all() if f.id not in cited and isinstance(f.value, str)]
-    if others and NUMBER.search(body):
-        out.append((CITE.sub("", sentence).rstrip(". ") + f" [{rng.choice(others)}].", "cites the wrong fact"))
     return out
 
 
@@ -101,8 +126,9 @@ def main() -> int:
         "metrics": [
             {"id": "E5", "name": "Planted errors the verifier caught",
              "value": round(caught / planted, 4) if planted else None, "baseline": 0.0,
-             "note": f"{planted} deliberately wrong sentences (changed number, missing citation, made-up fact, "
-                     f"wrong fact) built from {N_CASES} replayed cases. Without a verifier none would be caught."},
+             "note": f"{planted} deliberately wrong sentences (changed number, number written as a word, wrong "
+                     f"unit, missing citation, made-up fact, wrong fact) built from {N_CASES} replayed cases. "
+                     f"Without a verifier none would be caught."},
             {"id": "E5", "name": "Brief sentences that passed the check",
              "value": round(kept / written, 4) if written else None, "baseline": None,
              "note": f"{written} sentences over {N_CASES} replayed cases. Writer: {writer}."

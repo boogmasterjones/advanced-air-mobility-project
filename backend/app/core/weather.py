@@ -58,10 +58,14 @@ def problems(visibility_mi: float | None, ceiling_ft: float | None, wind_kt: flo
 
 
 def report_is_flyable(obs: Observation) -> bool | None:
-    """True or False for one report; None when the report lacks visibility (unusable)."""
-    if obs.visibility_mi is None:
+    """False when the report shows any problem, True when it shows none and is complete,
+    None when it shows none but lacks visibility or wind (it cannot be judged, so it is
+    not used). A thunderstorm report with no visibility still counts as not flyable."""
+    if problems(obs.visibility_mi, obs.ceiling_ft, obs.wind_kt, obs.gust_kt, obs.thunderstorm):
+        return False
+    if obs.visibility_mi is None or (obs.wind_kt is None and obs.gust_kt is None):
         return None
-    return not problems(obs.visibility_mi, obs.ceiling_ft, obs.wind_kt, obs.gust_kt, obs.thunderstorm)
+    return True
 
 
 def _num(value) -> float | None:
@@ -85,8 +89,8 @@ def parse_metar_json(item: dict) -> Observation:
         observed_at=datetime.fromtimestamp(item["obsTime"], tz=timezone.utc),
         visibility_mi=vis,
         ceiling_ft=ceiling,
-        wind_kt=item.get("wspd"),
-        gust_kt=item.get("wgst"),
+        wind_kt=_num(item.get("wspd")),
+        gust_kt=_num(item.get("wgst")),
         thunderstorm="TS" in wx,
         raw=item.get("rawOb", ""),
         temp_c=_num(item.get("temp")),
@@ -128,7 +132,9 @@ def flyable_now(obs: Observation | None, now: datetime | None = None) -> tuple[s
     age_min = (now - obs.observed_at).total_seconds() / 60
     if age_min > THRESHOLDS["max_obs_age_min"]:
         return "UNKNOWN", [f"weather report is {age_min:.0f} min old"]
-    if obs.visibility_mi is None:
-        return "UNKNOWN", ["visibility missing from report"]
     reasons = problems(obs.visibility_mi, obs.ceiling_ft, obs.wind_kt, obs.gust_kt, obs.thunderstorm)
-    return ("NOT_FLYABLE", reasons) if reasons else ("FLYABLE", [])
+    if reasons:
+        return "NOT_FLYABLE", reasons
+    if report_is_flyable(obs) is None:
+        return "UNKNOWN", ["visibility or wind missing from report"]
+    return "FLYABLE", []

@@ -96,7 +96,9 @@ export default function MapView({ origin, dest, map }: { origin?: Facility; dest
         <span><i className="swatch dash" style={{ borderColor: AIR }} /> Flight path, from the simulated base</span>
         {map && (map.landing_places?.length ?? 0) > 0 && (
           <span><i className="swatch ring" style={{ borderColor: AIR }} /> Landing places along the way
-            {map.min_margin_min != null && <> (smallest energy margin {Math.round(map.min_margin_min)} min)</>}</span>
+            {map.min_margin_min != null && (map.min_margin_min >= 0
+              ? <> (always within reach, at least {Math.round(map.min_margin_min)} min of energy to spare)</>
+              : <> (with the lowest starting charge, {Math.round(-map.min_margin_min)} min short of the reserve at the worst point)</>)}</span>
         )}
       </p>
     </div>

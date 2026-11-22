@@ -68,13 +68,20 @@ def fetch_osrm(lat1: float, lon1: float, lat2: float, lon2: float, timeout: floa
             "geometry": [[round(x, 4), round(y, 4)] for x, y in best["geometry"]["coordinates"]]}
 
 
-@lru_cache(maxsize=512)
+_LIVE: dict[tuple, tuple] = {}  # successful live lookups only; a failure is retried next time
+
+
 def _live(lat1: float, lon1: float, lat2: float, lon2: float) -> tuple | None:
-    try:
-        r = fetch_osrm(lat1, lon1, lat2, lon2)
-    except Exception:
-        return None
-    return r["miles"], r["minutes"], tuple(map(tuple, r["geometry"])), datetime.now(timezone.utc)
+    key = (lat1, lon1, lat2, lon2)
+    if key not in _LIVE:
+        try:
+            r = fetch_osrm(lat1, lon1, lat2, lon2)
+        except Exception:
+            return None
+        if len(_LIVE) > 2000:
+            _LIVE.clear()
+        _LIVE[key] = (r["miles"], r["minutes"], tuple(map(tuple, r["geometry"])), datetime.now(timezone.utc))
+    return _LIVE[key]
 
 
 def modeled(origin: dict, dest: dict, ground_profile: dict) -> Route:

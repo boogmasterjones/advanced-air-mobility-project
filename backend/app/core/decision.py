@@ -106,7 +106,10 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
     ground_t = (_lognormal(rng, _v(ground, "dispatch_delay_min_median"), SPREAD, n)
                 + _lognormal(rng, _v(ground, "load_min_median"), SPREAD, n) + drive
                 + _lognormal(rng, _v(ground, "handoff_min_median"), 0.3, n))
-    ground_ids = [f_road, f_drive, f_cong, f_wait, f_gload]
+    f_hand = ledger.add("Typical handoff time at the receiving hospital", _v(ground, "handoff_min_median"),
+                        unit="min", source="aircraft_profiles.json",
+                        confidence=ground["handoff_min_median"]["confidence"])
+    ground_ids = [f_road, f_drive, f_cong, f_wait, f_gload, f_hand]
     ground_reasons = ["road time has no live traffic; rush hours use a modeled slowdown"
                       if road.routed else "road time is modeled from straight-line distance, not routed"]
     options = [_summarize("ground_only", ground_t, deadline_min, ground_reasons, ground_ids)]
@@ -155,9 +158,16 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
                          source="decision engine", confidence="computed")
     air_ids += [f_weather, f_energy, f_spare, f_pad, f_flies]
 
-    air_ids.append(ledger.add("Typical aircraft time at the sending hospital", _v(air, "load_min_median"),
-                              unit="min", source="aircraft_profiles.json (helicopter air ambulance figure)",
-                              confidence=air["load_min_median"]["confidence"]))
+    for label, key, src in (
+            ("Typical time from the call to lift-off at the base", "launch_delay_min_median", "aircraft_profiles.json"),
+            ("Typical aircraft time at the sending hospital", "load_min_median",
+             "aircraft_profiles.json (helicopter air ambulance figure)"),
+            ("Typical time from landing to handover", "unload_min_median",
+             "aircraft_profiles.json (helicopter air ambulance figure)")):
+        air_ids.append(ledger.add(label, _v(air, key), unit="min", source=src, confidence=air[key]["confidence"]))
+    air_ids.append(ledger.add("Extra delay to call an ambulance after a flight is called off",
+                              _v(ground, "late_start_min_median"), unit="min", source="aircraft_profiles.json",
+                              confidence=ground["late_start_min_median"]["confidence"]))
     launch = _lognormal(rng, _v(air, "launch_delay_min_median"), 0.3, n)
     air_t = (launch + sum(power.leg_minutes)
              + _lognormal(rng, _v(air, "load_min_median"), SPREAD, n)
@@ -171,6 +181,8 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
         air_reasons.append(f"{round(power.p_ok * 100)}% chance the battery covers the trip and reserve")
     if not power.temp_known:
         air_reasons.append("temperature unknown, so the hottest case is assumed for the battery")
+    if not power.wind_known:
+        air_reasons.append("wind unknown, so a strong wind from any direction is assumed for the battery")
     out = alternates.check(air, origin, dest, base, temp_c)
     air_ids.append(ledger.add(
         "Smallest energy margin to the nearest landing place along the flight", round(out["min_margin_min"]),
@@ -199,5 +211,5 @@ def recommend(options: list[Option]) -> str:
     if not usable:
         return "ground_only"
     best = max(o.p_by_deadline for o in usable)
-    close = [o for o in usable if o.p_by_deadline >= best - CLOSE_CALL]
+    close = [o for o in usable if o.p_by_deadline >= best - CLOSE_CALL - 1e-9]  # exactly 2 points is a tie
     return min(close, key=lambda o: PREFERENCE.index(o.strategy)).strategy

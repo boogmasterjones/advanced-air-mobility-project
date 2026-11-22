@@ -31,7 +31,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 from statistics import mean
 
-from app.core import decision, history, replay, weather
+from app.core import decision, forecaster, history, replay, weather
 from app.core.case import FLORIDA, build_case
 from app.core.geo import DATA_DIR, haversine_mi, heliports, nearest_station
 from app.core.ledger import Ledger
@@ -226,12 +226,17 @@ def main() -> int:
     active = summary.get("active_weather_hours", {}).get("policies", {})
     calm = summary.get("random_hours", {}).get("policies", {})
     n_active = summary.get("active_weather_hours", {}).get("cases", 0)
+    model = forecaster.model_name()
     note = (f"Synthetic cases replayed on real {span[0].year} weather; aircraft simulated, road times modeled. "
-            f"Compared with the old rule that looks only at the weather right now.")
+            f"Compared with the old rule that looks only at the weather right now. Forecaster: {model}.")
+    if model == forecaster.RULE_MODEL:
+        note += " WARNING: the trained forecaster was not installed, so the app and the old rule are the same here."
+        print("WARNING: no trained forecaster found; this run compares the rule with itself.")
     get = lambda group, policy, key: group.get(policy, {}).get(key)  # noqa: E731
     out = {
         "id": "E2", "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "weather_year": span[0].year, "seed": args.seed, "summary": summary,
+        "weather_year": span[0].year, "seed": args.seed, "forecaster": forecaster.model_name(),
+        "summary": summary,
         "weather_chance_check": weather_calibration(every),
         "demo_cases": picks, "cases": every,
         "how_to_read": "regret_min: minutes lost against the fastest choice under the weather that really "

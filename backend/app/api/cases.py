@@ -11,7 +11,7 @@ from ..contracts import CaseIn, CaseOut, ForecastOut, ForecastPoint, ReplayOut, 
 from ..core import history, replay as replay_engine, weather
 from ..core.case import DISCLAIMER, build_case
 from ..core.forecaster import from_reports
-from ..core.geo import DATA_DIR, heliports, stations
+from ..core.geo import DATA_DIR, heliports, station_neighbors, stations
 from ..core.ledger import Ledger
 
 router = APIRouter(prefix="/api")
@@ -90,11 +90,13 @@ def forecast(station: str):
     if st is None:
         raise HTTPException(404, "Unknown station; see data/seeds/stations.csv")
     now = datetime.now(timezone.utc)
+    nearby = station_neighbors(icao)  # the same neighbors the case screen uses, so the numbers agree
     try:
-        reports = weather.fetch_history([icao]).get(icao, [])
+        fetched = weather.fetch_history([icao] + [code for code, _ in nearby])
     except Exception:
         raise HTTPException(503, "Weather service did not answer; forecast UNKNOWN") from None
-    fc = from_reports(reports, st["lat"], st["lon"], now)
+    fc = from_reports(fetched.get(icao, []), st["lat"], st["lon"], now,
+                      [(miles, fetched.get(code, [])) for code, miles in nearby])
     if fc is None:
         raise HTTPException(503, "No fresh weather report for this airport; forecast UNKNOWN")
     ledger = Ledger(now=now)
