@@ -12,7 +12,7 @@ Confidence = Literal["official", "reported", "estimate", "assumption", "simulate
 class Fact(BaseModel):
     id: str
     label: str
-    value: float | str | bool | None
+    value: bool | int | float | str | None  # whole numbers stay whole (45, not 45.0)
     unit: str = ""
     source: str
     fetched_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

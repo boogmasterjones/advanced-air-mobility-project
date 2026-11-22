@@ -1,0 +1,1381 @@
+{
+ "_note": "Synthetic intake requests for E3. Every case is made up; facility names are public. Built by backend/eval_llm/make_intake_cases.py (seeded).",
+ "cases": [
+  {
+   "id": "intake-001",
+   "text": "Stroke patient from Highlands Regional Med Ctr to HCA Florida Bayonet Point Hospital within 90 minutes.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 90,
+    "people": null,
+    "origin_id": "9FD3",
+    "dest_id": "FL32"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-002",
+   "text": "Stroke alert. Transfer from Wellington Medical Center to Delray Medical Center, needs to arrive within 60 min for clot removal.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": null,
+    "origin_id": "FL39",
+    "dest_id": "48FD"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-003",
+   "text": "pt w/ CVA at Lower Keys Medical Center, xfer to hca florida orange park hospital in under 45 mins pls",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 45,
+    "people": null,
+    "origin_id": "7FA0",
+    "dest_id": "20FA"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-004",
+   "text": "67 year old with stroke symptoms, last known well 2 hours ago. Send from Jay Hospital to Tallahassee Memorial Hospital within 1 hour.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "FA16",
+    "dest_id": "FD18"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-005",
+   "text": "Trauma from oviedo medical center to hca florida blake hospital in 1 hour.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 60,
+    "people": null,
+    "origin_id": "FA96",
+    "dest_id": "5FL2"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-006",
+   "text": "Car crash victim, 2 units of blood given, moving from Orlando Health Lakeland to Nicklaus Children's Hospital. Must be there in 45 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 45,
+    "people": 1,
+    "origin_id": "44FA",
+    "dest_id": "FA76"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-007",
+   "text": "Level 1 trauma activation: Lakeside Med Ctr in Belle Glade to HCA Florida Fort Walton-Destin Hospital, 30 min window.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 30,
+    "people": null,
+    "origin_id": "9FA2",
+    "dest_id": "FD45"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-008",
+   "text": "We have a STEMI at Jackson County Hospital. Receiving hospital is ascension sacred heart pensacola. Door to balloon target is 90 minutes.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": 90,
+    "people": null,
+    "origin_id": "28FD",
+    "dest_id": "9FD1"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-009",
+   "text": "Heart attack patient needs cath lab. From UF Health Leesburg Hospital to Nicklaus Children's Hospital within 1.5 hours.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": 90,
+    "people": 1,
+    "origin_id": "3FD2",
+    "dest_id": "FA76"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-010",
+   "text": "Kidney for transplant leaving Oviedo Medical Center, going to St. Joseph's Hspital. Must arrive within 6 hours.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 360,
+    "people": 0,
+    "origin_id": "FA96",
+    "dest_id": "FL38"
+   },
+   "tags": [
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-011",
+   "text": "Organ transport from Lakeside Medical Center to hca florida bayonet point hospital within 4 hours.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 240,
+    "people": null,
+    "origin_id": "9FA2",
+    "dest_id": "FL32"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-012",
+   "text": "Liver for a transplant team: pick up at Wellington Medical Center, deliver to Sarasota Memorial Hospital in 3 hrs.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 180,
+    "people": 0,
+    "origin_id": "FL39",
+    "dest_id": "FA23"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-013",
+   "text": "Need 6 units of O negative blood moved from Oviedo Medical Center to UF Health Jacksonville within 2 hours.",
+   "expected": {
+    "category": "supplies",
+    "deadline_min": 120,
+    "people": 0,
+    "origin_id": "FA96",
+    "dest_id": "FA61"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-014",
+   "text": "Supplies run: ventilator parts from Orlando Health Lakeland to Orlando Health Orlando Regional Medical Center, needed in 90 min.",
+   "expected": {
+    "category": "supplies",
+    "deadline_min": 90,
+    "people": 0,
+    "origin_id": "44FA",
+    "dest_id": "FD28"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-015",
+   "text": "Paciente con derrame cerebral (stroke), de Wellington Medical Center a Ascension Sacred Heart Pensacola, within 60 minutes por favor.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "FL39",
+    "dest_id": "9FD1"
+   },
+   "tags": [
+    "spanish mix"
+   ]
+  },
+  {
+   "id": "intake-016",
+   "text": "Traslado urgente: trauma patient from Wellington Medical Center to HCA Florida Fort Walton-Destin Hosp, tiene que llegar in 45 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 45,
+    "people": 1,
+    "origin_id": "FL39",
+    "dest_id": "FD45"
+   },
+   "tags": [
+    "abbreviated",
+    "spanish mix"
+   ]
+  },
+  {
+   "id": "intake-017",
+   "text": "Please arrange transfer from Orlando Health Lakeland to halifax health medical center of daytona beach for a stroke patient.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "44FA",
+    "dest_id": "29FL"
+   },
+   "tags": [
+    "lowercase",
+    "no deadline"
+   ]
+  },
+  {
+   "id": "intake-018",
+   "text": "Trauma patient at uf health leesburg hospital needs a higher level of care at HCA Florida Osceola Hosptal. How fast can we get there?",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "3FD2",
+    "dest_id": "12FD"
+   },
+   "tags": [
+    "lowercase",
+    "no deadline",
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-019",
+   "text": "STEMI, 54 y/o male, BP 90/60, from Lakeside Med Ctr in Belle Glade to Lakeland Regional Health Med Ctr.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "9FA2",
+    "dest_id": "7FD7"
+   },
+   "tags": [
+    "abbreviated",
+    "no deadline"
+   ]
+  },
+  {
+   "id": "intake-020",
+   "text": "Burn patient and one nurse escort from desoto memorial hospital to Ascension Sacred Heart Pensacola within 2 hours.",
+   "expected": {
+    "category": "other",
+    "deadline_min": 120,
+    "people": 2,
+    "origin_id": "FD85",
+    "dest_id": "9FD1"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-021",
+   "text": "Pediatric patient with parent, Lakeside Med Ctr in Belle Glade to Broward Health Medical Center, within 75 minutes.",
+   "expected": {
+    "category": "other",
+    "deadline_min": 75,
+    "people": 2,
+    "origin_id": "9FA2",
+    "dest_id": "6FD8"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-022",
+   "text": "From Oviedo Medical Center to Johns Hopkins All Children's Hospital within 40 minutes, stroke.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 40,
+    "people": null,
+    "origin_id": "FA96",
+    "dest_id": "FL14"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-023",
+   "text": "Stroke patient needs transfer to UF Halth Jacksonville within 90 minutes.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 90,
+    "people": 1,
+    "origin_id": null,
+    "dest_id": "FA61"
+   },
+   "tags": [
+    "missing place",
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-024",
+   "text": "Trauma patient at Lakeside Med Ctr in Belle Glade, needs transfer out within 60 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "9FA2",
+    "dest_id": null
+   },
+   "tags": [
+    "missing place"
+   ]
+  },
+  {
+   "id": "intake-025",
+   "text": "URGENT!!! organ (heart for transplant) jackson county hospital >> HCA Florida Orage Park Hospital 4 hrs MAX",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 240,
+    "people": 0,
+    "origin_id": "28FD",
+    "dest_id": "20FA"
+   },
+   "tags": [
+    "lowercase",
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-026",
+   "text": "Stroke patient from Jupiter Medical Center to HCA Florida Bayonet Point Hosp within 90 minutes.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 90,
+    "people": null,
+    "origin_id": "60FL",
+    "dest_id": "FL32"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-027",
+   "text": "Stroke alert. Transfer from Lower Keys Med Ctr to UF Health Shands Hospital, needs to arrive within 60 min for clot removal.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": null,
+    "origin_id": "7FA0",
+    "dest_id": "FA12"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-028",
+   "text": "pt w/ CVA at Wellington Medical Center, xfer to Halifax Health Medical Center of Daytona Beach in under 45 mins pls",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 45,
+    "people": null,
+    "origin_id": "FL39",
+    "dest_id": "29FL"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-029",
+   "text": "67 year old with stroke symptoms, last known well 2 hours ago. Send from Orlando Health Lakeland to HCA Florida Osceola Hospital within 1 hour.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "44FA",
+    "dest_id": "12FD"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-030",
+   "text": "Trauma from Highlands Regional Medical Center to jackson memorial hospital in 1 hour.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 60,
+    "people": null,
+    "origin_id": "9FD3",
+    "dest_id": "25FA"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-031",
+   "text": "Car crash victim, 2 units of blood given, moving from Jackson Couty Hospital to Johns Hopkins All Children's Hospial. Must be there in 45 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 45,
+    "people": 1,
+    "origin_id": "28FD",
+    "dest_id": "FL14"
+   },
+   "tags": [
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-032",
+   "text": "Level 1 trauma activation: Wellington Medical Cener to HCA Florida Bayonet Point Hospital, 30 min window.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 30,
+    "people": null,
+    "origin_id": "FL39",
+    "dest_id": "FL32"
+   },
+   "tags": [
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-033",
+   "text": "We have a STEMI at Wellington Medical Center. Receiving hospital is lakeland regional health medical center. Door to balloon target is 90 minutes.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": 90,
+    "people": null,
+    "origin_id": "FL39",
+    "dest_id": "7FD7"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-034",
+   "text": "Heart attack patient needs cath lab. From Lower Keys Medical Center to Ascension Sacred Heart Pensacola within 1.5 hours.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": 90,
+    "people": 1,
+    "origin_id": "7FA0",
+    "dest_id": "9FD1"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-035",
+   "text": "Kidney for transplant leaving lakeside medical center, going to Memorial Regional Hospital. Must arrive within 6 hours.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 360,
+    "people": 0,
+    "origin_id": "9FA2",
+    "dest_id": "77FD"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-036",
+   "text": "Organ transport from uf health leesburg hospital to jackson south medical center within 4 hours.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 240,
+    "people": null,
+    "origin_id": "3FD2",
+    "dest_id": "FL91"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-037",
+   "text": "Liver for a transplant team: pick up at Jupiter Med Ctr, deliver to HCA Florida Orange Park Hosp in 3 hrs.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 180,
+    "people": 0,
+    "origin_id": "60FL",
+    "dest_id": "20FA"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-038",
+   "text": "Need 6 units of O negative blood moved from Lakeside Med Ctr to hca florida bayonet point hospital within 2 hours.",
+   "expected": {
+    "category": "supplies",
+    "deadline_min": 120,
+    "people": 0,
+    "origin_id": "9FA2",
+    "dest_id": "FL32"
+   },
+   "tags": [
+    "abbreviated",
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-039",
+   "text": "Supplies run: ventilator parts from Jackson County Hosp to HCA Florida Ocala Hospital, needed in 90 min.",
+   "expected": {
+    "category": "supplies",
+    "deadline_min": 90,
+    "people": 0,
+    "origin_id": "28FD",
+    "dest_id": "3FD1"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-040",
+   "text": "Paciente con derrame cerebral (stroke), de Wellington Medcal Center a Halifax Health Medical Center of Daytona Beach, within 60 minutes por favor.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "FL39",
+    "dest_id": "29FL"
+   },
+   "tags": [
+    "spanish mix",
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-041",
+   "text": "Traslado urgente: trauma patient from Highlands Regional Medical Center to St. Joseph's Hospital, tiene que llegar in 45 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 45,
+    "people": 1,
+    "origin_id": "9FD3",
+    "dest_id": "FL38"
+   },
+   "tags": [
+    "spanish mix"
+   ]
+  },
+  {
+   "id": "intake-042",
+   "text": "Please arrange transfer from Lakeside Med Ctr in Belle Glade to johns hopkins all children's hospital for a stroke patient.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "9FA2",
+    "dest_id": "FL14"
+   },
+   "tags": [
+    "lowercase",
+    "no deadline"
+   ]
+  },
+  {
+   "id": "intake-043",
+   "text": "Trauma patient at uf health leesburg hospital needs a higher level of care at St. Joseph's Hospital. How fast can we get there?",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "3FD2",
+    "dest_id": "FL38"
+   },
+   "tags": [
+    "lowercase",
+    "no deadline"
+   ]
+  },
+  {
+   "id": "intake-044",
+   "text": "STEMI, 54 y/o male, BP 90/60, from Lakeside Medical Center to UF Health Shands Hosp.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "9FA2",
+    "dest_id": "FA12"
+   },
+   "tags": [
+    "abbreviated",
+    "no deadline"
+   ]
+  },
+  {
+   "id": "intake-045",
+   "text": "Burn patient and one nurse escort from UF Health Leesburg Hospital to HCA Florida Kendall Hosp within 2 hours.",
+   "expected": {
+    "category": "other",
+    "deadline_min": 120,
+    "people": 2,
+    "origin_id": "3FD2",
+    "dest_id": "70FL"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-046",
+   "text": "Pediatric patient with parent, Wellington Medical Center to Gulf Coast Med Ctr, within 75 minutes.",
+   "expected": {
+    "category": "other",
+    "deadline_min": 75,
+    "people": 2,
+    "origin_id": "FL39",
+    "dest_id": "67FD"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-047",
+   "text": "From desoto memorial hospital to Orlando Health Orlando Regional Medical Center within 40 minutes, stroke.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 40,
+    "people": null,
+    "origin_id": "FD85",
+    "dest_id": "FD28"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-048",
+   "text": "Stroke patient needs transfer to St. Mary's Med Ctr within 90 minutes.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 90,
+    "people": 1,
+    "origin_id": null,
+    "dest_id": "64FD"
+   },
+   "tags": [
+    "abbreviated",
+    "missing place"
+   ]
+  },
+  {
+   "id": "intake-049",
+   "text": "Trauma patient at Oviedo Meical Center, needs transfer out within 60 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "FA96",
+    "dest_id": null
+   },
+   "tags": [
+    "missing place",
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-050",
+   "text": "URGENT!!! organ (heart for transplant) Lower Keys Medical Center >> UF Health Jacksonville 4 hrs MAX",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 240,
+    "people": 0,
+    "origin_id": "7FA0",
+    "dest_id": "FA61"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-051",
+   "text": "Stroke patient from Jay Hospitl to HCA Florida Memorial Hospital within 90 minutes.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 90,
+    "people": null,
+    "origin_id": "FA16",
+    "dest_id": "FA65"
+   },
+   "tags": [
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-052",
+   "text": "Stroke alert. Transfer from Jackson County Hospital to Johns Hopkins All Children's Hospital, needs to arrive within 60 min for clot removal.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": null,
+    "origin_id": "28FD",
+    "dest_id": "FL14"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-053",
+   "text": "pt w/ CVA at UF Halth Leesburg Hospital, xfer to Holmes Reginal Medical Center in under 45 mins pls",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 45,
+    "people": null,
+    "origin_id": "3FD2",
+    "dest_id": "3FD3"
+   },
+   "tags": [
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-054",
+   "text": "67 year old with stroke symptoms, last known well 2 hours ago. Send from UF Health Leesburg Hspital to broward health north within 1 hour.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "3FD2",
+    "dest_id": "28FA"
+   },
+   "tags": [
+    "lowercase",
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-055",
+   "text": "Trauma from Jackson County Hospital to HCA Florida Ocala Hospital in 1 hour.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 60,
+    "people": null,
+    "origin_id": "28FD",
+    "dest_id": "3FD1"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-056",
+   "text": "Car crash victim, 2 units of blood given, moving from Oviedo Medical Center to Broward Health North. Must be there in 45 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 45,
+    "people": 1,
+    "origin_id": "FA96",
+    "dest_id": "28FA"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-057",
+   "text": "Level 1 trauma activation: jupiter medical center to HCA Florida Bayonet Point Hospital, 30 min window.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 30,
+    "people": null,
+    "origin_id": "60FL",
+    "dest_id": "FL32"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-058",
+   "text": "We have a STEMI at Lower Keys Med Ctr. Receiving hospital is broward health north. Door to balloon target is 90 minutes.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": 90,
+    "people": null,
+    "origin_id": "7FA0",
+    "dest_id": "28FA"
+   },
+   "tags": [
+    "abbreviated",
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-059",
+   "text": "Heart attack patient needs cath lab. From orlando health lakeland to HCA Florida Aventura Hospital within 1.5 hours.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": 90,
+    "people": 1,
+    "origin_id": "44FA",
+    "dest_id": "1FD5"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-060",
+   "text": "Kidney for transplant leaving DeSoto Memorial Hospital, going to Ascension Sacred Heart Bay. Must arrive within 6 hours.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 360,
+    "people": 0,
+    "origin_id": "FD85",
+    "dest_id": "8FL4"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-061",
+   "text": "Organ transport from Oviedo Medical Center to broward health north within 4 hours.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 240,
+    "people": null,
+    "origin_id": "FA96",
+    "dest_id": "28FA"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-062",
+   "text": "Liver for a transplant team: pick up at UF Health Leesburg Hospital, deliver to UF Health Sands Hospital in 3 hrs.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 180,
+    "people": 0,
+    "origin_id": "3FD2",
+    "dest_id": "FA12"
+   },
+   "tags": [
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-063",
+   "text": "Need 6 units of O negative blood moved from Lkeside Medical Center to HCA Florida Bayonet Point Hospital within 2 hours.",
+   "expected": {
+    "category": "supplies",
+    "deadline_min": 120,
+    "people": 0,
+    "origin_id": "9FA2",
+    "dest_id": "FL32"
+   },
+   "tags": [
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-064",
+   "text": "Supplies run: ventilator parts from Lakeside Medical Center to Gulf Coast Medical Center, needed in 90 min.",
+   "expected": {
+    "category": "supplies",
+    "deadline_min": 90,
+    "people": 0,
+    "origin_id": "9FA2",
+    "dest_id": "67FD"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-065",
+   "text": "Paciente con derrame cerebral (stroke), de DeSoto Memoril Hospital a Jackson South Med Ctr, within 60 minutes por favor.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "FD85",
+    "dest_id": "FL91"
+   },
+   "tags": [
+    "abbreviated",
+    "spanish mix",
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-066",
+   "text": "Traslado urgente: trauma patient from jackson county hospital to Memorial Regional Hospital, tiene que llegar in 45 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 45,
+    "people": 1,
+    "origin_id": "28FD",
+    "dest_id": "77FD"
+   },
+   "tags": [
+    "lowercase",
+    "spanish mix"
+   ]
+  },
+  {
+   "id": "intake-067",
+   "text": "Please arrange transfer from Ovieo Medical Center to HCA Florida Aventura Hospital for a stroke patient.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "FA96",
+    "dest_id": "1FD5"
+   },
+   "tags": [
+    "no deadline",
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-068",
+   "text": "Trauma patient at UF Health Leesbrg Hospital needs a higher level of care at HCA Florida Kendall Hospital. How fast can we get there?",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "3FD2",
+    "dest_id": "70FL"
+   },
+   "tags": [
+    "no deadline",
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-069",
+   "text": "STEMI, 54 y/o male, BP 90/60, from Orlando Health Lakeland to Nicklaus Cildren's Hospital.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "44FA",
+    "dest_id": "FA76"
+   },
+   "tags": [
+    "no deadline",
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-070",
+   "text": "Burn patient and one nurse escort from Jupiter Medical Center to Tampa General Hosp within 2 hours.",
+   "expected": {
+    "category": "other",
+    "deadline_min": 120,
+    "people": 2,
+    "origin_id": "60FL",
+    "dest_id": "61FL"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-071",
+   "text": "Pediatric patient with parent, Jay Hospital to orlando health orlando regional medical center, within 75 minutes.",
+   "expected": {
+    "category": "other",
+    "deadline_min": 75,
+    "people": 2,
+    "origin_id": "FA16",
+    "dest_id": "FD28"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-072",
+   "text": "From Orlando Health Lakeland to HCA Florida Oseola Hospital within 40 minutes, stroke.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 40,
+    "people": null,
+    "origin_id": "44FA",
+    "dest_id": "12FD"
+   },
+   "tags": [
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-073",
+   "text": "Stroke patient needs transfer to HCA Florida Bayonet Point Hospital within 90 minutes.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 90,
+    "people": 1,
+    "origin_id": null,
+    "dest_id": "FL32"
+   },
+   "tags": [
+    "missing place"
+   ]
+  },
+  {
+   "id": "intake-074",
+   "text": "Trauma patient at Jupiter Medical Cnter, needs transfer out within 60 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "60FL",
+    "dest_id": null
+   },
+   "tags": [
+    "missing place",
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-075",
+   "text": "URGENT!!! organ (heart for transplant) Jay Hospital >> UF Health Shands Hospital 4 hrs MAX",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 240,
+    "people": 0,
+    "origin_id": "FA16",
+    "dest_id": "FA12"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-076",
+   "text": "Stroke patient from Jay Hospital to Jackson South Medical Cnter within 90 minutes.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 90,
+    "people": null,
+    "origin_id": "FA16",
+    "dest_id": "FL91"
+   },
+   "tags": [
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-077",
+   "text": "Stroke alert. Transfer from lower keys medical center to HCA Florida Blake Hosp, needs to arrive within 60 min for clot removal.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": null,
+    "origin_id": "7FA0",
+    "dest_id": "5FL2"
+   },
+   "tags": [
+    "abbreviated",
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-078",
+   "text": "pt w/ CVA at Orlando Health Lakeland, xfer to Gulf Coast Medical Center in under 45 mins pls",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 45,
+    "people": null,
+    "origin_id": "44FA",
+    "dest_id": "67FD"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-079",
+   "text": "67 year old with stroke symptoms, last known well 2 hours ago. Send from Oviedo Medical Center to HCA Florida Kendall Hosp within 1 hour.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "FA96",
+    "dest_id": "70FL"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-080",
+   "text": "Trauma from Lakeside Med Ctr in Belle Glade to Ascension Sacred Heart Pensacola in 1 hour.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 60,
+    "people": null,
+    "origin_id": "9FA2",
+    "dest_id": "9FD1"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-081",
+   "text": "Car crash victim, 2 units of blood given, moving from Jay Hospital to Holmes Regional Medical Center. Must be there in 45 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 45,
+    "people": 1,
+    "origin_id": "FA16",
+    "dest_id": "3FD3"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-082",
+   "text": "Level 1 trauma activation: Lakeside Medical Center to uf health jacksonville, 30 min window.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 30,
+    "people": null,
+    "origin_id": "9FA2",
+    "dest_id": "FA61"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-083",
+   "text": "We have a STEMI at Orlando Health Lakeland. Receiving hospital is Halifax Health Medicl Center of Daytona Beach. Door to balloon target is 90 minutes.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": 90,
+    "people": null,
+    "origin_id": "44FA",
+    "dest_id": "29FL"
+   },
+   "tags": [
+    "typo"
+   ]
+  },
+  {
+   "id": "intake-084",
+   "text": "Heart attack patient needs cath lab. From desoto memorial hospital to delray medical center within 1.5 hours.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": 90,
+    "people": 1,
+    "origin_id": "FD85",
+    "dest_id": "48FD"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-085",
+   "text": "Kidney for transplant leaving Highlands Regional Medical Center, going to St. Mary's Medical Center. Must arrive within 6 hours.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 360,
+    "people": 0,
+    "origin_id": "9FD3",
+    "dest_id": "64FD"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-086",
+   "text": "Organ transport from Oviedo Med Ctr to HCA Florida Orange Park Hosp within 4 hours.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 240,
+    "people": null,
+    "origin_id": "FA96",
+    "dest_id": "20FA"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-087",
+   "text": "Liver for a transplant team: pick up at Jupiter Medical Center, deliver to Orlando Health Orlando Regional Med Ctr in 3 hrs.",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 180,
+    "people": 0,
+    "origin_id": "60FL",
+    "dest_id": "FD28"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-088",
+   "text": "Need 6 units of O negative blood moved from Highlands Regional Medical Center to Orlando Health Orlando Regional Medical Center within 2 hours.",
+   "expected": {
+    "category": "supplies",
+    "deadline_min": 120,
+    "people": 0,
+    "origin_id": "9FD3",
+    "dest_id": "FD28"
+   },
+   "tags": []
+  },
+  {
+   "id": "intake-089",
+   "text": "Supplies run: ventilator parts from Oviedo Medical Center to uf health shands hospital, needed in 90 min.",
+   "expected": {
+    "category": "supplies",
+    "deadline_min": 90,
+    "people": 0,
+    "origin_id": "FA96",
+    "dest_id": "FA12"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-090",
+   "text": "Paciente con derrame cerebral (stroke), de oviedo medical center a HCA Florida Blake Hospital, within 60 minutes por favor.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "FA96",
+    "dest_id": "5FL2"
+   },
+   "tags": [
+    "lowercase",
+    "spanish mix"
+   ]
+  },
+  {
+   "id": "intake-091",
+   "text": "Traslado urgente: trauma patient from Lower Keys Medical Center to UF Health Shands Hospital, tiene que llegar in 45 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 45,
+    "people": 1,
+    "origin_id": "7FA0",
+    "dest_id": "FA12"
+   },
+   "tags": [
+    "spanish mix"
+   ]
+  },
+  {
+   "id": "intake-092",
+   "text": "Please arrange transfer from desoto memorial hospital to hca florida bayonet point hospital for a stroke patient.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "FD85",
+    "dest_id": "FL32"
+   },
+   "tags": [
+    "lowercase",
+    "no deadline"
+   ]
+  },
+  {
+   "id": "intake-093",
+   "text": "Trauma patient at UF Health Leesburg Hosp needs a higher level of care at uf health jacksonville. How fast can we get there?",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "3FD2",
+    "dest_id": "FA61"
+   },
+   "tags": [
+    "abbreviated",
+    "lowercase",
+    "no deadline"
+   ]
+  },
+  {
+   "id": "intake-094",
+   "text": "STEMI, 54 y/o male, BP 90/60, from Jay Hospital to Holmes Regional Medical Center.",
+   "expected": {
+    "category": "heart_attack",
+    "deadline_min": null,
+    "people": 1,
+    "origin_id": "FA16",
+    "dest_id": "3FD3"
+   },
+   "tags": [
+    "no deadline"
+   ]
+  },
+  {
+   "id": "intake-095",
+   "text": "Burn patient and one nurse escort from UF Health Leesburg Hospital to HCA Florida Osceola Hosp within 2 hours.",
+   "expected": {
+    "category": "other",
+    "deadline_min": 120,
+    "people": 2,
+    "origin_id": "3FD2",
+    "dest_id": "12FD"
+   },
+   "tags": [
+    "abbreviated"
+   ]
+  },
+  {
+   "id": "intake-096",
+   "text": "Pediatric patient with parent, Jackson County Hospital to tallahassee memorial hospital, within 75 minutes.",
+   "expected": {
+    "category": "other",
+    "deadline_min": 75,
+    "people": 2,
+    "origin_id": "28FD",
+    "dest_id": "FD18"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-097",
+   "text": "From uf health leesburg hospital to Memorial Regional Hospital within 40 minutes, stroke.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 40,
+    "people": null,
+    "origin_id": "3FD2",
+    "dest_id": "77FD"
+   },
+   "tags": [
+    "lowercase"
+   ]
+  },
+  {
+   "id": "intake-098",
+   "text": "Stroke patient needs transfer to Orlando Health Orlando Regional Medical Center within 90 minutes.",
+   "expected": {
+    "category": "stroke",
+    "deadline_min": 90,
+    "people": 1,
+    "origin_id": null,
+    "dest_id": "FD28"
+   },
+   "tags": [
+    "missing place"
+   ]
+  },
+  {
+   "id": "intake-099",
+   "text": "Trauma patient at UF Health Leesburg Hospital, needs transfer out within 60 minutes.",
+   "expected": {
+    "category": "trauma",
+    "deadline_min": 60,
+    "people": 1,
+    "origin_id": "3FD2",
+    "dest_id": null
+   },
+   "tags": [
+    "missing place"
+   ]
+  },
+  {
+   "id": "intake-100",
+   "text": "URGENT!!! organ (heart for transplant) Wellington Medical Center >> Ascension Sacred Heart Pensacola 4 hrs MAX",
+   "expected": {
+    "category": "organ",
+    "deadline_min": 240,
+    "people": 0,
+    "origin_id": "FL39",
+    "dest_id": "9FD1"
+   },
+   "tags": []
+  }
+ ]
+}

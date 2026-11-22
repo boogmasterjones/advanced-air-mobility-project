@@ -164,9 +164,24 @@ def test_verifier_edge_cases():
     assert verify("", ledger).pass_rate == 1.0
 
 
+def test_verifier_checks_units_not_just_digits():
+    """Found by the planted-error eval: a wrong percentage that equals the deadline in
+    minutes used to pass, because both facts were cited."""
+    ledger = Ledger()
+    chance = ledger.add("Chance", 32, unit="%", source="t", confidence="computed")
+    deadline = ledger.add("Deadline", 45, unit="min", source="t", confidence="reported")
+    cites = f"[{chance}][{deadline}]"
+    assert verify(f"A 32% chance within the 45 min deadline {cites}.", ledger).kept
+    assert not verify(f"A 45% chance within the 45 min deadline {cites}.", ledger).kept
+    assert not verify(f"A 32% chance within the 32 minutes deadline {cites}.", ledger).kept
+    assert verify(f"The numbers are 32 and 45 {cites}.", ledger).kept   # no unit written: either fact
+    flag = ledger.add("Thunderstorm reported", True, source="t", confidence="official")
+    assert not verify(f"There is 1 storm [{flag}].", ledger).kept       # True is not the number 1
+
+
 # ---- evidence -------------------------------------------------------------------------
 def test_evidence_lists_all_six_and_never_invents_numbers():
     out = client.get("/api/evidence").json()
     assert {m["id"] for m in out["metrics"]} == {"E1", "E2", "E3", "E4", "E5", "E6"}
-    for m in out["metrics"]:
-        assert m["value"] is not None or m["note"] == "not run yet"
+    for m in out["metrics"]:  # an empty value must say it was not run, never show a guess
+        assert m["value"] is not None or "not run" in m["note"]

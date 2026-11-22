@@ -1,0 +1,2030 @@
+{
+ "id": "E2",
+ "generated_at": "2026-11-22T22:07:16+00:00",
+ "weather_year": 2024,
+ "seed": 2024,
+ "summary": {
+  "random_hours": {
+   "cases": 20,
+   "weather_stayed_flyable": 0.85,
+   "policies": {
+    "ours": {
+     "mean_regret_min": 5.73,
+     "mean_chance_on_time": 0.8014,
+     "mean_chance_lost": 0.0027,
+     "picked_best_choice": 0.9,
+     "vehicles_per_case": 1.25
+    },
+    "weather_now": {
+     "mean_regret_min": 5.73,
+     "mean_chance_on_time": 0.8014,
+     "mean_chance_lost": 0.0027,
+     "picked_best_choice": 0.9,
+     "vehicles_per_case": 1.25
+    },
+    "always_ground": {
+     "mean_regret_min": 10.59,
+     "mean_chance_on_time": 0.6581,
+     "mean_chance_lost": 0.1461,
+     "picked_best_choice": 0.65,
+     "vehicles_per_case": 1
+    },
+    "always_air": {
+     "mean_regret_min": 5.13,
+     "mean_chance_on_time": 0.7576,
+     "mean_chance_lost": 0.0466,
+     "picked_best_choice": 0.1,
+     "vehicles_per_case": 1
+    },
+    "always_both": {
+     "mean_regret_min": 0.0,
+     "mean_chance_on_time": 0.8042,
+     "mean_chance_lost": 0.0,
+     "picked_best_choice": 0.25,
+     "vehicles_per_case": 2
+    }
+   }
+  },
+  "active_weather_hours": {
+   "cases": 20,
+   "weather_stayed_flyable": 0.25,
+   "policies": {
+    "ours": {
+     "mean_regret_min": 3.3,
+     "mean_chance_on_time": 0.4608,
+     "mean_chance_lost": 0.0247,
+     "picked_best_choice": 0.7,
+     "vehicles_per_case": 1.2
+    },
+    "weather_now": {
+     "mean_regret_min": 3.3,
+     "mean_chance_on_time": 0.4608,
+     "mean_chance_lost": 0.0247,
+     "picked_best_choice": 0.7,
+     "vehicles_per_case": 1.2
+    },
+    "always_ground": {
+     "mean_regret_min": 1.87,
+     "mean_chance_on_time": 0.4456,
+     "mean_chance_lost": 0.0399,
+     "picked_best_choice": 0.9,
+     "vehicles_per_case": 1
+    },
+    "always_air": {
+     "mean_regret_min": 17.14,
+     "mean_chance_on_time": 0.2535,
+     "mean_chance_lost": 0.2321,
+     "picked_best_choice": 0,
+     "vehicles_per_case": 1
+    },
+    "always_both": {
+     "mean_regret_min": 0.0,
+     "mean_chance_on_time": 0.4855,
+     "mean_chance_lost": 0.0,
+     "picked_best_choice": 0.1,
+     "vehicles_per_case": 2
+    }
+   }
+  }
+ },
+ "demo_cases": [],
+ "cases": [
+  {
+   "when": "2024-07-02T09:50+00:00",
+   "origin": "3FD3",
+   "dest": "FD19",
+   "origin_name": "HOLMES RGNL MEDICAL CENTER",
+   "dest_name": "HCA FLORIDA LAWNWOOD HOSPITAL",
+   "deadline_min": 90,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "air_and_ground",
+   "policies": {
+    "ours": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.993
+    },
+    "weather_now": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.993
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 31.4,
+     "regret_chance": 0.136,
+     "chance_on_time": 0.857
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.028,
+     "chance_on_time": 0.965
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.993
+    }
+   }
+  },
+  {
+   "when": "2024-07-16T15:40+00:00",
+   "origin": "FA03",
+   "dest": "FD19",
+   "origin_name": "SEBASTIAN RIVER MEDICAL CENTER",
+   "dest_name": "HCA FLORIDA LAWNWOOD HOSPITAL",
+   "deadline_min": 60,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "air_and_ground",
+   "policies": {
+    "ours": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.971
+    },
+    "weather_now": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.971
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 16.4,
+     "regret_chance": 0.469,
+     "chance_on_time": 0.502
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.027,
+     "chance_on_time": 0.944
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.971
+    }
+   }
+  },
+  {
+   "when": "2024-08-30T08:50+00:00",
+   "origin": "30FL",
+   "dest": "20FA",
+   "origin_name": "HCA FLORIDA PUTNAM HOSPITAL",
+   "dest_name": "HCA FLORIDA ORANGE PARK HOSPITAL",
+   "deadline_min": 60,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "air_and_ground",
+   "policies": {
+    "ours": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.659
+    },
+    "weather_now": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.659
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 15.2,
+     "regret_chance": 0.567,
+     "chance_on_time": 0.092
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.4,
+     "regret_chance": 0.032,
+     "chance_on_time": 0.627
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.659
+    }
+   }
+  },
+  {
+   "when": "2024-08-20T08:50+00:00",
+   "origin": "FD28",
+   "dest": "12FD",
+   "origin_name": "ORLANDO RGNL MEDICAL CENTER",
+   "dest_name": "HCA FLORIDA OSCEOLA HOSPITAL",
+   "deadline_min": 60,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 6.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 6.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 6.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.5,
+     "regret_chance": 0.021,
+     "chance_on_time": 0.979
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    }
+   }
+  },
+  {
+   "when": "2024-07-31T00:50+00:00",
+   "origin": "5FA0",
+   "dest": "20FA",
+   "origin_name": "SILVER-LEAF HOSPITAL HELISTOP",
+   "dest_name": "HCA FLORIDA ORANGE PARK HOSPITAL",
+   "deadline_min": 120,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.6,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.6,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.6,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 3.1,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    }
+   }
+  },
+  {
+   "when": "2024-07-05T16:20+00:00",
+   "origin": "FD96",
+   "dest": "FL32",
+   "origin_name": "HCA FLORIDA CITRUS HOSPITAL",
+   "dest_name": "HCA FLORIDA BAYONET POINT HOSPITAL",
+   "deadline_min": 120,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.2,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.999
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.2,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.999
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.2,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.999
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.5,
+     "regret_chance": 0.067,
+     "chance_on_time": 0.932
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.999
+    }
+   }
+  },
+  {
+   "when": "2024-07-10T11:10+00:00",
+   "origin": "FA19",
+   "dest": "48FD",
+   "origin_name": "HCA FLORIDA PALMS WEST HOSPITAL",
+   "dest_name": "DELRAY MEDICAL CENTER EMERGENCY HELISTOP",
+   "deadline_min": 45,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "air_only",
+   "policies": {
+    "ours": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.001,
+     "chance_on_time": 0.848
+    },
+    "weather_now": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.001,
+     "chance_on_time": 0.848
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "air_only",
+     "regret_min": 19.7,
+     "regret_chance": 0.822,
+     "chance_on_time": 0.027
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.001,
+     "chance_on_time": 0.848
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.849
+    }
+   }
+  },
+  {
+   "when": "2024-08-26T16:20+00:00",
+   "origin": "FL39",
+   "dest": "48FD",
+   "origin_name": "WELLINGTON MEDICAL CENTER",
+   "dest_name": "DELRAY MEDICAL CENTER EMERGENCY HELISTOP",
+   "deadline_min": 120,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 4.2,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 4.2,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 4.2,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 1.7,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    }
+   }
+  },
+  {
+   "when": "2024-08-19T14:20+00:00",
+   "origin": "FD85",
+   "dest": "FA23",
+   "origin_name": "DE SOTO MEML HOSPITAL",
+   "dest_name": "SARASOTA MEML HOSPITAL",
+   "deadline_min": 60,
+   "actual_flyable": false,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.021,
+     "chance_on_time": 0.0
+    },
+    "weather_now": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.021,
+     "chance_on_time": 0.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.021
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.021,
+     "chance_on_time": 0.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.021
+    }
+   }
+  },
+  {
+   "when": "2024-08-06T11:40+00:00",
+   "origin": "0FL4",
+   "dest": "67FD",
+   "origin_name": "ENGLEWOOD COMMUNITY HOSPITAL",
+   "dest_name": "GULF COAST MEDICAL CENTER",
+   "deadline_min": 90,
+   "actual_flyable": false,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.6,
+     "regret_chance": 0.007,
+     "chance_on_time": 0.0
+    },
+    "weather_now": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.6,
+     "regret_chance": 0.007,
+     "chance_on_time": 0.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.007
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.6,
+     "regret_chance": 0.007,
+     "chance_on_time": 0.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.007
+    }
+   }
+  },
+  {
+   "when": "2024-09-26T02:50+00:00",
+   "origin": "FL96",
+   "dest": "20FA",
+   "origin_name": "BAPTIST ST AUGUSTINE",
+   "dest_name": "HCA FLORIDA ORANGE PARK HOSPITAL",
+   "deadline_min": 60,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "air_and_ground",
+   "policies": {
+    "ours": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.932
+    },
+    "weather_now": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.932
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 2.4,
+     "regret_chance": 0.115,
+     "chance_on_time": 0.817
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 5.2,
+     "regret_chance": 0.291,
+     "chance_on_time": 0.641
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.932
+    }
+   }
+  },
+  {
+   "when": "2024-07-01T00:00+00:00",
+   "origin": "2FL9",
+   "dest": "7FD7",
+   "origin_name": "ADVENTHEALTH HEART OF FLORIDA",
+   "dest_name": "LAKELAND RGNL MEDICAL CENTER",
+   "deadline_min": 60,
+   "actual_flyable": true,
+   "forecast_chance_pct": null,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.0,
+     "regret_chance": 0.015,
+     "chance_on_time": 0.983
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.0,
+     "regret_chance": 0.015,
+     "chance_on_time": 0.983
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.0,
+     "regret_chance": 0.015,
+     "chance_on_time": 0.983
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 3.6,
+     "regret_chance": 0.048,
+     "chance_on_time": 0.95
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.998
+    }
+   }
+  },
+  {
+   "when": "2024-06-15T06:10+00:00",
+   "origin": "1FL8",
+   "dest": "FD28",
+   "origin_name": "CAPE CANAVERAL HOSPITAL",
+   "dest_name": "ORLANDO RGNL MEDICAL CENTER",
+   "deadline_min": 90,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "air_and_ground",
+   "policies": {
+    "ours": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.955
+    },
+    "weather_now": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.955
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 28.1,
+     "regret_chance": 0.199,
+     "chance_on_time": 0.756
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.105,
+     "chance_on_time": 0.85
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.955
+    }
+   }
+  },
+  {
+   "when": "2024-08-29T18:30+00:00",
+   "origin": "3FD7",
+   "dest": "3FD3",
+   "origin_name": "INDIAN RIVER MEML HOSPITAL",
+   "dest_name": "HOLMES RGNL MEDICAL CENTER",
+   "deadline_min": 120,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 24.1,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 24.1,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 24.1,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    }
+   }
+  },
+  {
+   "when": "2024-07-18T21:10+00:00",
+   "origin": "29FD",
+   "dest": "FD18",
+   "origin_name": "GADSDEN MEML HOSPITAL",
+   "dest_name": "TALLAHASSEE MEML HOSPITAL",
+   "deadline_min": 90,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 14.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 14.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 14.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.1,
+     "regret_chance": 0.004,
+     "chance_on_time": 0.996
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    }
+   }
+  },
+  {
+   "when": "2024-08-06T16:10+00:00",
+   "origin": "1FA7",
+   "dest": "FL32",
+   "origin_name": "BAYFRONT HEALTH BROOKSVILLE",
+   "dest_name": "HCA FLORIDA BAYONET POINT HOSPITAL",
+   "deadline_min": 60,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.1,
+     "regret_chance": 0.001,
+     "chance_on_time": 0.998
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.1,
+     "regret_chance": 0.001,
+     "chance_on_time": 0.998
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.1,
+     "regret_chance": 0.001,
+     "chance_on_time": 0.998
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 10.7,
+     "regret_chance": 0.196,
+     "chance_on_time": 0.803
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.999
+    }
+   }
+  },
+  {
+   "when": "2024-09-25T02:40+00:00",
+   "origin": "1FD8",
+   "dest": "29FL",
+   "origin_name": "MEML HOSPITAL-FLAGLER HELISTOP",
+   "dest_name": "HALIFAX HOSPITAL MEDICAL CENTER",
+   "deadline_min": 120,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 3.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    }
+   }
+  },
+  {
+   "when": "2024-07-10T13:00+00:00",
+   "origin": "FA01",
+   "dest": "67FD",
+   "origin_name": "ADVENTHEALTH PORT CHARLOTTE",
+   "dest_name": "GULF COAST MEDICAL CENTER",
+   "deadline_min": 60,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "air_only",
+   "policies": {
+    "ours": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_only",
+     "regret_min": 0.1,
+     "regret_chance": 0.01,
+     "chance_on_time": 0.622
+    },
+    "weather_now": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_only",
+     "regret_min": 0.1,
+     "regret_chance": 0.01,
+     "chance_on_time": 0.622
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "air_only",
+     "regret_min": 21.1,
+     "regret_chance": 0.598,
+     "chance_on_time": 0.034
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_only",
+     "regret_min": 0.1,
+     "regret_chance": 0.01,
+     "chance_on_time": 0.622
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.632
+    }
+   }
+  },
+  {
+   "when": "2024-07-01T00:10+00:00",
+   "origin": "FA16",
+   "dest": "99FL",
+   "origin_name": "JAY HOSPITAL",
+   "dest_name": "BAPTIST HEALTH PENSACOLA",
+   "deadline_min": 120,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 21.1,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 21.1,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 21.1,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.005,
+     "chance_on_time": 0.995
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    }
+   }
+  },
+  {
+   "when": "2024-09-14T19:00+00:00",
+   "origin": "79FA",
+   "dest": "2FA8",
+   "origin_name": "ADVENTHEALTH PORT ORANGE HELISTOP",
+   "dest_name": "HCA FLORIDA LAKE MONROE HOSPITAL",
+   "deadline_min": 45,
+   "actual_flyable": false,
+   "forecast_chance_pct": 0.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.068
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.068
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.068
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.7,
+     "regret_chance": 0.068,
+     "chance_on_time": 0.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.068
+    }
+   }
+  },
+  {
+   "when": "2024-09-16T18:50+00:00",
+   "origin": "1FA7",
+   "dest": "FL38",
+   "origin_name": "BAYFRONT HEALTH BROOKSVILLE",
+   "dest_name": "CARE FLIGHT",
+   "deadline_min": 120,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 4.6,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 4.6,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 4.6,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 17.6,
+     "regret_chance": 0.004,
+     "chance_on_time": 0.996
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    }
+   }
+  },
+  {
+   "when": "2024-09-25T01:30+00:00",
+   "origin": "11FD",
+   "dest": "9FD1",
+   "origin_name": "NORTH OKALOOSA MEDICAL CENTER",
+   "dest_name": "SACRED HEART HOSPITAL",
+   "deadline_min": 90,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.9,
+     "regret_chance": 0.005,
+     "chance_on_time": 0.987
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.9,
+     "regret_chance": 0.005,
+     "chance_on_time": 0.987
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 2.9,
+     "regret_chance": 0.005,
+     "chance_on_time": 0.987
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 17.1,
+     "regret_chance": 0.212,
+     "chance_on_time": 0.78
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.992
+    }
+   }
+  },
+  {
+   "when": "2024-06-27T16:50+00:00",
+   "origin": "86FL",
+   "dest": "FA12",
+   "origin_name": "LAKE SHORE HOSPITAL",
+   "dest_name": "SHANDS HELISTOP",
+   "deadline_min": 60,
+   "actual_flyable": false,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.145
+    },
+    "weather_now": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.145
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.145
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.6,
+     "regret_chance": 0.144,
+     "chance_on_time": 0.001
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.145
+    }
+   }
+  },
+  {
+   "when": "2024-08-07T02:30+00:00",
+   "origin": "9FA2",
+   "dest": "64FD",
+   "origin_name": "LAKESIDE MEDICAL CENTER",
+   "dest_name": "ST MARYS HOSPITAL",
+   "deadline_min": 45,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 8.3,
+     "regret_chance": 0.004,
+     "chance_on_time": 0.0
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 8.3,
+     "regret_chance": 0.004,
+     "chance_on_time": 0.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 8.3,
+     "regret_chance": 0.004,
+     "chance_on_time": 0.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 16.2,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.004
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.004
+    }
+   }
+  },
+  {
+   "when": "2024-08-27T11:30+00:00",
+   "origin": "FA12",
+   "dest": "3FD1",
+   "origin_name": "SHANDS HELISTOP",
+   "dest_name": "ORMC TRAUMA CENTER",
+   "deadline_min": 90,
+   "actual_flyable": false,
+   "forecast_chance_pct": 0.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.921
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.921
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.921
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.5,
+     "regret_chance": 0.525,
+     "chance_on_time": 0.396
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.921
+    }
+   }
+  },
+  {
+   "when": "2024-08-25T23:40+00:00",
+   "origin": "30FL",
+   "dest": "20FA",
+   "origin_name": "HCA FLORIDA PUTNAM HOSPITAL",
+   "dest_name": "HCA FLORIDA ORANGE PARK HOSPITAL",
+   "deadline_min": 60,
+   "actual_flyable": true,
+   "forecast_chance_pct": 0.0,
+   "best": "air_and_ground",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 13.5,
+     "regret_chance": 0.485,
+     "chance_on_time": 0.092
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 13.5,
+     "regret_chance": 0.485,
+     "chance_on_time": 0.092
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 13.5,
+     "regret_chance": 0.485,
+     "chance_on_time": 0.092
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 1.0,
+     "regret_chance": 0.045,
+     "chance_on_time": 0.532
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.577
+    }
+   }
+  },
+  {
+   "when": "2024-07-03T22:00+00:00",
+   "origin": "8FD8",
+   "dest": "5FL2",
+   "origin_name": "SARASOTA MEMORIAL HOSPITAL",
+   "dest_name": "HCA FLORIDA BLAKE HOSPITAL",
+   "deadline_min": 90,
+   "actual_flyable": false,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.942
+    },
+    "weather_now": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.942
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.942
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.468,
+     "chance_on_time": 0.474
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.942
+    }
+   }
+  },
+  {
+   "when": "2024-06-19T14:20+00:00",
+   "origin": "46FL",
+   "dest": "FD28",
+   "origin_name": "NORTH BREVARD HOSPITAL DISTRICT",
+   "dest_name": "ORLANDO RGNL MEDICAL CENTER",
+   "deadline_min": 60,
+   "actual_flyable": false,
+   "forecast_chance_pct": 0.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.174
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.174
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.174
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.6,
+     "regret_chance": 0.173,
+     "chance_on_time": 0.001
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.174
+    }
+   }
+  },
+  {
+   "when": "2024-07-21T03:30+00:00",
+   "origin": "1FA7",
+   "dest": "FL38",
+   "origin_name": "BAYFRONT HEALTH BROOKSVILLE",
+   "dest_name": "CARE FLIGHT",
+   "deadline_min": 60,
+   "actual_flyable": true,
+   "forecast_chance_pct": 90.0,
+   "best": "air_and_ground",
+   "policies": {
+    "ours": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.434
+    },
+    "weather_now": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.434
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 8.1,
+     "regret_chance": 0.305,
+     "chance_on_time": 0.129
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 13.1,
+     "regret_chance": 0.089,
+     "chance_on_time": 0.345
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "air_and_ground",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.434
+    }
+   }
+  },
+  {
+   "when": "2024-09-27T07:50+00:00",
+   "origin": "FL32",
+   "dest": "61FL",
+   "origin_name": "HCA FLORIDA BAYONET POINT HOSPITAL",
+   "dest_name": "TAMPA GENERAL HOSPITAL",
+   "deadline_min": 120,
+   "actual_flyable": false,
+   "forecast_chance_pct": 0.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.5,
+     "regret_chance": 0.023,
+     "chance_on_time": 0.977
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 1.0
+    }
+   }
+  },
+  {
+   "when": "2024-09-26T15:10+00:00",
+   "origin": "FL32",
+   "dest": "FL38",
+   "origin_name": "HCA FLORIDA BAYONET POINT HOSPITAL",
+   "dest_name": "CARE FLIGHT",
+   "deadline_min": 45,
+   "actual_flyable": false,
+   "forecast_chance_pct": 0.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.001
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.001
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.001
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.6,
+     "regret_chance": 0.001,
+     "chance_on_time": 0.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.001
+    }
+   }
+  },
+  {
+   "when": "2024-08-28T21:10+00:00",
+   "origin": "FL30",
+   "dest": "FL38",
+   "origin_name": "HCA FLORIDA TRINITY WEST HOSPITAL",
+   "dest_name": "CARE FLIGHT",
+   "deadline_min": 90,
+   "actual_flyable": false,
+   "forecast_chance_pct": 0.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.799
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.799
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.799
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.584,
+     "chance_on_time": 0.215
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.799
+    }
+   }
+  },
+  {
+   "when": "2024-08-26T19:30+00:00",
+   "origin": "FD85",
+   "dest": "67FD",
+   "origin_name": "DE SOTO MEML HOSPITAL",
+   "dest_name": "GULF COAST MEDICAL CENTER",
+   "deadline_min": 90,
+   "actual_flyable": false,
+   "forecast_chance_pct": 0.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.852
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.852
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.852
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.5,
+     "regret_chance": 0.57,
+     "chance_on_time": 0.282
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.852
+    }
+   }
+  },
+  {
+   "when": "2024-09-11T12:00+00:00",
+   "origin": "1FA7",
+   "dest": "FL38",
+   "origin_name": "BAYFRONT HEALTH BROOKSVILLE",
+   "dest_name": "CARE FLIGHT",
+   "deadline_min": 90,
+   "actual_flyable": false,
+   "forecast_chance_pct": 0.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.362
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.362
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.362
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.7,
+     "regret_chance": 0.336,
+     "chance_on_time": 0.026
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.362
+    }
+   }
+  },
+  {
+   "when": "2024-06-22T21:30+00:00",
+   "origin": "7FD7",
+   "dest": "61FL",
+   "origin_name": "LAKELAND RGNL MEDICAL CENTER",
+   "dest_name": "TAMPA GENERAL HOSPITAL",
+   "deadline_min": 60,
+   "actual_flyable": false,
+   "forecast_chance_pct": 0.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.031
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.031
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.031
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.5,
+     "regret_chance": 0.031,
+     "chance_on_time": 0.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.031
+    }
+   }
+  },
+  {
+   "when": "2024-07-21T03:50+00:00",
+   "origin": "99FA",
+   "dest": "29FL",
+   "origin_name": "HALIFAX HOSPITAL EMERGENCY HELOSTOP",
+   "dest_name": "HALIFAX HOSPITAL MEDICAL CENTER",
+   "deadline_min": 45,
+   "actual_flyable": false,
+   "forecast_chance_pct": 0.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.688
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.688
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.688
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.7,
+     "regret_chance": 0.686,
+     "chance_on_time": 0.002
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.688
+    }
+   }
+  },
+  {
+   "when": "2024-08-30T20:50+00:00",
+   "origin": "FA87",
+   "dest": "FA23",
+   "origin_name": "SARASOTA MEML HOSPITAL NORTH PORT ER",
+   "dest_name": "SARASOTA MEML HOSPITAL",
+   "deadline_min": 45,
+   "actual_flyable": false,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "weather_now": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    }
+   }
+  },
+  {
+   "when": "2024-06-28T22:50+00:00",
+   "origin": "3FD2",
+   "dest": "2FA8",
+   "origin_name": "UF HEALTH LEESBURG HOSPITAL",
+   "dest_name": "HCA FLORIDA LAKE MONROE HOSPITAL",
+   "deadline_min": 45,
+   "actual_flyable": false,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "weather_now": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    }
+   }
+  },
+  {
+   "when": "2024-06-29T09:10+00:00",
+   "origin": "1FD8",
+   "dest": "2FA8",
+   "origin_name": "MEML HOSPITAL-FLAGLER HELISTOP",
+   "dest_name": "HCA FLORIDA LAKE MONROE HOSPITAL",
+   "deadline_min": 45,
+   "actual_flyable": false,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "weather_now": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.4,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.0
+    }
+   }
+  },
+  {
+   "when": "2024-06-30T15:40+00:00",
+   "origin": "FD97",
+   "dest": "67FD",
+   "origin_name": "NAPLES COMMUNITY HOSPITAL",
+   "dest_name": "GULF COAST MEDICAL CENTER",
+   "deadline_min": 60,
+   "actual_flyable": false,
+   "forecast_chance_pct": 90.0,
+   "best": "ground_only",
+   "policies": {
+    "ours": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.789
+    },
+    "weather_now": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.789
+    },
+    "always_ground": {
+     "choice": "ground_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.789
+    },
+    "always_air": {
+     "choice": "air_only",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 18.7,
+     "regret_chance": 0.751,
+     "chance_on_time": 0.038
+    },
+    "always_both": {
+     "choice": "air_and_ground",
+     "actual_best_strategy": "ground_only",
+     "regret_min": 0.0,
+     "regret_chance": 0.0,
+     "chance_on_time": 0.789
+    }
+   }
+  }
+ ],
+ "how_to_read": "regret_min: minutes lost against the fastest choice under the weather that really happened. chance_on_time: chance of meeting the deadline under that weather. always_both has zero regret by construction but always uses two vehicles.",
+ "metrics": [
+  {
+   "id": "E2",
+   "name": "Minutes lost in active weather: app vs \"weather right now\" rule",
+   "value": 3.3,
+   "baseline": 3.3,
+   "note": "40 synthetic cases replayed on real 2024 weather; aircraft simulated, road times modeled. Minutes lost against the best choice in hindsight. Active weather: a storm or unflyable hour within 3 hours at the pick-up airport. Vehicles sent per case: app 1.2, rule 1.2."
+  },
+  {
+   "id": "E2",
+   "name": "Minutes lost at random hours: app vs \"weather right now\" rule",
+   "value": 5.73,
+   "baseline": 5.73,
+   "note": "40 synthetic cases replayed on real 2024 weather; aircraft simulated, road times modeled. Minutes lost against the best choice in hindsight."
+  }
+ ]
+}
