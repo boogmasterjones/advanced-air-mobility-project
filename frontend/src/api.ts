@@ -33,6 +33,9 @@ export type MapData = {
   road_is_routed: boolean;
   air_base: { name: string; icao: string; lat: number; lon: number };
   air: [number, number][];
+  // "Always an Out": nearest landing places along the flight, and the smallest energy margin to one
+  landing_places?: { id: string; name: string; kind: string; lat: number; lon: number }[];
+  min_margin_min?: number | null;
 };
 
 export type CaseResult = {

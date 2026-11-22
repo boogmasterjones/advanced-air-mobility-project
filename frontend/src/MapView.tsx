@@ -64,6 +64,20 @@ export default function MapView({ origin, dest, map }: { origin?: Facility; dest
       };
       set("road", road, { "line-color": GROUND, "line-width": 4, "line-opacity": 0.85 });
       set("air", air, { "line-color": AIR, "line-width": 3, "line-dasharray": [2, 2] });
+      // Landing places the aircraft could divert to along the flight ("always an out").
+      const outs: GeoJSON.FeatureCollection = {
+        type: "FeatureCollection",
+        features: (map?.landing_places ?? []).map((p) => ({
+          type: "Feature", properties: { name: p.name }, geometry: { type: "Point", coordinates: [p.lon, p.lat] },
+        })),
+      };
+      const outsSrc = m.getSource("outs") as maplibregl.GeoJSONSource | undefined;
+      if (outsSrc) outsSrc.setData(outs);
+      else {
+        m.addSource("outs", { type: "geojson", data: outs });
+        m.addLayer({ id: "outs", type: "circle", source: "outs",
+          paint: { "circle-radius": 6, "circle-color": "#ffffff", "circle-stroke-color": AIR, "circle-stroke-width": 2.5 } });
+      }
       const pts = [...road, ...air];
       if (pts.length > 1) {
         const lons = pts.map((p) => p[0]), lats = pts.map((p) => p[1]);
@@ -80,6 +94,10 @@ export default function MapView({ origin, dest, map }: { origin?: Facility; dest
       <p className="legend">
         <span><i className="swatch line" style={{ background: GROUND }} /> Road route{map && !map.road_is_routed ? " (not available, time is modeled)" : ""}</span>
         <span><i className="swatch dash" style={{ borderColor: AIR }} /> Flight path, from the simulated base</span>
+        {map && (map.landing_places?.length ?? 0) > 0 && (
+          <span><i className="swatch ring" style={{ borderColor: AIR }} /> Landing places along the way
+            {map.min_margin_min != null && <> (smallest energy margin {Math.round(map.min_margin_min)} min)</>}</span>
+        )}
       </p>
     </div>
   );

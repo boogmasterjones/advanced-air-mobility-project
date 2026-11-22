@@ -115,43 +115,75 @@ def summarize(cases: list[dict]) -> dict:
             "mean_chance_lost": round(mean(r["regret_chance"] for r in rows), 4),
             "picked_best_choice": round(mean(r["choice"] == r["actual_best_strategy"] for r in rows), 3),
             "vehicles_per_case": round(mean(VEHICLES[r["choice"]] for r in rows), 2),
+            "aircraft_sent": round(mean(r["choice"] != "ground_only" for r in rows), 3),
+            # An aircraft was sent and the weather then closed: a launch that helped nobody.
+            "aircraft_sent_for_nothing": round(mean(r["choice"] != "ground_only" and not c["actual_flyable"]
+                                                    for r, c in zip(rows, cases)), 3),
         }
     return out
 
 
+def weather_calibration(cases: list[dict]) -> list[dict]:
+    """End-to-end check of the number shown on screen: when the app said "X% chance the
+    weather stays flyable for the flight", how often did it stay flyable?"""
+    bands = [(0, 50), (50, 70), (70, 85), (85, 95), (95, 101)]
+    out = []
+    for lo, hi in bands:
+        hit = [c for c in cases if c["forecast_chance_pct"] is not None and lo <= c["forecast_chance_pct"] < hi]
+        if hit:
+            out.append({"app_said": f"{lo} to {min(hi, 100)}%", "cases": len(hit),
+                        "mean_app_said_pct": round(mean(c["forecast_chance_pct"] for c in hit), 1),
+                        "stayed_flyable_pct": round(100 * mean(c["actual_flyable"] for c in hit), 1)})
+    return out
+
+
 def demo_days(cases: list[dict], path) -> list[dict]:
-    """Storm cases where the forecast changed the answer for the better: good to show live."""
-    def gain(c):
-        return c["policies"]["weather_now"]["regret_min"] - c["policies"]["ours"]["regret_min"]
+    """Cases worth showing live, on three different days:
+      saw it coming   the sky was fine at decision time, the old rule would have launched,
+                      the app kept to ground, and the weather then closed
+      saw it clearing the weather was bad at decision time, the old rule kept to ground,
+                      the app sent the aircraft as well, and the flight got through"""
+    def kind(c) -> str | None:
+        ours, rule = c["policies"]["ours"]["choice"], c["policies"]["weather_now"]["choice"]
+        if not c["actual_flyable"] and ours == "ground_only" and rule != "ground_only":
+            return "saw it coming"
+        if c["actual_flyable"] and ours != "ground_only" and rule == "ground_only":
+            return "saw it clearing"
+        return None
+
+    def strength(c) -> float:  # the more the forecast disagreed with "right now", the clearer the demo
+        pct = c["forecast_chance_pct"] or 50
+        return (100 - pct) if kind(c) == "saw it coming" else c["policies"]["weather_now"]["regret_min"]
 
     picks, seen_days = [], set()
-    for c in sorted((c for c in cases if not c["actual_flyable"]), key=gain, reverse=True):
-        day = c["when"][:10]
-        if day in seen_days or gain(c) <= 0:
-            continue
-        seen_days.add(day)
-        picks.append(c)
-        if len(picks) == 3:
-            break
+    ranked = sorted((c for c in cases if kind(c)), key=strength, reverse=True)
+    for wanted in ("saw it coming", "saw it coming", "saw it clearing"):
+        for c in ranked:
+            if kind(c) == wanted and c["when"][:10] not in seen_days:
+                seen_days.add(c["when"][:10])
+                picks.append({**c, "kind": wanted})
+                break
     lines = ["# Demo days for the Time Machine", "",
-             "Written by `python -m eval_engine.replay_eval` (task A6). These are replayed cases from the",
-             "held-out weather year where the weather turned unflyable after the decision time and the",
-             "forecaster avoided minutes that the old \"weather right now\" rule would have lost.",
-             "All patient cases are synthetic. Aircraft are simulated and road times are modeled.", ""]
+             "Written by `python -m eval_engine.replay_eval` (task A6). Replayed cases from the held-out",
+             "weather year where the forecaster disagreed with the old \"weather right now\" rule and turned",
+             "out right. All patient cases are synthetic. Aircraft are simulated and road times are modeled.", ""]
     if not picks:
         lines.append("No case in this run met the bar. Run the eval again with more cases.")
     for i, c in enumerate(picks, 1):
         local = datetime.fromisoformat(c["when"]).astimezone(FLORIDA)
         ours, rule = c["policies"]["ours"], c["policies"]["weather_now"]
-        lines += [f"## {i}. {local:%A %B %d, %Y, %I:%M %p} Florida time",
+        happened = "it stayed flyable" if c["actual_flyable"] else "it did not stay flyable"
+        story = ("The sky looked fine, so the old rule would have launched an aircraft for nothing."
+                 if c["kind"] == "saw it coming" else
+                 f"The weather looked bad, so the old rule kept to ground and lost {rule['regret_min']} min.")
+        lines += [f"## {i}. {local:%A %B %d, %Y, %I:%M %p} Florida time ({c['kind']})",
                   f"- From **{c['origin_name'].title()}** (`{c['origin']}`) to **{c['dest_name'].title()}** "
                   f"(`{c['dest']}`), deadline {c['deadline_min']} min",
                   f"- Replay time (UTC): `{c['when']}`",
-                  f"- Forecast chance the weather stays flyable: {c['forecast_chance_pct']}%. "
-                  f"What happened: it did not stay flyable.",
-                  f"- The app suggested `{ours['choice']}` and lost {ours['regret_min']} min against the best "
-                  f"choice in hindsight. The \"weather right now\" rule would have picked `{rule['choice']}` "
-                  f"and lost {rule['regret_min']} min.", ""]
+                  f"- The app gave a {c['forecast_chance_pct']}% chance that the weather stays flyable for the "
+                  f"flight. What happened: {happened}.",
+                  f"- The app suggested `{ours['choice']}`. The \"weather right now\" rule would have picked "
+                  f"`{rule['choice']}`. {story}", ""]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return picks
 
@@ -193,35 +225,45 @@ def main() -> int:
     picks = demo_days(every, DOCS / "demo_days.md")
     active = summary.get("active_weather_hours", {}).get("policies", {})
     calm = summary.get("random_hours", {}).get("policies", {})
-    note = (f"{len(every)} synthetic cases replayed on real {span[0].year} weather; aircraft simulated, road "
-            f"times modeled. Minutes lost against the best choice in hindsight.")
+    n_active = summary.get("active_weather_hours", {}).get("cases", 0)
+    note = (f"Synthetic cases replayed on real {span[0].year} weather; aircraft simulated, road times modeled. "
+            f"Compared with the old rule that looks only at the weather right now.")
+    get = lambda group, policy, key: group.get(policy, {}).get(key)  # noqa: E731
     out = {
         "id": "E2", "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "weather_year": span[0].year, "seed": args.seed, "summary": summary,
+        "weather_chance_check": weather_calibration(every),
         "demo_cases": picks, "cases": every,
         "how_to_read": "regret_min: minutes lost against the fastest choice under the weather that really "
-                       "happened. chance_on_time: chance of meeting the deadline under that weather. "
-                       "always_both has zero regret by construction but always uses two vehicles.",
+                       "happened. aircraft_sent_for_nothing: an aircraft was sent and the weather then closed. "
+                       "always_both loses no minutes by construction but sends an aircraft every time. "
+                       "weather_chance_check: the chance shown on screen against how often the weather held.",
         "metrics": [
-            {"id": "E2", "name": "Minutes lost in active weather: app vs \"weather right now\" rule",
-             "value": active.get("ours", {}).get("mean_regret_min"),
-             "baseline": active.get("weather_now", {}).get("mean_regret_min"),
-             "note": note + " Active weather: a storm or unflyable hour within 3 hours at the pick-up airport. "
-                            f"Vehicles sent per case: app {active.get('ours', {}).get('vehicles_per_case')}, "
-                            f"rule {active.get('weather_now', {}).get('vehicles_per_case')}."},
-            {"id": "E2", "name": "Minutes lost at random hours: app vs \"weather right now\" rule",
-             "value": calm.get("ours", {}).get("mean_regret_min"),
-             "baseline": calm.get("weather_now", {}).get("mean_regret_min"), "note": note},
+            {"id": "E2", "name": "Aircraft sent for nothing in active weather (share of cases)",
+             "value": get(active, "ours", "aircraft_sent_for_nothing"),
+             "baseline": get(active, "weather_now", "aircraft_sent_for_nothing"),
+             "note": f"{n_active} cases with a storm or unflyable hour within 3 hours at the pick-up airport. "
+                     f"Lower is better. {note}"},
+            {"id": "E2", "name": "Minutes lost in active weather against the best choice in hindsight",
+             "value": get(active, "ours", "mean_regret_min"), "baseline": get(active, "weather_now", "mean_regret_min"),
+             "note": f"Lower is better. Sending both vehicles every time loses 0 minutes but launches an aircraft "
+                     f"in every case. {note}"},
+            {"id": "E2", "name": "Minutes lost at random hours against the best choice in hindsight",
+             "value": get(calm, "ours", "mean_regret_min"), "baseline": get(calm, "weather_now", "mean_regret_min"),
+             "note": f"{summary.get('random_hours', {}).get('cases', 0)} cases at random hours of the year. {note}"},
         ],
     }
     RESULTS.mkdir(parents=True, exist_ok=True)
     (RESULTS / "e2.json").write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8")
     for name, s in summary.items():
         print(f"{name}: {s['cases']} cases, weather stayed flyable in {s['weather_stayed_flyable']:.0%}")
-        print(f"  {'policy':14} {'min lost':>9} {'on time':>8} {'best pick':>10} {'vehicles':>9}")
+        print(f"  {'policy':14} {'min lost':>9} {'on time':>8} {'air sent':>9} {'for nothing':>12}")
         for policy, r in s["policies"].items():
             print(f"  {policy:14} {r['mean_regret_min']:>9.2f} {r['mean_chance_on_time']:>8.1%} "
-                  f"{r['picked_best_choice']:>10.0%} {r['vehicles_per_case']:>9.2f}")
+                  f"{r['aircraft_sent']:>9.0%} {r['aircraft_sent_for_nothing']:>12.0%}")
+    print("When the app said X% chance the weather holds for the flight:")
+    for row in out["weather_chance_check"]:
+        print(f"  {row['app_said']:>12}: {row['cases']:>4} cases, it held in {row['stayed_flyable_pct']}%")
     print(f"Wrote {RESULTS / 'e2.json'} and {DOCS / 'demo_days.md'} ({len(picks)} demo cases)")
     return 0
 

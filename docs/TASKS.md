@@ -1,5 +1,29 @@
 # Build plan and task board
 
+## Status on Sun Nov 22 (read this first)
+
+boogmasterjones asked a Claude session to build as much as possible in one pass, across both people's folders, while the Cloud Run deploy was blocked. **Jaden: a lot of your list now has a first version. Pull `main`, run it, and change anything you like. It is your area.**
+
+| Task | State | Notes |
+|---|---|---|
+| A0 Deploy | **Blocked** | The Google Cloud billing account is closed (the free trial asks for a prepayment). The project `car-or-air` exists. Deploy as soon as billing works: the command is in the README. |
+| A1 to A7 | Done | Weather is all of 2019 to 2024 (not only summers) at 21 airports, so the forecaster also works in winter and the Time Machine can replay any 2024 date. |
+| A8 Always an Out | Not started | Stretch. |
+| B1 Intake | First version | Works with the offline parser. The Anthropic path is written with the official SDK but **has never run against a real key**. Facility matching is in `backend/app/llm/match.py`. |
+| B2, B3 Evals | Scripts and data done | 100 intake cases and 30 injection cases. Only the regex baseline has scores. **Run both with a key** to fill in the LLM numbers. |
+| B4 Brief | First version | Offline template plus LLM path (same caveat). The verifier now also checks units. |
+| B5 Time Machine, B6 Evidence | Done | Real data, no mocks. `frontend/src/mocks/` is no longer used. |
+| B7 Polish | Partly | Decision log with required reasons, phone layout and keyboard focus are in. No frozen-data mode yet; the Time Machine works without internet when run locally. |
+| S1 to S7 | Open | Registration, deck, video and submission are still yours to do. |
+
+Things to decide together:
+
+1. **LLM provider and key** (B0). Nothing LLM-related has been tested live.
+2. **Realistic delays changed the picture.** With published transfer delays (RESEARCH.md section 12), a 60 or 90 minute deadline is rarely met by any option. The form now defaults to 120 minutes.
+3. **Contract changes** were all new optional fields (see `backend/app/contracts.py`).
+
+---
+
 Today is **Thu Nov 19**. Submission is **Wed Dec 2, 4:00 PM**. Live judging is **Thu Dec 3**.
 
 - **Person A: boogmasterjones** owns data, ML and the decision engine (Python, `backend/app/core/`).

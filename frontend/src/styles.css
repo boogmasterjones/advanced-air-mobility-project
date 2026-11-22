@@ -54,6 +54,7 @@ button.chip:hover { background: var(--series-soft); border-color: var(--series);
 .swatch { display: inline-block; width: 22px; vertical-align: middle; margin-right: 4px; }
 .swatch.line { height: 4px; border-radius: 2px; }
 .swatch.dash { height: 0; border-top: 3px dashed; }
+.swatch.ring { width: 12px; height: 12px; border: 2.5px solid; border-radius: 50%; background: #fff; }
 
 .results { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 .results.stale > :not(.notice) { opacity: 0.5; }
@@ -95,6 +96,7 @@ figcaption strong { color: var(--ink); }
 .audit li { margin-bottom: 4px; }
 
 .table-wrap { overflow-x: auto; max-height: 420px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; margin: 8px 0; }
+.table-wrap.full { max-height: none; }
 table { border-collapse: collapse; width: 100%; font-size: 13px; }
 th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #e6ecf0; vertical-align: top; }
 th { position: sticky; top: 0; background: #f3f6f8; font-weight: 600; z-index: 1; }

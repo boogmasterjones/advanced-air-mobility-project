@@ -43,7 +43,9 @@ def archive() -> dict[str, dict[datetime, HourRecord]]:
     for path in sorted(REPLAY_DIR.glob("hourly_*.csv.gz")):
         with gzip.open(path, "rt", newline="", encoding="utf-8") as f:
             for row in csv.DictReader(f):
-                when = datetime.strptime(row["hour_end_utc"], "%Y-%m-%dT%H:%MZ").replace(tzinfo=timezone.utc)
+                s = row["hour_end_utc"]  # "2024-07-15T19:00Z"; sliced by hand because this runs 180,000 times
+                when = datetime(int(s[0:4]), int(s[5:7]), int(s[8:10]), int(s[11:13]), int(s[14:16]),
+                                tzinfo=timezone.utc)
                 out.setdefault(row["station"], {})[when] = _record(row)
     return out
 

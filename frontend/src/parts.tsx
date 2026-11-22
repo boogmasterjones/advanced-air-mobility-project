@@ -89,6 +89,10 @@ export function ForecastStrip({ forecasts }: { forecasts: StationForecast[] }) {
         Chance each airport stays flyable for the whole hour, counted from its newest weather report.
         Model: {forecasts[0].model}.
       </p>
+      {forecasts[0].model.startsWith("rule") && (
+        <p className="notice">The trained forecaster is not installed on this server, so a simple rule is used:
+          90% if the airport is flyable now, otherwise 0%.</p>
+      )}
       <div className="forecast-grid">
         {forecasts.map((f) => (
           <figure key={f.station}>

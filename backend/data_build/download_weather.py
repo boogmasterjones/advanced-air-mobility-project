@@ -33,6 +33,9 @@ USER_AGENT = "car-or-air-hackathon/0.1 (student project)"
 ASOS_URL = "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py"
 TAF_URL = "https://mesonet.agron.iastate.edu/cgi-bin/request/taf.py"
 PAUSE_S = 1.0  # be polite to a free public service
+# Palm Beach International changed its identifier from KPBI to KDJT. The live feed and the
+# weather archive use KDJT; the 2019-2024 forecast archive is still filed under KPBI.
+TAF_ARCHIVE_ID = {"KDJT": "KPBI"}
 
 
 def all_stations() -> list[str]:
@@ -71,7 +74,7 @@ def asos_url(icao: str, year: int, m1: int, m2: int) -> str:
 
 def taf_url(icao: str, year: int, m1: int, m2: int) -> str:
     end_year, end_month = (year, m2 + 1) if m2 < 12 else (year + 1, 1)
-    params = {"station": icao, "sts": f"{year}-{m1:02d}-01T00:00Z",
+    params = {"station": TAF_ARCHIVE_ID.get(icao, icao), "sts": f"{year}-{m1:02d}-01T00:00Z",
               "ets": f"{end_year}-{end_month:02d}-01T00:00Z", "fmt": "csv"}
     return TAF_URL + "?" + urllib.parse.urlencode(params)
 

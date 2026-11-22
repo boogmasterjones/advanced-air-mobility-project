@@ -19,7 +19,7 @@ from functools import lru_cache
 import numpy as np
 from pydantic import BaseModel
 
-from . import energy, roads
+from . import alternates, energy, roads
 from .geo import DATA_DIR, bearing_deg, haversine_mi
 from .ledger import Ledger
 
@@ -171,6 +171,15 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
         air_reasons.append(f"{round(power.p_ok * 100)}% chance the battery covers the trip and reserve")
     if not power.temp_known:
         air_reasons.append("temperature unknown, so the hottest case is assumed for the battery")
+    out = alternates.check(air, origin, dest, base, temp_c)
+    air_ids.append(ledger.add(
+        "Smallest energy margin to the nearest landing place along the flight", round(out["min_margin_min"]),
+        unit="min", source="always-an-out check (alternates.py): still air, lowest starting charge, reserve kept",
+        confidence="computed"))
+    air_reasons.append(
+        f"a landing place stays within reach for the whole flight (at least {round(out['min_margin_min'])} min of energy to spare)"
+        if out["always_reachable"] else
+        f"around mile {round(out['worst_at_mile'])} of the flight, no landing place is within reach without using the reserve")
     late_min = round(float(np.median(late)))
     options.append(_summarize("air_only", np.where(flies, air_t, late + ground_t), deadline_min,
                               air_reasons + [f"if the flight is called off, an ambulance starts about {late_min} min late"],

@@ -47,6 +47,14 @@ def station_neighbors(icao: str, limit: int = 3, radius_mi: float = 100.0) -> tu
     return tuple((code, miles) for miles, code in others[:limit] if miles <= radius_mi)
 
 
+def stations_near(lat: float, lon: float, limit: int = 3, radius_mi: float = 40.0) -> list[tuple[dict, float]]:
+    """Weather stations to try for a place, nearest first: the nearest one always, then
+    others within the radius. Some small airports do not report at night, so the app
+    falls back to the next one and says how far away it is."""
+    ranked = sorted(((haversine_mi(lat, lon, s["lat"], s["lon"]), s["icao"], s) for s in stations()))
+    return [(s, miles) for i, (miles, _, s) in enumerate(ranked[:limit]) if i == 0 or miles <= radius_mi]
+
+
 def nearest_station(lat: float, lon: float) -> tuple[dict, float]:
     best = min(stations(), key=lambda s: haversine_mi(lat, lon, s["lat"], s["lon"]))
     return best, haversine_mi(lat, lon, best["lat"], best["lon"])

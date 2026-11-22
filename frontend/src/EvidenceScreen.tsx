@@ -115,6 +115,74 @@ function ForecasterDetail({ e1 }: { e1: { horizons: Record<string, Horizon>; tes
   );
 }
 
+type Policy = {
+  mean_regret_min: number; mean_chance_on_time: number; aircraft_sent: number; aircraft_sent_for_nothing: number;
+};
+type ReplayGroup = { cases: number; weather_stayed_flyable: number; policies: Record<string, Policy> };
+type ChanceRow = { app_said: string; cases: number; mean_app_said_pct: number; stayed_flyable_pct: number };
+
+const POLICY_LABEL: Record<string, string> = {
+  ours: "This app (forecaster)", weather_now: "Old rule: weather right now",
+  always_ground: "Always ground", always_air: "Always air taxi only", always_both: "Always both",
+};
+const GROUP_LABEL: Record<string, string> = {
+  random_hours: "Random hours of the year", active_weather_hours: "Hours with storms or bad weather nearby",
+};
+
+function ReplayDetail({ e2 }: { e2: { summary: Record<string, ReplayGroup>; weather_chance_check?: ChanceRow[]; weather_year: number } }) {
+  return (
+    <section className="panel">
+      <h3>Replayed decisions, in detail (E2)</h3>
+      <p className="muted">
+        Made-up transfer cases replayed on real {e2.weather_year} weather. Each way of deciding sees the same cases.
+        “Sent for nothing” means an aircraft was launched and the weather then closed.
+      </p>
+      <div className="two-col">
+        {Object.entries(e2.summary).map(([name, g]) => (
+          <div key={name}>
+            <h4>{GROUP_LABEL[name] ?? name} <span className="muted">· {g.cases} cases · weather held in {pct(g.weather_stayed_flyable)}</span></h4>
+            <div className="table-wrap">
+              <table>
+                <thead><tr><th>Way of deciding</th><th>Minutes lost</th><th>On time</th><th>Aircraft sent</th><th>Sent for nothing</th></tr></thead>
+                <tbody>
+                  {Object.entries(g.policies).map(([p, r]) => (
+                    <tr key={p} className={p === "ours" ? "selected" : ""}>
+                      <td>{POLICY_LABEL[p] ?? p}</td>
+                      <td className="num">{r.mean_regret_min.toFixed(1)}</td>
+                      <td className="num">{pct(r.mean_chance_on_time)}</td>
+                      <td className="num">{pct(r.aircraft_sent)}</td>
+                      <td className="num">{pct(r.aircraft_sent_for_nothing)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ))}
+      </div>
+      {e2.weather_chance_check && e2.weather_chance_check.length > 0 && (
+        <>
+          <h4>Is the weather chance on the case screen honest?</h4>
+          <div className="table-wrap">
+            <table>
+              <thead><tr><th>The app said</th><th>Cases</th><th>Average it said</th><th>Weather really held</th></tr></thead>
+              <tbody>
+                {e2.weather_chance_check.map((r) => (
+                  <tr key={r.app_said}>
+                    <td>{r.app_said}</td><td className="num">{r.cases}</td>
+                    <td className="num">{Math.round(r.mean_app_said_pct)}%</td>
+                    <td className="num">{Math.round(r.stayed_flyable_pct)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
 export default function EvidenceScreen({ active }: { active: boolean }) {
   const [data, setData] = useState<Evidence | null>(null);
   const [error, setError] = useState("");
@@ -133,7 +201,7 @@ export default function EvidenceScreen({ active }: { active: boolean }) {
         </p>
         {error && <p className="error" role="alert">{error}</p>}
         {data && (
-          <div className="table-wrap">
+          <div className="table-wrap full">
             <table className="evidence">
               <thead><tr><th>Test</th><th>What was measured</th><th>Result</th><th>Compare with</th><th>How to read it</th></tr></thead>
               <tbody>
@@ -152,6 +220,7 @@ export default function EvidenceScreen({ active }: { active: boolean }) {
         )}
       </section>
       {data?.details?.E1?.horizons && <ForecasterDetail e1={data.details.E1} />}
+      {data?.details?.E2?.summary && <ReplayDetail e2={data.details.E2} />}
     </main>
   );
 }

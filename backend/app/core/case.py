@@ -12,10 +12,10 @@ from datetime import datetime, timedelta, timezone
 from typing import Protocol
 from zoneinfo import ZoneInfo
 
-from . import decision, forecaster, roads, weather
+from . import alternates, decision, forecaster, roads, weather
 from .energy import Wind
 from .features import CEILING_CAP_FT, HourRecord
-from .geo import haversine_mi, nearest_station, station_neighbors
+from .geo import haversine_mi, station_neighbors, stations_near
 from .ledger import Ledger
 
 FLORIDA = ZoneInfo("America/New_York")
@@ -141,23 +141,38 @@ class Built:
 def build_case(*, origin: dict, dest: dict, deadline_min: int, now: datetime,
                source: WeatherSource | None = None) -> Built:
     ledger = Ledger(now=now)
-    pickup_st, pickup_mi = nearest_station(origin["lat"], origin["lon"])
-    drop_st, drop_mi = nearest_station(dest["lat"], dest["lon"])
-    base = {"name": pickup_st["name"].title(), "icao": pickup_st["icao"],
-            "lat": pickup_st["lat"], "lon": pickup_st["lon"]}
-    source = source or LiveWeather([pickup_st["icao"], drop_st["icao"]])
+    pickup_opts = stations_near(origin["lat"], origin["lon"])
+    drop_opts = stations_near(dest["lat"], dest["lon"])
+    base_st = pickup_opts[0][0]  # the simulated aircraft waits at the airport nearest the pick-up
+    base = {"name": base_st["name"].title(), "icao": base_st["icao"], "lat": base_st["lat"], "lon": base_st["lon"]}
+    source = source or LiveWeather([st["icao"] for st, _ in pickup_opts + drop_opts])
 
     wait_min, air_min = flight_minutes(origin, dest, base)
     start, end = now + timedelta(minutes=wait_min), now + timedelta(minutes=wait_min + air_min)
 
     chances, reasons, weather_ids, forecasts = [], [], [], []
-    ends = [(pickup_st, pickup_mi, "pick-up")]
-    if drop_st["icao"] != pickup_st["icao"]:
-        ends.append((drop_st, drop_mi, "drop-off"))
-    pickup_weather = None
-    for st, miles, role in ends:
-        w = source.station(st, now)
-        pickup_weather = pickup_weather or w
+
+    def reporting(options: list[tuple[dict, float]], role: str) -> tuple[dict, float, StationWeather]:
+        """The nearest airport with a fresh report. Small airports go quiet at night, so
+        the next ones within reach are tried, and the switch is stated as a reason."""
+        first = None
+        for st, miles in options:
+            w = source.station(st, now)
+            first = first or (st, miles, w)
+            if w.observed_at is not None and w.forecast is not None:
+                if st is not options[0][0]:
+                    reasons.append(f"{options[0][0]['icao']} has no fresh report; using {st['icao']}, "
+                                   f"{miles:.0f} mi from {role}")
+                return st, miles, w
+        return first
+
+    picked = [(*reporting(pickup_opts, "pick-up"), "pick-up")]
+    drop = reporting(drop_opts, "drop-off")
+    if drop[0]["icao"] != picked[0][0]["icao"]:
+        picked.append((*drop, "drop-off"))
+    ends = [(st, miles, role) for st, miles, _, role in picked]
+    pickup_weather = picked[0][2]
+    for st, miles, w, role in picked:
         if w.observed_at is None or w.forecast is None:
             age = "" if w.observed_at is None else f" (newest is {(now - w.observed_at).total_seconds() / 60:.0f} min old)"
             reasons.append(f"{st['icao']}: no fresh weather report{age}")
@@ -194,6 +209,8 @@ def build_case(*, origin: dict, dest: dict, deadline_min: int, now: datetime,
             o.fact_ids = o.fact_ids + weather_ids
     recommended = decision.recommend(options)
     _result_facts(ledger, options, recommended, deadline_min)
+    flying = any(o.strategy == "air_only" and o.status == "OK" for o in options)
+    outs = alternates.check(decision.profiles()["air_taxi_a"], origin, dest, base, w0.temp_c) if flying else None
     out = {
         "disclaimer": DISCLAIMER, "origin": origin, "dest": dest,
         "options": [o.model_dump() for o in options], "recommended": recommended,
@@ -202,7 +219,10 @@ def build_case(*, origin: dict, dest: dict, deadline_min: int, now: datetime,
         "forecasts": forecasts,
         "map": {"road": road.geometry, "road_is_routed": road.routed,
                 "air_base": base, "air": [[base["lon"], base["lat"]], [origin["lon"], origin["lat"]],
-                                          [dest["lon"], dest["lat"]]]},
+                                          [dest["lon"], dest["lat"]]],
+                # "Always an Out": the nearest landing places along the flight, for the map
+                "landing_places": outs["sites"] if outs else [],
+                "min_margin_min": outs["min_margin_min"] if outs else None},
     }
     return Built(out=out, road=road, base=base, wind=wind, temp_c=w0.temp_c, local_hour=local_hour,
                  stations=[st for st, _, _ in ends], flight_start=start, flight_end=end)
