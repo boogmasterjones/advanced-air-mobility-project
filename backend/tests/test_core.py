@@ -17,7 +17,7 @@ def obs(**kw):
     return weather.Observation(**(base | kw))
 
 
-def options(p_weather, deadline=60, hour=10, **kw):
+def options(p_weather, deadline=120, hour=10, **kw):
     pads = heliports()
     opts = decision.evaluate(origin=pads["9FA2"], dest=pads["48FD"], deadline_min=deadline,
                              local_hour=hour, p_weather=p_weather, weather_reasons=[],
@@ -75,17 +75,18 @@ def test_bad_weather_makes_air_only_slower_than_ground():
 
 
 def test_more_flyable_weather_never_lowers_the_air_chance():
-    chances = [options(p, deadline=45)[0]["air_only"].p_by_deadline for p in (0.0, 0.3, 0.6, 0.9, 1.0)]
+    chances = [options(p, deadline=100)[0]["air_only"].p_by_deadline for p in (0.0, 0.3, 0.6, 0.9, 1.0)]
     assert chances == sorted(chances)
 
 
-def test_close_calls_go_to_ground_then_fewer_vehicles():
+def test_close_calls_go_to_ground_then_to_air_with_ground_backup():
     def opt(name, p):
         return decision.Option(strategy=name, status="OK", p_by_deadline=p, median_min=30,
                                range_min=(20, 40), reasons=[], fact_ids=[])
 
     assert decision.recommend([opt("ground_only", 0.97), opt("air_only", 0.98), opt("air_and_ground", 0.985)]) == "ground_only"
-    assert decision.recommend([opt("ground_only", 0.50), opt("air_only", 0.89), opt("air_and_ground", 0.90)]) == "air_only"
+    assert decision.recommend([opt("ground_only", 0.50), opt("air_only", 0.89), opt("air_and_ground", 0.90)]) == "air_and_ground"
+    assert decision.recommend([opt("ground_only", 0.885), opt("air_only", 0.89), opt("air_and_ground", 0.90)]) == "ground_only"
     assert decision.recommend([opt("ground_only", 0.50), opt("air_only", 0.70), opt("air_and_ground", 0.90)]) == "air_and_ground"
     assert decision.recommend([]) == "ground_only"
 

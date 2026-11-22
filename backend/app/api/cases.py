@@ -18,20 +18,23 @@ router = APIRouter(prefix="/api")
 
 
 @lru_cache
-def trauma_levels() -> dict[str, str]:
-    """FAA pad id -> state trauma level, from the hand-checked list of 36 centers."""
+def trauma_centers() -> dict[str, dict]:
+    """FAA pad id -> the state's row for that trauma center (hand-checked list of 36)."""
     path = DATA_DIR / "seeds" / "trauma_centers.csv"
     if not path.exists():
         return {}
     with open(path, newline="", encoding="utf-8") as f:
-        return {r["faa_id"]: r["level"] for r in csv.DictReader(f) if r["faa_id"]}
+        return {r["faa_id"]: r for r in csv.DictReader(f) if r["faa_id"]}
 
 
 @router.get("/facilities")
 def facilities(q: str = ""):
-    """FAA-listed Florida heliports (the UI filters to hospital-style names)."""
-    levels = trauma_levels()
-    items = [{**h, "trauma_level": levels.get(h["faa_id"])} for h in heliports().values()]
+    """FAA-listed Florida heliports (the UI filters to hospital-style names). Trauma
+    centers also carry their level and the name the state uses, which is the name people
+    know ("UF Health Shands Hospital" is "SHANDS HELISTOP" in the FAA list)."""
+    centers = trauma_centers()
+    items = [{**h, "trauma_level": centers.get(h["faa_id"], {}).get("level"),
+              "known_as": centers.get(h["faa_id"], {}).get("name")} for h in heliports().values()]
     if q:
         items = [h for h in items if q.lower() in h["name"].lower() or q.lower() in h["city"].lower()]
     return items[:500]
@@ -43,7 +46,13 @@ def _pads(origin_id: str, dest_id: str) -> tuple[dict, dict]:
         raise HTTPException(404, "Unknown facility id")
     if origin_id == dest_id:
         raise HTTPException(422, "Pick-up and drop-off must be different places")
-    return pads[origin_id], pads[dest_id]
+    centers = trauma_centers()
+
+    def with_names(pad: dict) -> dict:
+        row = centers.get(pad["faa_id"], {})
+        return {**pad, "trauma_level": row.get("level"), "known_as": row.get("name")}
+
+    return with_names(pads[origin_id]), with_names(pads[dest_id])
 
 
 def _time(text: str) -> datetime:

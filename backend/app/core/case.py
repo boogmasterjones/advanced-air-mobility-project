@@ -119,7 +119,7 @@ def _result_facts(ledger: Ledger, options: list[decision.Option], recommended: s
                    source=src, confidence="computed")
         ledger.add(f"{name}: typical time", round(o.median_min), unit="min", source=src, confidence="computed")
     ledger.add("Option the engine suggests", STRATEGY_LABEL[recommended],
-               source="decision rule: best chance by the deadline; close calls go to fewer vehicles, ground first",
+               source="decision rule: best chance by the deadline; close calls go to ground, then to air with ground backup",
                confidence="computed")
 
 

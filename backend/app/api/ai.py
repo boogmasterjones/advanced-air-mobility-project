@@ -13,6 +13,7 @@ from ..llm import match, provider
 
 router = APIRouter(prefix="/api")
 RESULTS_DIR = DATA_DIR.parent / "eval" / "results"
+BULKY = {"cases", "metrics"}  # per-case rows stay in the files; the screen needs the summaries
 
 # What each evidence number is, shown even before its eval has been run.
 PLANNED = {
@@ -57,7 +58,7 @@ def evidence():
             metrics.append(EvalMetric(id=eval_id, name=title, value=None, note="not run yet"))
             continue
         metrics += rows
-        details[eval_id] = data
+        details[eval_id] = {k: v for k, v in data.items() if k not in BULKY}
         stamp = data.get("generated_at")
         newest = max(newest, stamp) if newest and stamp else (stamp or newest)
     return EvidenceOut(generated_at=newest or datetime.now(timezone.utc).isoformat(timespec="seconds"),

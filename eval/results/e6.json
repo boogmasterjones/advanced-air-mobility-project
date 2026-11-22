@@ -1,36 +1,36 @@
 {
   "id": "E6",
-  "generated_at": "2026-11-22T22:05:47+00:00",
+  "generated_at": "2026-11-22T22:14:41+00:00",
   "reference": {
     "road_miles": 31.9,
-    "source": "Swiss study of 645 heart and stroke transfers (RESEARCH.md section 4)"
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8650228/",
+    "how_it_was_measured": "helicopter: emergency call to landing at the destination (measured); road: map drive time plus a flat 10 minutes (assumed)"
   },
   "road_model": {
     "road_miles_per_straight_mile": 1.245,
     "avg_mph": 41.2,
     "from": "fitted to 407 OSRM routes",
-    "note": "free-flow, no traffic; traffic would lower the break-even"
+    "note": "free-flow, no traffic; traffic would lower every break-even"
   },
   "typical_miles_from_base_to_pickup": 13.0,
   "breakeven_road_miles": {
     "helicopter": {
-      "aircraft_already_at_pickup": 10.0,
-      "aircraft_flies_in_from_base": 15.0
+      "study_definition": 36.0,
+      "our_model": 8.5
     },
     "air_taxi_a": {
-      "aircraft_already_at_pickup": 15.0,
-      "aircraft_flies_in_from_base": 20.0
+      "study_definition": 36.5,
+      "our_model": 9.5
     }
   },
-  "how_to_read": "Road distance above which the aircraft's typical time beats the ambulance's. The study measured real missions, where the helicopter flies in from its base.",
+  "verdict": "Compared the way the study did, our model puts the helicopter break-even at 36.0 road miles against the study's 32: it agrees with the study to within 25%. With the ground delays the app really uses (waiting for the ambulance and time at the sending hospital, from published transfer studies), the helicopter wins from 8.5 miles. The study allowed the road only 10 minutes for all of that.",
   "metrics": [
     {
       "id": "E6",
-      "name": "Helicopter beats ambulance above this road distance (miles)",
-      "value": 15.0,
+      "name": "Helicopter beats the road above this distance (miles), measured the study's way",
+      "value": 36.0,
       "baseline": 31.9,
-      "note": "Our time model, helicopter flying in 13.0 mi from its base, against the Swiss study's 32 miles. With the helicopter already at the pick-up pad: 10.0 mi. Road times have no traffic. Our model finds the helicopter faster at shorter distances than the study did, so it probably favors air: real missions spend longer at the bedside and on the pad than our labeled assumptions. Read air times as optimistic."
+      "note": "Compared the way the study did, our model puts the helicopter break-even at 36.0 road miles against the study's 32: it agrees with the study to within 25%. With the ground delays the app really uses (waiting for the ambulance and time at the sending hospital, from published transfer studies), the helicopter wins from 8.5 miles. The study allowed the road only 10 minutes for all of that. Road times have no traffic. Sanity check only."
     }
-  ],
-  "verdict": "Our model finds the helicopter faster at shorter distances than the study did, so it probably favors air: real missions spend longer at the bedside and on the pad than our labeled assumptions. Read air times as optimistic."
+  ]
 }

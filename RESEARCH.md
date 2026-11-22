@@ -187,6 +187,45 @@ Source: [rules page](https://drreacto.github.io/florida_poly_ai_hackathon/rules.
 11. eccodes install on both machines.
 12. Official range, battery and wind limits for any real aircraft (not published).
 
+## 12. Transfer time components (added 2026-11-22)
+
+Why this was added: our first time model said a helicopter beats an ambulance above about 15 road miles, half the Swiss study's 32. The published numbers below replaced our guesses in `data/aircraft_profiles.json`. "Abstract only" means we read the abstract, not the full paper, so the exact definition is less certain.
+
+**How the Swiss break-even was really measured** ([full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC8650228/), 645 transfers, 2019 to 2021):
+
+- Helicopter time was measured: emergency call to landing at the destination, median 59.9 min. Call to landing at the sending hospital was 22.1 min. [reported]
+- **Road time was not measured.** It was the map drive time plus a flat 10 minutes for preparation and handover. [reported]
+- So the 32-mile break-even compares a real helicopter mission with an optimistic road estimate. Our E6 check reproduces that comparison (and gets 36 miles), then also reports the break-even with realistic ground delays.
+
+**Helicopter air ambulance**
+
+| What | Value | Source |
+|---|---|---|
+| Dispatch to lift-off, interfacility flights | 13.2 min mean | Clark 2019, Colorado, PMID 31122584 (abstract only) [reported] |
+| Alert to landing at the sending hospital | 26 min median | German stroke transfers, n=7,528, [PMC12619459](https://pmc.ncbi.nlm.nih.gov/articles/PMC12619459/) [reported] |
+| Time on the ground at the sending hospital | 31 min mean | Svenson 2006, Wisconsin, PMID 16818167; Leicht 1986 agrees (abstracts only) [reported] |
+| Same, other definitions | 8 to about 42 min | "Bedside time" 8 min (Martin-Gill 2016, abstract only) up to about 42 min in German data ([PMC10598984](https://pmc.ncbi.nlm.nih.gov/articles/PMC10598984/)) [reported] |
+| Landing to handover at the receiving hospital | 9.2 min mean with a direct helipad | [PMC10598984](https://pmc.ncbi.nlm.nih.gov/articles/PMC10598984/) [reported] |
+
+**Ground ambulance, hospital to hospital**
+
+| What | Value | Source |
+|---|---|---|
+| Ambulance request to arrival at the sending hospital | 20.5 min median | Prabhakaran 2021, Chicago stroke, n=191, PMID 34598828 (abstract only) [reported] |
+| Ambulance time at the sending hospital | 26 min median | same study [reported] |
+| Notification to departure (both of the above together) | 15 min median | Dutch stroke transfers, n=125, [PMC10472962](https://pmc.ncbi.nlm.nih.gov/articles/PMC10472962) [reported] |
+| Handoff at the receiving hospital | none found | we keep 3 min [assumption] |
+
+US and European figures differ a lot (46 min against 15 min before departure), so the engine draws these delays with a wide spread.
+
+**Other air-versus-ground findings (they do not agree with each other):**
+
+- Vanderbilt stroke transfers: air predicted faster only beyond 40 miles (Kunte 2021, PMID 33744719, abstract only). [reported]
+- North Carolina heart attack transfers: time at the sending hospital was 63 to 72 min by air against 38 to 43 by ground, and air was slower overall in every drive-time band ([PMC3600977](https://pmc.ncbi.nlm.nih.gov/articles/PMC3600977)). [reported]
+- Ontario trauma: no distance threshold; decision to arrival 120 min by land against 150 by air (Karanicolas 2006, PMID 16917457, abstract only). [reported]
+
+**What this means for us:** air is not automatically faster for short hospital-to-hospital trips. Most of the time is spent waiting and at the bedside, not travelling. No data exists for air taxis, so the simulated air taxi uses the helicopter figures, labeled as an assumption.
+
 ## Sources
 
 - [Hackathon rules](https://drreacto.github.io/florida_poly_ai_hackathon/rules.html)

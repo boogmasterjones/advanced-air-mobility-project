@@ -39,7 +39,7 @@ from app.core.ledger import Ledger
 RESULTS = DATA_DIR.parent / "eval" / "results"
 DOCS = DATA_DIR.parent / "docs"
 HOSPITAL_WORDS = re.compile(r"HOSP|MED|HEALTH|MEML|RGNL|CLINIC|TRAUMA|SHANDS|BAPTIST|ADVENT", re.I)
-DEADLINES = (45, 60, 90, 120)
+DEADLINES = (90, 120, 150, 180)
 MIN_FLIGHT_MI, MAX_FLIGHT_MI = 15, 70
 VEHICLES = {"ground_only": 1, "air_only": 1, "air_and_ground": 2}
 HOUR = timedelta(hours=1)

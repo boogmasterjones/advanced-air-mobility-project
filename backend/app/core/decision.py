@@ -25,12 +25,15 @@ from .ledger import Ledger
 
 N_DRAWS = 2000
 CLOSE_CALL = 0.02  # options within 2 points of the best count as tied
+SPREAD = 0.4       # log-scale spread of time spent waiting and at the sending hospital
 
 # Assumption: congestion multiplier by local hour (rush hours slower). Labeled in the UI.
 CONGESTION = {h: 1.0 for h in range(24)} | {7: 1.35, 8: 1.4, 9: 1.2, 16: 1.3, 17: 1.45, 18: 1.3}
 
-# Fewest vehicles first, ground before air: the order used to break close calls.
-PREFERENCE = ["ground_only", "air_only", "air_and_ground"]
+# The order used to break close calls: ground alone first, then air with the ambulance
+# already moving. Air alone is never better on the deadline than air with a ground backup
+# (it only saves a vehicle), so it is shown for comparison and suggested last.
+PREFERENCE = ["ground_only", "air_and_ground", "air_only"]
 
 
 @lru_cache
@@ -93,9 +96,17 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
     f_cong = ledger.add(f"Road congestion factor at {local_hour:02d}:00", congestion,
                         source="modeled by hour of day (no live traffic data)", confidence="assumption")
     drive = road.minutes * congestion * _lognormal(rng, 1.0, 0.15, n)
-    ground_t = (_lognormal(rng, _v(ground, "dispatch_delay_min_median"), 0.3, n) + drive
+    f_wait = ledger.add("Typical wait for the ambulance to reach the sending hospital",
+                        _v(ground, "dispatch_delay_min_median"), unit="min", source="aircraft_profiles.json",
+                        confidence=ground["dispatch_delay_min_median"]["confidence"])
+    f_gload = ledger.add("Typical ambulance time at the sending hospital", _v(ground, "load_min_median"),
+                         unit="min", source="aircraft_profiles.json",
+                         confidence=ground["load_min_median"]["confidence"])
+    # Wide spread on the fixed delays: published figures differ a lot between studies.
+    ground_t = (_lognormal(rng, _v(ground, "dispatch_delay_min_median"), SPREAD, n)
+                + _lognormal(rng, _v(ground, "load_min_median"), SPREAD, n) + drive
                 + _lognormal(rng, _v(ground, "handoff_min_median"), 0.3, n))
-    ground_ids = [f_road, f_drive, f_cong]
+    ground_ids = [f_road, f_drive, f_cong, f_wait, f_gload]
     ground_reasons = ["road time has no live traffic; rush hours use a modeled slowdown"
                       if road.routed else "road time is modeled from straight-line distance, not routed"]
     options = [_summarize("ground_only", ground_t, deadline_min, ground_reasons, ground_ids)]
@@ -144,9 +155,12 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
                          source="decision engine", confidence="computed")
     air_ids += [f_weather, f_energy, f_spare, f_pad, f_flies]
 
+    air_ids.append(ledger.add("Typical aircraft time at the sending hospital", _v(air, "load_min_median"),
+                              unit="min", source="aircraft_profiles.json (helicopter air ambulance figure)",
+                              confidence=air["load_min_median"]["confidence"]))
     launch = _lognormal(rng, _v(air, "launch_delay_min_median"), 0.3, n)
     air_t = (launch + sum(power.leg_minutes)
-             + _lognormal(rng, _v(air, "load_min_median"), 0.3, n)
+             + _lognormal(rng, _v(air, "load_min_median"), SPREAD, n)
              + _lognormal(rng, _v(air, "unload_min_median"), 0.3, n))
     flies = (rng.random(n) < p_weather) & power.ok & (rng.random(n) < p_pad)
     late = launch + _lognormal(rng, _v(ground, "late_start_min_median"), 0.3, n)
@@ -170,8 +184,8 @@ def evaluate(*, origin: dict, dest: dict, deadline_min: float, local_hour: int,
 
 def recommend(options: list[Option]) -> str:
     """Best chance of making the deadline. Options within 2 points of the best count as
-    tied, and a tie goes to the choice with fewer vehicles, ground first. With no usable
-    numbers at all, ground is the safe default."""
+    tied, and a tie goes to ground alone, then to air with the ground backup. With no
+    usable numbers at all, ground is the safe default."""
     usable = [o for o in options if o.status == "OK" and o.p_by_deadline is not None]
     if not usable:
         return "ground_only"

@@ -43,7 +43,7 @@ def cases(rng: random.Random) -> list[CaseOut]:
     while len(out) < N_CASES:
         a, b = rng.choice(PAIRS)
         when = span[0] + timedelta(hours=8 + rng.randrange(hours))
-        built = build_case(origin=pads[a], dest=pads[b], deadline_min=rng.choice((45, 60, 90)),
+        built = build_case(origin=pads[a], dest=pads[b], deadline_min=rng.choice((90, 120, 150)),
                            now=when, source=history.ArchiveWeather())
         out.append(CaseOut(**built.out))
     return out
