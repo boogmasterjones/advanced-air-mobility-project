@@ -68,6 +68,45 @@ def report_is_flyable(obs: Observation) -> bool | None:
     return True
 
 
+MAX_PLAUSIBLE_WIND_KT = 130.0
+
+
+def clean_wind(direction: float | None, speed: float | None, gust: float | None
+               ) -> tuple[float | None, float | None, float | None]:
+    """Drop wind values that cannot be right. Hand-typed reports sometimes carry typos
+    such as "030086G16KT" (86 kt steady wind with a 16 kt gust) or "30669KT" (direction
+    306). A value we cannot trust becomes None (unknown), never a corrected guess.
+      * the steady wind is higher than the gust reported with it
+      * the direction is not a multiple of 10 degrees (reports only use tens)
+      * any speed above 130 kt
+      * a steady wind above 60 kt with no gust reported (real storms always report gusts)
+      * a gust above 90 kt that is far out of line with the steady wind ("16G227KT")
+    Returns (direction, speed, gust)."""
+    if direction is not None and direction % 10 != 0:
+        return None, None, None
+    if speed is not None and gust is not None and speed > gust:
+        speed = None
+    if speed is not None and (not 0 <= speed <= MAX_PLAUSIBLE_WIND_KT or (speed > 60 and gust is None)):
+        speed = None
+    if gust is not None and not 0 <= gust <= MAX_PLAUSIBLE_WIND_KT:
+        gust = None
+    if gust is not None and gust > 90 and gust > 2 * (speed or 0) + 20:
+        gust = None
+    return direction, speed, gust
+
+
+def in_range(value: float | None, low: float, high: float) -> float | None:
+    """The value, or None when it is outside what is physically possible in Florida."""
+    return value if value is not None and low <= value <= high else None
+
+
+# Limits for the checks above and below. Wide on purpose: they remove typos ("160SM",
+# "A3993", minus 16 C in Brooksville), not unusual weather. Hurricane lows stay in.
+VISIBILITY_MI = (0.0, 20.0)
+TEMP_C = (-15.0, 48.0)
+PRESSURE_HPA = (897.0, 1057.0)
+
+
 def _num(value) -> float | None:
     try:
         return float(value)
@@ -84,19 +123,20 @@ def parse_metar_json(item: dict) -> Observation:
         if layer.get("cover") in ("BKN", "OVC", "OVX", "VV") and layer.get("base") is not None:
             ceiling = layer["base"] if ceiling is None else min(ceiling, layer["base"])
     wx = item.get("wxString") or ""
+    wind_dir, wind_kt, gust_kt = clean_wind(_num(item.get("wdir")), _num(item.get("wspd")), _num(item.get("wgst")))
     return Observation(
         station=item["icaoId"],
         observed_at=datetime.fromtimestamp(item["obsTime"], tz=timezone.utc),
-        visibility_mi=vis,
+        visibility_mi=in_range(vis, *VISIBILITY_MI),
         ceiling_ft=ceiling,
-        wind_kt=_num(item.get("wspd")),
-        gust_kt=_num(item.get("wgst")),
+        wind_kt=wind_kt,
+        gust_kt=gust_kt,
         thunderstorm="TS" in wx,
         raw=item.get("rawOb", ""),
-        temp_c=_num(item.get("temp")),
-        dewpoint_c=_num(item.get("dewp")),
-        altimeter_hpa=_num(item.get("altim")),
-        wind_dir=_num(item.get("wdir")),  # "VRB" becomes None
+        temp_c=in_range(_num(item.get("temp")), *TEMP_C),
+        dewpoint_c=in_range(_num(item.get("dewp")), *TEMP_C),
+        altimeter_hpa=in_range(_num(item.get("altim")), *PRESSURE_HPA),
+        wind_dir=wind_dir,  # "VRB" becomes None
         precip_in=_num(item.get("precip")),
     )
 

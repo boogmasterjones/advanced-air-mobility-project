@@ -66,6 +66,28 @@ def test_storm_report_without_visibility_still_counts():
     assert summarize_hour([obs(visibility_mi=None)]) is None
 
 
+def test_impossible_wind_values_become_unknown_not_a_storm():
+    """Real typos from the archive: KTPA "030086G16KT" (Dec 14, 2024) and KMCO "30669KT" (Oct 21, 2024)."""
+    assert weather.clean_wind(30, 86, 16) == (30, None, 16)       # steady wind above its own gust
+    assert weather.clean_wind(306, 69, None) == (None, None, None)  # direction is not a multiple of 10
+    assert weather.clean_wind(240, 7, None) == (240, 7, None)
+    assert weather.clean_wind(None, 8, 15) == (None, 8, 15)       # variable direction is fine
+    assert weather.clean_wind(90, 60, 89) == (90, 60, 89)         # a real hurricane report is kept
+    assert weather.clean_wind(90, 20, 400) == (90, 20, None)
+    assert weather.clean_wind(250, 85, None) == (250, None, None)   # "250085KT": 85 kt steady, no gust
+    assert weather.clean_wind(90, 16, 118) == (90, 16, None)        # "12012G118KT"-style gust typo
+    assert weather.clean_wind(90, 70, 110) == (90, 70, 110)         # a major hurricane stays in
+    assert weather.clean_wind(200, 5, 55) == (200, 5, 55)           # a thunderstorm gust on a calm day stays in
+    assert weather.in_range(160, *weather.VISIBILITY_MI) is None and weather.in_range(10, *weather.VISIBILITY_MI) == 10
+    assert weather.in_range(-16, *weather.TEMP_C) is None and weather.in_range(940, *weather.PRESSURE_HPA) == 940
+    from data_build.build_dataset import parse_iem_row
+    typo = parse_iem_row({"valid": "2024-12-14 14:53", "drct": "30.00", "sknt": "86.00", "gust": "16.00",
+                          "vsby": "10.00", "tmpf": "67.00", "dwpf": "59.00", "alti": "30.37"}, "KTPA")
+    assert typo.wind_kt is None and typo.gust_kt == 16 and weather.report_is_flyable(typo) is True
+    item = {"icaoId": "KMCO", "obsTime": 1794966780, "visib": "10+", "wdir": 306, "wspd": 69}
+    assert weather.report_is_flyable(weather.parse_metar_json(item)) is None   # cannot be judged, so not used
+
+
 def test_feed_values_of_the_wrong_type_do_not_crash():
     item = {"icaoId": "KMCO", "obsTime": 1794966780, "visib": "abc", "wspd": "12", "wgst": "strong",
             "wdir": None, "temp": "hot", "clouds": None, "wxString": None}

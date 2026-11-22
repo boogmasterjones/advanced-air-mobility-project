@@ -27,7 +27,7 @@ import numpy as np
 from app.core.features import (FEATURE_NAMES, HISTORY_HOURS, HORIZONS, HourRecord,
                                build_features, summarize_hour)
 from app.core.geo import DATA_DIR, station_neighbors, stations
-from app.core.weather import Observation
+from app.core.weather import PRESSURE_HPA, TEMP_C, VISIBILITY_MI, Observation, clean_wind, in_range
 
 RAW = DATA_DIR / "raw"
 PROCESSED = DATA_DIR / "processed"
@@ -61,15 +61,16 @@ def parse_iem_row(row: dict, icao: str) -> Observation | None:
             ceiling = base if ceiling is None else min(ceiling, base)
     tmpf, dwpf, alti = _f(row.get("tmpf")), _f(row.get("dwpf")), _f(row.get("alti"))
     wx = row.get("wxcodes") or ""
+    wind_dir, wind_kt, gust_kt = clean_wind(_f(row.get("drct")), _f(row.get("sknt")), _f(row.get("gust")))
     return Observation(
         station=icao, observed_at=when,
-        visibility_mi=_f(row.get("vsby")), ceiling_ft=ceiling,
-        wind_kt=_f(row.get("sknt")), gust_kt=_f(row.get("gust")),
+        visibility_mi=in_range(_f(row.get("vsby")), *VISIBILITY_MI), ceiling_ft=ceiling,
+        wind_kt=wind_kt, gust_kt=gust_kt,
         thunderstorm="TS" in wx if wx != "M" else False, raw=row.get("metar", ""),
-        temp_c=(tmpf - 32) * 5 / 9 if tmpf is not None else None,
-        dewpoint_c=(dwpf - 32) * 5 / 9 if dwpf is not None else None,
-        altimeter_hpa=alti * 33.8639 if alti is not None else None,
-        wind_dir=_f(row.get("drct")), precip_in=_f(row.get("p01i")),
+        temp_c=in_range((tmpf - 32) * 5 / 9 if tmpf is not None else None, *TEMP_C),
+        dewpoint_c=in_range((dwpf - 32) * 5 / 9 if dwpf is not None else None, *TEMP_C),
+        altimeter_hpa=in_range(alti * 33.8639 if alti is not None else None, *PRESSURE_HPA),
+        wind_dir=wind_dir, precip_in=_f(row.get("p01i")),
     )
 
 
@@ -129,7 +130,8 @@ def _fmt(v) -> str:
     if isinstance(v, bool):
         return "1" if v else "0"
     if isinstance(v, float):
-        return "" if v != v else f"{v:.2f}".rstrip("0").rstrip(".")
+        # Four decimals: enough that features rebuilt from this file match the training rows.
+        return "" if v != v else f"{v:.4f}".rstrip("0").rstrip(".")
     return str(v)
 
 

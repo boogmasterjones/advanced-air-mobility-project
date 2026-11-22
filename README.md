@@ -145,7 +145,7 @@ On demo days, keep one instance warm: `gcloud run services update car-or-air --r
 ## Data sources
 
 - Live airport weather: [Aviation Weather Center API](https://aviationweather.gov/data/api/).
-- Past airport weather and official forecasts: [Iowa Environmental Mesonet](https://mesonet.agron.iastate.edu/request/download.phtml).
+- Past airport weather and official forecasts: [Iowa Environmental Mesonet](https://mesonet.agron.iastate.edu/request/download.phtml). 2.9 million reports from 41 Florida airports, 2019 to 2024. A few hundred contain typos (a steady wind of 86 knots "gusting" 16, visibility of 160 miles, pressure "A3993"); `clean_wind` and `in_range` in `backend/app/core/weather.py` turn such values into "unknown" for training and for the live feed alike.
 - Heliports: [FAA 28-day data](https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/NASR_Subscription/), Oct 29, 2026 cycle.
 - Trauma centers: [Florida Department of Health list](https://www.floridahealth.gov/wp-content/uploads/2025/08/Florida-Trauma-Centers.pdf), 36 centers, matched to helipads by hand.
 - Road routes: the public [OSRM](https://project-osrm.org/) demo router on OpenStreetMap data.
