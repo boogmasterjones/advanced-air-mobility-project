@@ -154,6 +154,15 @@ def test_replay_uses_only_the_past_and_scores_against_what_happened():
     assert again == out  # a replay is repeatable
 
 
+def test_demo_mode_answers_from_saved_weather_without_the_network():
+    """The case screen's demo mode sends as_of; conftest blocks the network, so this
+    passes only if the answer comes entirely from the archive in the repository."""
+    out = client.post("/api/cases/evaluate", json=CASE | {"deadline_min": 150, "as_of": "2024-07-15T19:00:00Z"}).json()
+    assert out["as_of"].startswith("2024-07-15T19:00") and len(out["options"]) == 3
+    assert {o["strategy"]: o["status"] for o in out["options"]}["air_only"] == "OK"
+    assert all("aviationweather" not in f["source"] for f in out["facts"])
+
+
 def test_replay_rejects_times_outside_the_archive():
     params = {"date": "2031-01-01T00:00Z", "origin_id": "61FL", "dest_id": "7FD7", "deadline_min": 60}
     assert client.get("/api/replay", params=params).status_code == 422

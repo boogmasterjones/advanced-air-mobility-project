@@ -13,7 +13,7 @@ boogmasterjones asked a Claude session to build as much as possible in one pass,
 | B2, B3 Evals | Scripts and data done | 100 intake cases and 30 injection cases. Only the regex baseline has scores. **Run both with a key** to fill in the LLM numbers. |
 | B4 Brief | First version | Offline template plus LLM path (same caveat). The verifier now also checks units. |
 | B5 Time Machine, B6 Evidence | Done | Real data, no mocks. `frontend/src/mocks/` is no longer used. |
-| B7 Polish | Partly | Decision log with required reasons, phone layout and keyboard focus are in. No frozen-data mode yet; the Time Machine works without internet when run locally. |
+| B7 Polish | First version | Decision log with required reasons, phone layout, keyboard focus, and a labeled demo mode on the case screen that answers from saved weather when the live feed or the venue network is down (the map tiles still need internet). |
 | S1 to S7 | Open | Registration, deck, video and submission are still yours to do. |
 
 Things to decide together:

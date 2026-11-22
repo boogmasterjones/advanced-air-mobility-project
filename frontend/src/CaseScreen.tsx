@@ -16,6 +16,10 @@ const FIELD_NAME: Record<string, string> = {
 };
 const SAMPLE = "Stroke patient from Lakeside Medical Center to Delray Medical Center within 2 hours.";
 const AUDIT_KEY = "car-or-air-audit";
+// Demo mode answers as of this saved moment (a summer afternoon in the weather archive), so the
+// screen works when the live weather service or the venue network is down. Always labeled.
+const SAVED_MOMENT = "2024-07-15T19:00:00Z";
+const SAVED_LABEL = "July 15, 2024, 3:00 PM Florida time";
 
 type AuditEntry = { at: string; action: string; option: string; reason: string; trip: string };
 
@@ -47,6 +51,7 @@ export default function CaseScreen({ facilities }: { facilities: Facility[] }) {
   const [reason, setReason] = useState("");
   const [override, setOverride] = useState<Strategy>("ground_only");
   const [decisionError, setDecisionError] = useState("");
+  const [saved, setSaved] = useState(false); // demo mode: saved weather instead of the live feed
 
   const byId = useMemo(() => Object.fromEntries(facilities.map((f) => [f.faa_id, f])), [facilities]);
   const stale = result !== null &&
@@ -72,7 +77,8 @@ export default function CaseScreen({ facilities }: { facilities: Facility[] }) {
   async function run() {
     setBusy(true); setError(""); setBrief(null); setBriefError(""); setOpenFact(null); setDecisionError("");
     try {
-      const out = await evaluateCase({ origin_id: originId, dest_id: destId, deadline_min: deadline, category });
+      const out = await evaluateCase({ origin_id: originId, dest_id: destId, deadline_min: deadline, category,
+                                       ...(saved ? { as_of: SAVED_MOMENT } : {}) });
       setResult(out); setAsked(deadline); setOverride(out.recommended);
       setBriefBusy(true);
       getBrief(out).then(setBrief).catch((e: Error) => setBriefError(e.message)).finally(() => setBriefBusy(false));
@@ -163,6 +169,10 @@ export default function CaseScreen({ facilities }: { facilities: Facility[] }) {
             <button key={m} className={deadline === m ? "chip on" : "chip"} onClick={() => setDeadline(m)}>{m} min</button>
           ))}
         </div>
+        <label className="check">
+          <input type="checkbox" checked={saved} onChange={(e) => setSaved(e.target.checked)} />
+          <span>Demo mode: use saved weather from {SAVED_LABEL} instead of the live feed</span>
+        </label>
         <button className="primary" onClick={run} disabled={busy || !originId || !destId || originId === destId}>
           {busy ? "Checking weather, roads and battery…" : "Compare options"}
         </button>
@@ -175,6 +185,10 @@ export default function CaseScreen({ facilities }: { facilities: Facility[] }) {
       {result && (
         <section className={`results ${stale ? "stale" : ""}`} aria-live="polite">
           {stale && <p className="notice">The form changed. Press “Compare options” to update the answer below.</p>}
+          {result.as_of && Date.now() - new Date(result.as_of).getTime() > 6 * 3600 * 1000 && (
+            <p className="notice"><strong>Demo mode.</strong> This answer uses saved weather from{" "}
+              {new Date(result.as_of).toLocaleString(undefined, { dateStyle: "long", timeStyle: "short" })}, not today's weather.</p>
+          )}
           <h2>
             Suggested: {STRATEGY_LABEL[result.recommended]}
             <span className="muted"> · {placeName(result.origin)} to {placeName(result.dest)}, within {asked} min</span>

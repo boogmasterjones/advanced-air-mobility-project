@@ -120,6 +120,7 @@ export const getFacilities = () => call<Facility[]>("/api/facilities");
 
 export const evaluateCase = (body: {
   origin_id: string; dest_id: string; deadline_min: number; category: string;
+  as_of?: string; // demo mode: answer as of this past moment, from the weather archive
 }) => call<CaseResult>("/api/cases/evaluate", post(body));
 
 export const readRequest = (text: string) => call<IntakeResult>("/api/intake", post({ text }));

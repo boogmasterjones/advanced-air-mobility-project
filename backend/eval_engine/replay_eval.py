@@ -163,6 +163,15 @@ def demo_days(cases: list[dict], path) -> list[dict]:
                 seen_days.add(c["when"][:10])
                 picks.append({**c, "kind": wanted})
                 break
+    # One fixed case as well: the roughest hours of the year at Tampa, taken from the archive itself.
+    tampa = history.archive().get("KTPA", {})
+    pads = heliports()
+    if tampa and "61FL" in pads and "7FD7" in pads:
+        worst = max(tampa, key=lambda t: tampa[t].gust_max)
+        rough = run_case(pads["61FL"], pads["7FD7"], 150, worst - 3 * HOUR)
+        if rough is not None and rough["when"][:10] not in seen_days:
+            picks.append({**rough, "kind": f"roughest weather of the year at Tampa (gusts {tampa[worst].gust_max:.0f} kt "
+                                           f"three hours later)"})
     lines = ["# Demo days for the Time Machine", "",
              "Written by `python -m eval_engine.replay_eval` (task A6). Replayed cases from the held-out",
              "weather year where the forecaster disagreed with the old \"weather right now\" rule and turned",
@@ -173,9 +182,9 @@ def demo_days(cases: list[dict], path) -> list[dict]:
         local = datetime.fromisoformat(c["when"]).astimezone(FLORIDA)
         ours, rule = c["policies"]["ours"], c["policies"]["weather_now"]
         happened = "it stayed flyable" if c["actual_flyable"] else "it did not stay flyable"
-        story = ("The sky looked fine, so the old rule would have launched an aircraft for nothing."
-                 if c["kind"] == "saw it coming" else
-                 f"The weather looked bad, so the old rule kept to ground and lost {rule['regret_min']} min.")
+        story = {"saw it coming": "The sky looked fine, so the old rule would have launched an aircraft for nothing.",
+                 "saw it clearing": f"The weather looked bad, so the old rule kept to ground and lost "
+                                    f"{rule['regret_min']} min."}.get(c["kind"], "")
         lines += [f"## {i}. {local:%A %B %d, %Y, %I:%M %p} Florida time ({c['kind']})",
                   f"- From **{c['origin_name'].title()}** (`{c['origin']}`) to **{c['dest_name'].title()}** "
                   f"(`{c['dest']}`), deadline {c['deadline_min']} min",

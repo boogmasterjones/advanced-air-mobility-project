@@ -6,7 +6,8 @@ import {
 import { ForecastStrip, OptionCards, Receipts } from "./parts";
 
 const ZONE = "America/New_York";
-type Preset = { label: string; date: string; hour: number; origin: string; dest: string; deadline: number };
+// iso: the exact moment of a preset case (it may not be on the hour); the form shows the hour it falls in.
+type Preset = { label: string; date: string; hour: number; origin: string; dest: string; deadline: number; iso?: string };
 
 /** Florida wall-clock time -> the matching UTC instant (handles daylight saving). */
 function floridaToUtc(date: string, hour: number): Date {
@@ -51,11 +52,12 @@ export default function TimeMachine({ facilities, active }: { facilities: Facili
     // Storm cases picked by the replay evaluation (E2), if it has been run.
     getEvidence().then((ev) => {
       const cases = (ev.details?.E2?.demo_cases ?? []) as
-        { when: string; origin: string; dest: string; deadline_min: number; origin_name: string }[];
+        { when: string; origin: string; dest: string; deadline_min: number; origin_name: string; kind?: string }[];
       setPresets(cases.map((c) => {
         const { date: d, hour: h } = floridaParts(c.when);
-        return { label: `${new Date(c.when).toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: ZONE })}, ${hourLabel(h)}: ${niceName(c.origin_name)}`,
-                 date: d, hour: h, origin: c.origin, dest: c.dest, deadline: c.deadline_min };
+        const day = new Date(c.when).toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: ZONE });
+        return { label: `${day}, ${hourLabel(h)}, from ${niceName(c.origin_name)}${c.kind ? ` (${c.kind})` : ""}`,
+                 date: d, hour: h, origin: c.origin, dest: c.dest, deadline: c.deadline_min, iso: c.when };
       }));
     }).catch(() => { /* presets are optional */ });
   }, [active, loaded]);
@@ -68,7 +70,7 @@ export default function TimeMachine({ facilities, active }: { facilities: Facili
     if (p) { setDate(p.date); setHour(p.hour); setOriginId(p.origin); setDestId(p.dest); setDeadline(p.deadline); }
     setBusy(true); setError(""); setOpenFact(null);
     try {
-      const out = await getReplay({ date: floridaToUtc(q.date, q.hour).toISOString(), origin_id: q.origin,
+      const out = await getReplay({ date: p?.iso ?? floridaToUtc(q.date, q.hour).toISOString(), origin_id: q.origin,
                                     dest_id: q.dest, deadline_min: q.deadline });
       setReplay(out); setAsked(q.deadline);
     } catch (e) {

@@ -25,6 +25,8 @@ main.single { grid-template-columns: minmax(0, 1fr); }
 .form { display: flex; flex-direction: column; gap: 10px; }
 .form h2 { margin: 6px 0 0; }
 .form label, .decide label { display: flex; flex-direction: column; gap: 4px; font-weight: 600; font-size: 14px; }
+.form label.check { flex-direction: row; align-items: flex-start; gap: 8px; font-weight: 400; font-size: 13px; color: var(--muted); }
+.form label.check input { width: auto; margin-top: 2px; }
 .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
 select, input, textarea { font: inherit; padding: 8px; max-width: 100%; width: 100%; border: 1px solid #9fb0bc; border-radius: 6px; background: #fff; color: var(--ink); }
 textarea { resize: vertical; }
