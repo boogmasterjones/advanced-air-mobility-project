@@ -1,0 +1,56 @@
+{
+ "id": "E5",
+ "generated_at": "2026-11-22T23:36:33+00:00",
+ "writer": "offline (no LLM)",
+ "cases": 30,
+ "sentences_written": 180,
+ "sentences_kept": 180,
+ "sentences_removed": 0,
+ "pass_rate": 1.0,
+ "planted_errors": 840,
+ "planted_errors_caught": 840,
+ "catch_rate": 1.0,
+ "catch_rate_by_kind": {
+  "citation removed": {
+   "planted": 180,
+   "caught": 180
+  },
+  "cites a fact that does not exist": {
+   "planted": 180,
+   "caught": 180
+  },
+  "cites the wrong fact": {
+   "planted": 120,
+   "caught": 120
+  },
+  "number changed": {
+   "planted": 120,
+   "caught": 120
+  },
+  "unit changed": {
+   "planted": 120,
+   "caught": 120
+  },
+  "wrong number written as a word": {
+   "planted": 120,
+   "caught": 120
+  }
+ },
+ "errors_that_slipped_through": [],
+ "metrics": [
+  {
+   "id": "E5",
+   "name": "Planted errors the verifier caught",
+   "value": 1.0,
+   "baseline": 0.0,
+   "note": "840 deliberately wrong sentences (changed number, number written as a word, wrong unit, missing citation, made-up fact, wrong fact) built from 30 replayed cases. Without a verifier none would be caught."
+  },
+  {
+   "id": "E5",
+   "name": "Brief sentences that passed the check",
+   "value": 1.0,
+   "baseline": null,
+   "note": "180 sentences over 30 replayed cases. Writer: offline (no LLM). The offline template is built to pass; run with an LLM key to measure a real writer."
+  }
+ ]
+}

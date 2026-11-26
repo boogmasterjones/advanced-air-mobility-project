@@ -1,5 +1,6 @@
 node_modules/
 frontend/dist/
+*.tsbuildinfo
 __pycache__/
 .pytest_cache/
 *.pyc
@@ -7,3 +8,4 @@ __pycache__/
 .venv/
 data/raw/
 data/processed/
+.claude/launch.json

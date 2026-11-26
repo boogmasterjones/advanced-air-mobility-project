@@ -38,6 +38,7 @@ class OptionOut(BaseModel):
     range_min: tuple[float, float] | None
     reasons: list[str]
     fact_ids: list[str]
+    steps: list[dict] = []  # optional: where the time goes, [{kind, label, minutes}] at typical values
 
 
 class CaseOut(BaseModel):
@@ -48,9 +49,13 @@ class CaseOut(BaseModel):
     recommended: Strategy
     facts: list[Fact]
     decision_owner: str
+    # Optional extras (added later; older clients can ignore them)
+    as_of: str | None = None  # the time the answer was built for (UTC)
+    forecasts: list[dict] = []  # per airport: {station, role, issued_at, model, points[]}
+    map: dict | None = None  # {road: [[lon, lat]...], road_is_routed, air_base, air: [[lon, lat]...]}
 
 
-# ---- GET /api/forecast?station=KTPA  (PLANNED, owner: A) ------------------------------
+# ---- GET /api/forecast?station=KTPA  (LIVE, owner: A) ---------------------------------
 class ForecastPoint(BaseModel):
     hours_ahead: int  # 0, 1, 2, 3
     p_flyable: float  # calibrated probability 0..1
@@ -65,13 +70,22 @@ class ForecastOut(BaseModel):
 
 
 # ---- GET /api/replay?date=2024-07-15T19:00Z&origin_id=..&dest_id=..&deadline_min=..
-#      (PLANNED, owner: A)  "Time Machine"
+#      (LIVE, owner: A)  "Time Machine"
 class ReplayOut(BaseModel):
     as_of: str
     then: CaseOut  # what the app would have said using only data available at as_of
     actual_flyable: bool | None  # what really happened (observed weather afterwards)
     actual_best_strategy: Strategy | None
     regret_min: float | None  # minutes lost vs the best choice in hindsight
+    # Optional extras
+    regret_chance: float | None = None  # on-time chance lost vs the best choice in hindsight
+    actual_options: list[OptionOut] | None = None  # the options re-scored with the real weather
+
+
+class ReplayRange(BaseModel):  # GET /api/replay/range
+    first: str | None  # earliest and latest time a replay can use (UTC), None if no archive
+    last: str | None
+    stations: list[str]
 
 
 # ---- POST /api/intake  (LIVE with offline parser, owner: B) ---------------------------
@@ -82,9 +96,15 @@ class IntakeIn(BaseModel):
 class IntakeOut(BaseModel):
     result: IntakeResult
     confirm_required: bool = True
+    # Optional extras. Matching names to real facilities happens in code (llm/match.py).
+    origin_matches: list[dict] = []  # best helipad matches: {faa_id, name, city, score}
+    dest_matches: list[dict] = []
+    origin_id: str | None = None  # pre-selected only when the top match is strong and clear
+    dest_id: str | None = None
+    provider: str = ""  # which parser produced the fields, e.g. "anthropic: claude-haiku-5-5"
 
 
-# ---- POST /api/brief  (PLANNED, owner: B) --------------------------------------------
+# ---- POST /api/brief  (LIVE, owner: B) -----------------------------------------------
 class BriefIn(BaseModel):
     case: CaseOut  # the brief may only use facts in case.facts
 
@@ -93,9 +113,10 @@ class BriefOut(BaseModel):
     sentences: list[str]  # verified sentences, each citing [F#]
     removed: list[dict]  # sentences the verifier deleted, with the reason
     pass_rate: float
+    provider: str = ""  # who wrote the text: an LLM, or the offline template
 
 
-# ---- GET /api/evidence  (PLANNED, owners: A writes eval/results/*.json, B displays) ----
+# ---- GET /api/evidence  (LIVE, owners: A and B write eval/results/*.json, B displays) --
 class EvalMetric(BaseModel):
     id: str  # E1..E6
     name: str
@@ -107,3 +128,4 @@ class EvalMetric(BaseModel):
 class EvidenceOut(BaseModel):
     generated_at: str
     metrics: list[EvalMetric]
+    details: dict = {}  # the full result files by id, for charts (optional)

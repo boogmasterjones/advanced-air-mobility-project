@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
-import type { Facility } from "./api";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { placeName, type Facility, type MapData } from "./api";
 
 // OpenStreetMap raster tiles, no key. Fine for a prototype; respect the tile usage policy.
 const STYLE: maplibregl.StyleSpecification = {
@@ -15,45 +16,91 @@ const STYLE: maplibregl.StyleSpecification = {
   },
   layers: [{ id: "osm", type: "raster", source: "osm" }],
 };
+const GROUND = "#0c6b63";
+const AIR = "#b3410d";
 
-export default function MapView({ origin, dest }: { origin?: Facility; dest?: Facility }) {
+type Line = [number, number][];
+const feature = (coordinates: Line): GeoJSON.Feature => ({
+  type: "Feature", properties: {}, geometry: { type: "LineString", coordinates },
+});
+
+export default function MapView({ origin, dest, map }: { origin?: Facility; dest?: Facility; map: MapData | null }) {
   const ref = useRef<HTMLDivElement>(null);
-  const map = useRef<maplibregl.Map | null>(null);
+  const mapRef = useRef<maplibregl.Map | null>(null);
   const markers = useRef<maplibregl.Marker[]>([]);
 
   useEffect(() => {
-    if (!ref.current || map.current) return;
-    map.current = new maplibregl.Map({ container: ref.current, style: STYLE, center: [-81.5, 27.8], zoom: 6 });
+    if (!ref.current || mapRef.current) return;
+    const m = new maplibregl.Map({ container: ref.current, style: STYLE, center: [-81.5, 27.8], zoom: 6 });
+    m.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+    mapRef.current = m;
+    return () => { m.remove(); mapRef.current = null; };
   }, []);
 
   useEffect(() => {
-    const m = map.current;
+    const m = mapRef.current;
     if (!m) return;
     markers.current.forEach((mk) => mk.remove());
     markers.current = [];
-    const pts = [origin, dest].filter(Boolean) as Facility[];
-    pts.forEach((p, i) =>
-      markers.current.push(
-        new maplibregl.Marker({ color: i === 0 ? "#b3410d" : "#0c6b63" })
-          .setLngLat([p.lon, p.lat])
-          .setPopup(new maplibregl.Popup().setText(p.name))
-          .addTo(m),
-      ),
-    );
+    const pin = (lon: number, lat: number, color: string, label: string) =>
+      markers.current.push(new maplibregl.Marker({ color }).setLngLat([lon, lat])
+        .setPopup(new maplibregl.Popup({ offset: 24 }).setText(label)).addTo(m));
+    if (origin) pin(origin.lon, origin.lat, AIR, `From: ${placeName(origin)}`);
+    if (dest) pin(dest.lon, dest.lat, GROUND, `To: ${placeName(dest)}`);
+    if (map) pin(map.air_base.lon, map.air_base.lat, "#6b7280", `Simulated aircraft base: ${map.air_base.name}`);
+
+    const straight: Line = origin && dest ? [[origin.lon, origin.lat], [dest.lon, dest.lat]] : [];
+    const road: Line = map && map.road.length > 1 ? map.road : [];
+    const air: Line = map ? map.air : straight;
     const draw = () => {
-      if (m.getSource("route")) { m.removeLayer("route"); m.removeSource("route"); }
-      if (pts.length === 2) {
-        m.addSource("route", {
-          type: "geojson",
-          data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: pts.map((p) => [p.lon, p.lat]) } },
-        });
-        m.addLayer({ id: "route", type: "line", source: "route", paint: { "line-color": "#334", "line-width": 3, "line-dasharray": [2, 2] } });
-        m.fitBounds([[Math.min(...pts.map((p) => p.lon)), Math.min(...pts.map((p) => p.lat))],
-                     [Math.max(...pts.map((p) => p.lon)), Math.max(...pts.map((p) => p.lat))]], { padding: 80, maxZoom: 10 });
+      const set = (id: string, line: Line, paint: maplibregl.LineLayerSpecification["paint"]) => {
+        const data = feature(line.length > 1 ? line : []);
+        const src = m.getSource(id) as maplibregl.GeoJSONSource | undefined;
+        if (src) src.setData(data);
+        else {
+          m.addSource(id, { type: "geojson", data });
+          m.addLayer({ id, type: "line", source: id, paint, layout: { "line-cap": "round", "line-join": "round" } });
+        }
+      };
+      set("road", road, { "line-color": GROUND, "line-width": 4, "line-opacity": 0.85 });
+      set("air", air, { "line-color": AIR, "line-width": 3, "line-dasharray": [2, 2] });
+      // Landing places the aircraft could divert to along the flight ("always an out").
+      const outs: GeoJSON.FeatureCollection = {
+        type: "FeatureCollection",
+        features: (map?.landing_places ?? []).map((p) => ({
+          type: "Feature", properties: { name: p.name }, geometry: { type: "Point", coordinates: [p.lon, p.lat] },
+        })),
+      };
+      const outsSrc = m.getSource("outs") as maplibregl.GeoJSONSource | undefined;
+      if (outsSrc) outsSrc.setData(outs);
+      else {
+        m.addSource("outs", { type: "geojson", data: outs });
+        m.addLayer({ id: "outs", type: "circle", source: "outs",
+          paint: { "circle-radius": 6, "circle-color": "#ffffff", "circle-stroke-color": AIR, "circle-stroke-width": 2.5 } });
+      }
+      const pts = [...road, ...air];
+      if (pts.length > 1) {
+        const lons = pts.map((p) => p[0]), lats = pts.map((p) => p[1]);
+        m.fitBounds([[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]],
+          { padding: 60, maxZoom: 11, duration: 400 });
       }
     };
-    m.loaded() ? draw() : m.once("load", draw);
-  }, [origin, dest]);
+    if (m.isStyleLoaded()) draw(); else m.once("load", draw);
+  }, [origin, dest, map]);
 
-  return <div ref={ref} className="map" />;
+  return (
+    <div className="map-wrap">
+      <div ref={ref} className="map" role="img" aria-label="Map of the trip" />
+      <p className="legend">
+        <span><i className="swatch line" style={{ background: GROUND }} /> Road route{map && !map.road_is_routed ? " (not available, time is modeled)" : ""}</span>
+        <span><i className="swatch dash" style={{ borderColor: AIR }} /> Flight path, from the simulated base</span>
+        {map && (map.landing_places?.length ?? 0) > 0 && (
+          <span><i className="swatch ring" style={{ borderColor: AIR }} /> Landing places along the way
+            {map.min_margin_min != null && (map.min_margin_min >= 0
+              ? <> (always within reach, at least {Math.round(map.min_margin_min)} min of energy to spare)</>
+              : <> (with the lowest starting charge, {Math.round(-map.min_margin_min)} min short of the reserve at the worst point)</>)}</span>
+        )}
+      </p>
+    </div>
+  );
 }

@@ -1,0 +1,305 @@
+{
+ "id": "E3",
+ "generated_at": "2026-11-22T23:36:36+00:00",
+ "llm": null,
+ "regex": {
+  "cases": 100,
+  "field_accuracy": {
+   "category": 0.96,
+   "origin_id": 0.6,
+   "dest_id": 0.6,
+   "deadline_min": 1.0,
+   "people": 0.32
+  },
+  "all_main_fields_right": 0.56,
+  "llm_call_failures": 0,
+  "by_tag": {
+   "abbreviated": {
+    "cases": 21,
+    "all_main_fields_right": 0.667
+   },
+   "lowercase": {
+    "cases": 32,
+    "all_main_fields_right": 0.562
+   },
+   "missing place": {
+    "cases": 8,
+    "all_main_fields_right": 0.0
+   },
+   "no deadline": {
+    "cases": 12,
+    "all_main_fields_right": 0.667
+   },
+   "plain": {
+    "cases": 26,
+    "all_main_fields_right": 0.615
+   },
+   "spanish mix": {
+    "cases": 8,
+    "all_main_fields_right": 0.5
+   },
+   "typo": {
+    "cases": 21,
+    "all_main_fields_right": 0.381
+   }
+  },
+  "sample_misses": [
+   {
+    "id": "intake-003",
+    "text": "pt w/ CVA at Lower Keys Medical Center, xfer to hca florida orange park hospital in under 45 mins pls",
+    "wrong": {
+     "category": {
+      "expected": "stroke",
+      "got": "other"
+     },
+     "origin_id": {
+      "expected": "7FA0",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "20FA",
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-007",
+    "text": "Level 1 trauma activation: Lakeside Med Ctr in Belle Glade to HCA Florida Fort Walton-Destin Hospital, 30 min window.",
+    "wrong": {
+     "origin_id": {
+      "expected": "9FA2",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "FD45",
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-008",
+    "text": "We have a STEMI at Jackson County Hospital. Receiving hospital is ascension sacred heart pensacola. Door to balloon target is 90 minutes.",
+    "wrong": {
+     "origin_id": {
+      "expected": "28FD",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "9FD1",
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-010",
+    "text": "Kidney for transplant leaving Oviedo Medical Center, going to St. Joseph's Hspital. Must arrive within 6 hours.",
+    "wrong": {
+     "origin_id": {
+      "expected": "FA96",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "FL38",
+      "got": null
+     },
+     "people": {
+      "expected": 0,
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-012",
+    "text": "Liver for a transplant team: pick up at Wellington Medical Center, deliver to Sarasota Memorial Hospital in 3 hrs.",
+    "wrong": {
+     "origin_id": {
+      "expected": "FL39",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "FA23",
+      "got": null
+     },
+     "people": {
+      "expected": 0,
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-015",
+    "text": "Paciente con derrame cerebral (stroke), de Wellington Medical Center a Ascension Sacred Heart Pensacola, within 60 minutes por favor.",
+    "wrong": {
+     "origin_id": {
+      "expected": "FL39",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "9FD1",
+      "got": null
+     },
+     "people": {
+      "expected": 1,
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-018",
+    "text": "Trauma patient at uf health leesburg hospital needs a higher level of care at HCA Florida Osceola Hosptal. How fast can we get there?",
+    "wrong": {
+     "origin_id": {
+      "expected": "3FD2",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "12FD",
+      "got": null
+     },
+     "people": {
+      "expected": 1,
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-021",
+    "text": "Pediatric patient with parent, Lakeside Med Ctr in Belle Glade to Broward Health Medical Center, within 75 minutes.",
+    "wrong": {
+     "origin_id": {
+      "expected": "9FA2",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "6FD8",
+      "got": null
+     },
+     "people": {
+      "expected": 2,
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-023",
+    "text": "Stroke patient needs transfer to UF Halth Jacksonville within 90 minutes.",
+    "wrong": {
+     "dest_id": {
+      "expected": "FA61",
+      "got": null
+     },
+     "people": {
+      "expected": 1,
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-024",
+    "text": "Trauma patient at Lakeside Med Ctr in Belle Glade, needs transfer out within 60 minutes.",
+    "wrong": {
+     "origin_id": {
+      "expected": "9FA2",
+      "got": null
+     },
+     "people": {
+      "expected": 1,
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-025",
+    "text": "URGENT!!! organ (heart for transplant) jackson county hospital >> HCA Florida Orage Park Hospital 4 hrs MAX",
+    "wrong": {
+     "origin_id": {
+      "expected": "28FD",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "20FA",
+      "got": null
+     },
+     "people": {
+      "expected": 0,
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-028",
+    "text": "pt w/ CVA at Wellington Medical Center, xfer to Halifax Health Medical Center of Daytona Beach in under 45 mins pls",
+    "wrong": {
+     "category": {
+      "expected": "stroke",
+      "got": "other"
+     },
+     "origin_id": {
+      "expected": "FL39",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "29FL",
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-032",
+    "text": "Level 1 trauma activation: Wellington Medical Cener to HCA Florida Bayonet Point Hospital, 30 min window.",
+    "wrong": {
+     "origin_id": {
+      "expected": "FL39",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "FL32",
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-033",
+    "text": "We have a STEMI at Wellington Medical Center. Receiving hospital is lakeland regional health medical center. Door to balloon target is 90 minutes.",
+    "wrong": {
+     "origin_id": {
+      "expected": "FL39",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "7FD7",
+      "got": null
+     }
+    }
+   },
+   {
+    "id": "intake-035",
+    "text": "Kidney for transplant leaving lakeside medical center, going to Memorial Regional Hospital. Must arrive within 6 hours.",
+    "wrong": {
+     "origin_id": {
+      "expected": "9FA2",
+      "got": null
+     },
+     "dest_id": {
+      "expected": "77FD",
+      "got": null
+     },
+     "people": {
+      "expected": 0,
+      "got": null
+     }
+    }
+   }
+  ]
+ },
+ "llm_results": null,
+ "metrics": [
+  {
+   "id": "E3",
+   "name": "Intake: requests with every main field right",
+   "value": null,
+   "baseline": 0.56,
+   "note": "100 synthetic requests (typos, abbreviations, Spanish mix, missing fields). Share of requests with category, both facilities and deadline all right. Baseline: a regex parser. LLM not run: set LLM_PROVIDER=anthropic and ANTHROPIC_API_KEY, then run this script again."
+  }
+ ]
+}

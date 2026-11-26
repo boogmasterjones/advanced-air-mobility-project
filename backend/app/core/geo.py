@@ -17,6 +17,14 @@ def haversine_mi(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     return 2 * EARTH_RADIUS_MI * math.asin(math.sqrt(a))
 
 
+def bearing_deg(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Compass direction of travel from point 1 to point 2 (0 = north, 90 = east)."""
+    p1, p2, dl = math.radians(lat1), math.radians(lat2), math.radians(lon2 - lon1)
+    x = math.sin(dl) * math.cos(p2)
+    y = math.cos(p1) * math.sin(p2) - math.sin(p1) * math.cos(p2) * math.cos(dl)
+    return math.degrees(math.atan2(x, y)) % 360
+
+
 @lru_cache
 def heliports() -> dict[str, dict]:
     """Florida heliports from the FAA 28-day airport data (Oct 29, 2026 cycle)."""
@@ -28,6 +36,23 @@ def heliports() -> dict[str, dict]:
 def stations() -> list[dict]:
     with open(DATA_DIR / "seeds" / "stations.csv", newline="") as f:
         return [{**r, "lat": float(r["lat"]), "lon": float(r["lon"])} for r in csv.DictReader(f)]
+
+
+@lru_cache
+def station_neighbors(icao: str, limit: int = 3, radius_mi: float = 100.0) -> tuple[tuple[str, float], ...]:
+    """The nearest other weather stations as (icao, miles), nearest first."""
+    here = next(s for s in stations() if s["icao"] == icao)
+    others = sorted((haversine_mi(here["lat"], here["lon"], s["lat"], s["lon"]), s["icao"])
+                    for s in stations() if s["icao"] != icao)
+    return tuple((code, miles) for miles, code in others[:limit] if miles <= radius_mi)
+
+
+def stations_near(lat: float, lon: float, limit: int = 3, radius_mi: float = 40.0) -> list[tuple[dict, float]]:
+    """Weather stations to try for a place, nearest first: the nearest one always, then
+    others within the radius. Some small airports do not report at night, so the app
+    falls back to the next one and says how far away it is."""
+    ranked = sorted(((haversine_mi(lat, lon, s["lat"], s["lon"]), s["icao"], s) for s in stations()))
+    return [(s, miles) for i, (miles, _, s) in enumerate(ranked[:limit]) if i == 0 or miles <= radius_mi]
 
 
 def nearest_station(lat: float, lon: float) -> tuple[dict, float]:

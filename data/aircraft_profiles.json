@@ -1,26 +1,43 @@
 {
-  "_note": "Each value carries a confidence tag. 'assumption' values are ours and must stay visible in the app. See RESEARCH.md section 2.",
+  "_note": "Each value carries a confidence tag. 'assumption' and 'simulated' values are ours and must stay visible in the app. Sources are in RESEARCH.md sections 2, 4, 6 and 8.",
   "air_taxi_a": {
     "label": "Air taxi A (Joby-like, simulated)",
     "passengers": {"value": 4, "confidence": "official"},
     "cruise_mph": {"value": 150, "confidence": "assumption", "note": "Below the official 200 mph maximum"},
-    "range_mi": {"value": 100, "confidence": "reported"},
-    "launch_delay_min_median": {"value": 15, "confidence": "assumption"},
+    "range_mi": {"value": 100, "confidence": "reported", "note": "Widely reported range including reserves; not published by the maker"},
+    "launch_delay_min_median": {"value": 15, "confidence": "assumption", "note": "Call to lift-off at the aircraft's base. Helicopter programs report about 13 min"},
+    "load_min_median": {"value": 31, "confidence": "assumption", "note": "Time at the sending hospital. No air taxi data exists, so this is the helicopter air ambulance figure (RESEARCH.md section 12)"},
+    "unload_min_median": {"value": 9, "confidence": "assumption", "note": "Landing to handover at the receiving hospital. Helicopter figure, direct helipad (RESEARCH.md section 12)"},
     "reserve_min": {"value": 20, "confidence": "official", "note": "FAA powered-lift rule, vertical landing capable"},
+    "battery_kwh": {"value": 160, "confidence": "estimate", "note": "Unofficial analysis; some say up to 200"},
+    "usable_fraction": {"value": 0.8, "confidence": "assumption", "note": "Share of the pack that may be used"},
+    "hover_kw": {"value": 581, "confidence": "estimate", "note": "One unofficial analysis; low confidence"},
+    "hover_min_per_leg": {"value": 1.0, "confidence": "assumption", "note": "Take-off plus landing, per flight leg"},
+    "cruise_kwh_per_mi": {"value": 0.73, "confidence": "assumption", "note": "Chosen so a full pack gives about the reported 100 mile range including the reserve"},
+    "heat_loss_per_c_above_25": {"value": 0.011, "confidence": "assumption", "note": "Usable energy lost per degree C above 25, capped at 22% (a simulation reported up to 22% seasonal range loss)"},
+    "heat_loss_cap": {"value": 0.22, "confidence": "reported"},
+    "wind_aloft_factor": {"value": 1.5, "confidence": "assumption", "note": "Wind at cruise height compared with the airport's surface wind"},
+    "start_charge_min": {"value": 0.8, "confidence": "simulated", "note": "Battery charge at dispatch is drawn between this and full"},
+    "pad_available_p": {"value": 0.95, "confidence": "simulated", "note": "Chance both landing pads are free; no real pad data exists"},
     "needs_runway": false
   },
   "helicopter": {
     "label": "Helicopter air ambulance (baseline)",
     "cruise_mph": {"value": 140, "confidence": "assumption"},
     "range_mi": {"value": 300, "confidence": "assumption"},
-    "launch_delay_min_median": {"value": 9, "confidence": "reported", "note": "Montana median lift-off time"},
+    "launch_delay_min_median": {"value": 13, "confidence": "reported", "note": "Mean dispatch to lift-off on interfacility flights, one Colorado program (Clark 2019, abstract only). Montana reports a 9 min median"},
+    "load_min_median": {"value": 31, "confidence": "reported", "note": "Mean time on the ground at the sending hospital (Svenson 2006, Wisconsin; Leicht 1986 agrees; abstracts only). Sources range from 8 to about 42 min by definition"},
+    "unload_min_median": {"value": 9, "confidence": "reported", "note": "Mean landing to handover with a direct helipad, German interhospital missions (PMC10598984)"},
     "reserve_min": {"value": 20, "confidence": "official"},
     "needs_runway": false
   },
   "ground_ambulance": {
     "label": "Ground ambulance",
-    "avg_mph": {"value": 50, "confidence": "assumption", "note": "Replaced by routed times once OSRM caching lands"},
-    "detour_factor": {"value": 1.3, "confidence": "assumption"},
-    "dispatch_delay_min_median": {"value": 5, "confidence": "assumption"}
+    "avg_mph": {"value": 50, "confidence": "assumption", "note": "Used only when no routed time is available"},
+    "detour_factor": {"value": 1.3, "confidence": "assumption", "note": "Road miles per straight-line mile, used only when no routed distance is available"},
+    "dispatch_delay_min_median": {"value": 20.5, "confidence": "reported", "note": "Median ambulance request to arrival at the sending hospital, Chicago stroke transfers (Prabhakaran 2021, abstract only)"},
+    "load_min_median": {"value": 26, "confidence": "reported", "note": "Median ambulance time at the sending hospital, same study. A Dutch stroke study reports 15 min from notification to departure, so US and European figures differ a lot"},
+    "handoff_min_median": {"value": 3, "confidence": "assumption", "note": "Arrival to handoff at the receiving hospital; no published figure found"},
+    "late_start_min_median": {"value": 3, "confidence": "assumption", "note": "Extra delay to call an ambulance after an air attempt is called off"}
   }
 }

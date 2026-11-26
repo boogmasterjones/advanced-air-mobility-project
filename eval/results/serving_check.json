@@ -1,0 +1,32 @@
+{
+  "generated_at": "2026-11-22T23:33:37+00:00",
+  "model": "lightgbm-v1",
+  "hours_compared": 3000,
+  "hours_the_app_could_not_forecast": 0,
+  "by_hours_ahead": {
+    "0": {
+      "mean_gap": 5e-05,
+      "largest_gap": 0.0422,
+      "share_over_1_point": 0.0013,
+      "share_over_5_points": 0.0
+    },
+    "1": {
+      "mean_gap": 0.0001,
+      "largest_gap": 0.0391,
+      "share_over_1_point": 0.0023,
+      "share_over_5_points": 0.0
+    },
+    "2": {
+      "mean_gap": 5e-05,
+      "largest_gap": 0.0244,
+      "share_over_1_point": 0.0017,
+      "share_over_5_points": 0.0
+    },
+    "3": {
+      "mean_gap": 6e-05,
+      "largest_gap": 0.0253,
+      "share_over_1_point": 0.0017,
+      "share_over_5_points": 0.0
+    }
+  }
+}

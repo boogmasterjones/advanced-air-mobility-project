@@ -24,3 +24,22 @@ jobs:
         with: { node-version: "22" }
       - run: npm ci
       - run: npm run build
+
+  # Builds the same image Cloud Run builds and checks that it really serves the app,
+  # that the forecaster model loads inside it, and that a Time Machine replay works.
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t car-or-air .
+      - name: Smoke test the container
+        run: |
+          docker run -d -p 8080:8080 --name app car-or-air
+          for i in $(seq 1 30); do curl -sf localhost:8080/api/health && break; sleep 1; done
+          curl -sf localhost:8080/api/health
+          curl -sf localhost:8080/ | grep -qi "<title"
+          curl -sf "localhost:8080/api/replay?date=2024-07-15T19:00Z&origin_id=61FL&dest_id=7FD7&deadline_min=60" > replay.json
+          grep -q '"model":"lightgbm' replay.json
+          curl -sf localhost:8080/api/evidence | grep -q '"E1"'
+      - if: failure()
+        run: docker logs app

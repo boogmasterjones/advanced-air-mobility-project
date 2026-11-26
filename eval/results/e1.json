@@ -1,0 +1,1740 @@
+{
+  "id": "E1",
+  "model": "lightgbm-v1",
+  "generated_at": "2026-11-22T23:08:49+00:00",
+  "what_is_predicted": "chance that every weather report in the 60 minutes starting h hours from now meets the flyable thresholds",
+  "thresholds": {
+    "min_visibility_mi": 3.0,
+    "min_ceiling_ft": 1000,
+    "max_gust_kt": 25,
+    "max_obs_age_min": 90
+  },
+  "train_years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "test_year": 2024,
+  "stations": [
+    "KTPA",
+    "KMCO",
+    "KMIA",
+    "KFLL",
+    "KLAL",
+    "KSRQ",
+    "KJAX",
+    "KGNV",
+    "KRSW",
+    "KDAB",
+    "KMLB",
+    "KPIE",
+    "KORL",
+    "KSFB",
+    "KTLH",
+    "KPNS",
+    "KEYW",
+    "KVRB",
+    "KFMY",
+    "KLNA",
+    "KBCT",
+    "KDJT",
+    "KAPF",
+    "KOCF",
+    "KFPR",
+    "KSUA",
+    "KPGD",
+    "KECP",
+    "KVPS",
+    "KCRG",
+    "KSPG",
+    "KISM",
+    "KLEE",
+    "KBKV",
+    "KOPF",
+    "KTMB",
+    "KFXE",
+    "KSEF",
+    "KOBE",
+    "KMTH",
+    "KTIX"
+  ],
+  "how_to_read": "Brier score: lower is better. Skill: share of the reference forecast's error that the model removes (above 0 beats it).",
+  "horizons": {
+    "0": {
+      "flyable_rate": 0.9087,
+      "development_check_on_training_years": {
+        "n": 1695816,
+        "brier": 0.04243,
+        "auc": 0.944,
+        "calibration_error": 0.0035,
+        "vs": {
+          "persistence": {
+            "brier": 0.0669,
+            "skill": 0.3657
+          },
+          "climatology": {
+            "brier": 0.07815,
+            "skill": 0.457
+          }
+        }
+      },
+      "test": {
+        "n": 339100,
+        "brier": 0.04281,
+        "auc": 0.9435,
+        "calibration_error": 0.008,
+        "vs": {
+          "persistence": {
+            "brier": 0.06696,
+            "skill": 0.3607
+          },
+          "climatology": {
+            "brier": 0.08077,
+            "skill": 0.4699
+          }
+        }
+      },
+      "test_stations_with_taf": {
+        "n": 270019,
+        "brier": 0.0415,
+        "auc": 0.9429,
+        "calibration_error": 0.0081,
+        "vs": {
+          "taf": {
+            "brier": 0.05839,
+            "skill": 0.2893
+          },
+          "persistence": {
+            "brier": 0.06524,
+            "skill": 0.3639
+          },
+          "climatology": {
+            "brier": 0.07749,
+            "skill": 0.4645
+          }
+        }
+      },
+      "reliability": [
+        {
+          "band": "0.0-0.1",
+          "n": 5884,
+          "mean_predicted": 0.0405,
+          "observed_flyable": 0.0398
+        },
+        {
+          "band": "0.1-0.2",
+          "n": 3760,
+          "mean_predicted": 0.1479,
+          "observed_flyable": 0.1516
+        },
+        {
+          "band": "0.2-0.3",
+          "n": 4519,
+          "mean_predicted": 0.2544,
+          "observed_flyable": 0.2709
+        },
+        {
+          "band": "0.3-0.4",
+          "n": 3750,
+          "mean_predicted": 0.3583,
+          "observed_flyable": 0.3667
+        },
+        {
+          "band": "0.4-0.5",
+          "n": 5700,
+          "mean_predicted": 0.4555,
+          "observed_flyable": 0.4581
+        },
+        {
+          "band": "0.5-0.6",
+          "n": 4678,
+          "mean_predicted": 0.5585,
+          "observed_flyable": 0.5652
+        },
+        {
+          "band": "0.6-0.7",
+          "n": 6066,
+          "mean_predicted": 0.6438,
+          "observed_flyable": 0.6655
+        },
+        {
+          "band": "0.7-0.8",
+          "n": 10782,
+          "mean_predicted": 0.7464,
+          "observed_flyable": 0.7594
+        },
+        {
+          "band": "0.8-0.9",
+          "n": 21991,
+          "mean_predicted": 0.8552,
+          "observed_flyable": 0.8711
+        },
+        {
+          "band": "0.9-1.0",
+          "n": 271970,
+          "mean_predicted": 0.9787,
+          "observed_flyable": 0.9858
+        }
+      ],
+      "warnings": [
+        {
+          "warn_below": 0.5,
+          "warnings": 23613,
+          "unflyable_hours": 30961,
+          "caught": 0.5684,
+          "missed": 0.4316,
+          "false_alarms": 0.2547
+        },
+        {
+          "warn_below": 0.8,
+          "warnings": 45139,
+          "unflyable_hours": 30961,
+          "caught": 0.7834,
+          "missed": 0.2166,
+          "false_alarms": 0.4626
+        }
+      ],
+      "warnings_persistence": {
+        "warn_below": 0.5,
+        "warnings": 30972,
+        "unflyable_hours": 30961,
+        "caught": 0.6335,
+        "missed": 0.3665,
+        "false_alarms": 0.3668
+      },
+      "by_station": {
+        "KTPA": {
+          "n": 8738,
+          "brier": 0.03598,
+          "skill_vs_persistence": 0.3977
+        },
+        "KMCO": {
+          "n": 8768,
+          "brier": 0.03258,
+          "skill_vs_persistence": 0.4024
+        },
+        "KMIA": {
+          "n": 8772,
+          "brier": 0.03779,
+          "skill_vs_persistence": 0.3995
+        },
+        "KFLL": {
+          "n": 8760,
+          "brier": 0.04132,
+          "skill_vs_persistence": 0.3937
+        },
+        "KLAL": {
+          "n": 8197,
+          "brier": 0.03386,
+          "skill_vs_persistence": 0.2792
+        },
+        "KSRQ": {
+          "n": 8542,
+          "brier": 0.04156,
+          "skill_vs_persistence": 0.3638
+        },
+        "KJAX": {
+          "n": 8778,
+          "brier": 0.04074,
+          "skill_vs_persistence": 0.3498
+        },
+        "KGNV": {
+          "n": 8646,
+          "brier": 0.04967,
+          "skill_vs_persistence": 0.3758
+        },
+        "KRSW": {
+          "n": 8292,
+          "brier": 0.03874,
+          "skill_vs_persistence": 0.375
+        },
+        "KDAB": {
+          "n": 8758,
+          "brier": 0.04008,
+          "skill_vs_persistence": 0.3523
+        },
+        "KMLB": {
+          "n": 8666,
+          "brier": 0.04093,
+          "skill_vs_persistence": 0.3655
+        },
+        "KPIE": {
+          "n": 8194,
+          "brier": 0.04187,
+          "skill_vs_persistence": 0.3829
+        },
+        "KORL": {
+          "n": 8593,
+          "brier": 0.03933,
+          "skill_vs_persistence": 0.4081
+        },
+        "KSFB": {
+          "n": 8671,
+          "brier": 0.04055,
+          "skill_vs_persistence": 0.3875
+        },
+        "KTLH": {
+          "n": 8754,
+          "brier": 0.04337,
+          "skill_vs_persistence": 0.3597
+        },
+        "KPNS": {
+          "n": 8720,
+          "brier": 0.0487,
+          "skill_vs_persistence": 0.3365
+        },
+        "KEYW": {
+          "n": 8606,
+          "brier": 0.04065,
+          "skill_vs_persistence": 0.3593
+        },
+        "KVRB": {
+          "n": 8676,
+          "brier": 0.04308,
+          "skill_vs_persistence": 0.3644
+        },
+        "KFMY": {
+          "n": 8519,
+          "brier": 0.03677,
+          "skill_vs_persistence": 0.394
+        },
+        "KLNA": {
+          "n": 5202,
+          "brier": 0.04428,
+          "skill_vs_persistence": 0.3323
+        },
+        "KBCT": {
+          "n": 4646,
+          "brier": 0.0567,
+          "skill_vs_persistence": 0.2494
+        },
+        "KDJT": {
+          "n": 8773,
+          "brier": 0.04096,
+          "skill_vs_persistence": 0.3784
+        },
+        "KAPF": {
+          "n": 7918,
+          "brier": 0.04509,
+          "skill_vs_persistence": 0.3377
+        },
+        "KOCF": {
+          "n": 8693,
+          "brier": 0.04823,
+          "skill_vs_persistence": 0.356
+        },
+        "KFPR": {
+          "n": 8561,
+          "brier": 0.04452,
+          "skill_vs_persistence": 0.3742
+        },
+        "KSUA": {
+          "n": 7428,
+          "brier": 0.06369,
+          "skill_vs_persistence": 0.3083
+        },
+        "KPGD": {
+          "n": 8656,
+          "brier": 0.04269,
+          "skill_vs_persistence": 0.3585
+        },
+        "KECP": {
+          "n": 8711,
+          "brier": 0.04171,
+          "skill_vs_persistence": 0.3321
+        },
+        "KVPS": {
+          "n": 8542,
+          "brier": 0.03604,
+          "skill_vs_persistence": 0.3018
+        },
+        "KCRG": {
+          "n": 8702,
+          "brier": 0.04965,
+          "skill_vs_persistence": 0.3783
+        },
+        "KSPG": {
+          "n": 8591,
+          "brier": 0.04003,
+          "skill_vs_persistence": 0.3848
+        },
+        "KISM": {
+          "n": 8721,
+          "brier": 0.03678,
+          "skill_vs_persistence": 0.4071
+        },
+        "KLEE": {
+          "n": 8572,
+          "brier": 0.04003,
+          "skill_vs_persistence": 0.375
+        },
+        "KBKV": {
+          "n": 8493,
+          "brier": 0.06045,
+          "skill_vs_persistence": 0.3701
+        },
+        "KOPF": {
+          "n": 8728,
+          "brier": 0.04124,
+          "skill_vs_persistence": 0.3503
+        },
+        "KTMB": {
+          "n": 8449,
+          "brier": 0.04543,
+          "skill_vs_persistence": 0.3768
+        },
+        "KFXE": {
+          "n": 8535,
+          "brier": 0.04345,
+          "skill_vs_persistence": 0.3584
+        },
+        "KSEF": {
+          "n": 8557,
+          "brier": 0.05057,
+          "skill_vs_persistence": 0.3512
+        },
+        "KOBE": {
+          "n": 7764,
+          "brier": 0.05975,
+          "skill_vs_persistence": 0.3287
+        },
+        "KMTH": {
+          "n": 8446,
+          "brier": 0.03513,
+          "skill_vs_persistence": 0.3164
+        },
+        "KTIX": {
+          "n": 4762,
+          "brier": 0.02479,
+          "skill_vs_persistence": 0.2622
+        }
+      },
+      "top_features": [
+        {
+          "name": "cur_flyable",
+          "share_of_gain": 0.3309
+        },
+        {
+          "name": "hrs_since_unflyable",
+          "share_of_gain": 0.2218
+        },
+        {
+          "name": "nb_unflyable_now",
+          "share_of_gain": 0.1262
+        },
+        {
+          "name": "cur_ceil",
+          "share_of_gain": 0.0447
+        },
+        {
+          "name": "cur_temp",
+          "share_of_gain": 0.0202
+        },
+        {
+          "name": "cur_spread",
+          "share_of_gain": 0.0185
+        },
+        {
+          "name": "cur_vis",
+          "share_of_gain": 0.0153
+        },
+        {
+          "name": "cur_gust",
+          "share_of_gain": 0.013
+        },
+        {
+          "name": "doy_cos",
+          "share_of_gain": 0.0102
+        },
+        {
+          "name": "hour_cos",
+          "share_of_gain": 0.0098
+        }
+      ]
+    },
+    "1": {
+      "flyable_rate": 0.9087,
+      "development_check_on_training_years": {
+        "n": 1689957,
+        "brier": 0.05349,
+        "auc": 0.9107,
+        "calibration_error": 0.0025,
+        "vs": {
+          "persistence": {
+            "brier": 0.09358,
+            "skill": 0.4284
+          },
+          "climatology": {
+            "brier": 0.07807,
+            "skill": 0.3148
+          }
+        }
+      },
+      "test": {
+        "n": 337817,
+        "brier": 0.05366,
+        "auc": 0.9083,
+        "calibration_error": 0.0111,
+        "vs": {
+          "persistence": {
+            "brier": 0.09216,
+            "skill": 0.4177
+          },
+          "climatology": {
+            "brier": 0.08073,
+            "skill": 0.3353
+          }
+        }
+      },
+      "test_stations_with_taf": {
+        "n": 269197,
+        "brier": 0.05201,
+        "auc": 0.907,
+        "calibration_error": 0.0108,
+        "vs": {
+          "taf": {
+            "brier": 0.06256,
+            "skill": 0.1687
+          },
+          "persistence": {
+            "brier": 0.08924,
+            "skill": 0.4172
+          },
+          "climatology": {
+            "brier": 0.07748,
+            "skill": 0.3288
+          }
+        }
+      },
+      "reliability": [
+        {
+          "band": "0.0-0.1",
+          "n": 3004,
+          "mean_predicted": 0.0492,
+          "observed_flyable": 0.0586
+        },
+        {
+          "band": "0.1-0.2",
+          "n": 3092,
+          "mean_predicted": 0.1482,
+          "observed_flyable": 0.1452
+        },
+        {
+          "band": "0.2-0.3",
+          "n": 2739,
+          "mean_predicted": 0.2618,
+          "observed_flyable": 0.264
+        },
+        {
+          "band": "0.3-0.4",
+          "n": 3295,
+          "mean_predicted": 0.3567,
+          "observed_flyable": 0.3942
+        },
+        {
+          "band": "0.4-0.5",
+          "n": 4926,
+          "mean_predicted": 0.4583,
+          "observed_flyable": 0.4836
+        },
+        {
+          "band": "0.5-0.6",
+          "n": 5927,
+          "mean_predicted": 0.5507,
+          "observed_flyable": 0.573
+        },
+        {
+          "band": "0.6-0.7",
+          "n": 11829,
+          "mean_predicted": 0.6524,
+          "observed_flyable": 0.6821
+        },
+        {
+          "band": "0.7-0.8",
+          "n": 18080,
+          "mean_predicted": 0.7569,
+          "observed_flyable": 0.7842
+        },
+        {
+          "band": "0.8-0.9",
+          "n": 33345,
+          "mean_predicted": 0.858,
+          "observed_flyable": 0.8814
+        },
+        {
+          "band": "0.9-1.0",
+          "n": 251580,
+          "mean_predicted": 0.9747,
+          "observed_flyable": 0.9815
+        }
+      ],
+      "warnings": [
+        {
+          "warn_below": 0.5,
+          "warnings": 17056,
+          "unflyable_hours": 30833,
+          "caught": 0.3901,
+          "missed": 0.6099,
+          "false_alarms": 0.2949
+        },
+        {
+          "warn_below": 0.8,
+          "warnings": 52892,
+          "unflyable_hours": 30833,
+          "caught": 0.7207,
+          "missed": 0.2793,
+          "false_alarms": 0.5799
+        }
+      ],
+      "warnings_persistence": {
+        "warn_below": 0.5,
+        "warnings": 30855,
+        "unflyable_hours": 30833,
+        "caught": 0.4955,
+        "missed": 0.5045,
+        "false_alarms": 0.5048
+      },
+      "by_station": {
+        "KTPA": {
+          "n": 8735,
+          "brier": 0.04466,
+          "skill_vs_persistence": 0.4505
+        },
+        "KMCO": {
+          "n": 8767,
+          "brier": 0.04246,
+          "skill_vs_persistence": 0.4343
+        },
+        "KMIA": {
+          "n": 8771,
+          "brier": 0.04403,
+          "skill_vs_persistence": 0.437
+        },
+        "KFLL": {
+          "n": 8759,
+          "brier": 0.04968,
+          "skill_vs_persistence": 0.4221
+        },
+        "KLAL": {
+          "n": 8171,
+          "brier": 0.0437,
+          "skill_vs_persistence": 0.3647
+        },
+        "KSRQ": {
+          "n": 8539,
+          "brier": 0.05009,
+          "skill_vs_persistence": 0.4365
+        },
+        "KJAX": {
+          "n": 8777,
+          "brier": 0.05151,
+          "skill_vs_persistence": 0.409
+        },
+        "KGNV": {
+          "n": 8635,
+          "brier": 0.064,
+          "skill_vs_persistence": 0.4189
+        },
+        "KRSW": {
+          "n": 8233,
+          "brier": 0.05043,
+          "skill_vs_persistence": 0.4427
+        },
+        "KDAB": {
+          "n": 8757,
+          "brier": 0.04942,
+          "skill_vs_persistence": 0.3879
+        },
+        "KMLB": {
+          "n": 8658,
+          "brier": 0.04899,
+          "skill_vs_persistence": 0.4229
+        },
+        "KPIE": {
+          "n": 8157,
+          "brier": 0.05269,
+          "skill_vs_persistence": 0.4411
+        },
+        "KORL": {
+          "n": 8588,
+          "brier": 0.04983,
+          "skill_vs_persistence": 0.4691
+        },
+        "KSFB": {
+          "n": 8671,
+          "brier": 0.05022,
+          "skill_vs_persistence": 0.4495
+        },
+        "KTLH": {
+          "n": 8750,
+          "brier": 0.05746,
+          "skill_vs_persistence": 0.4254
+        },
+        "KPNS": {
+          "n": 8719,
+          "brier": 0.06115,
+          "skill_vs_persistence": 0.3829
+        },
+        "KEYW": {
+          "n": 8594,
+          "brier": 0.04856,
+          "skill_vs_persistence": 0.3995
+        },
+        "KVRB": {
+          "n": 8670,
+          "brier": 0.05529,
+          "skill_vs_persistence": 0.4154
+        },
+        "KFMY": {
+          "n": 8507,
+          "brier": 0.04649,
+          "skill_vs_persistence": 0.4627
+        },
+        "KLNA": {
+          "n": 5141,
+          "brier": 0.05423,
+          "skill_vs_persistence": 0.3872
+        },
+        "KBCT": {
+          "n": 4362,
+          "brier": 0.07368,
+          "skill_vs_persistence": 0.3248
+        },
+        "KDJT": {
+          "n": 8771,
+          "brier": 0.0489,
+          "skill_vs_persistence": 0.41
+        },
+        "KAPF": {
+          "n": 7882,
+          "brier": 0.05469,
+          "skill_vs_persistence": 0.4351
+        },
+        "KOCF": {
+          "n": 8688,
+          "brier": 0.06098,
+          "skill_vs_persistence": 0.4223
+        },
+        "KFPR": {
+          "n": 8554,
+          "brier": 0.05536,
+          "skill_vs_persistence": 0.4288
+        },
+        "KSUA": {
+          "n": 7285,
+          "brier": 0.0808,
+          "skill_vs_persistence": 0.3643
+        },
+        "KPGD": {
+          "n": 8653,
+          "brier": 0.05446,
+          "skill_vs_persistence": 0.435
+        },
+        "KECP": {
+          "n": 8706,
+          "brier": 0.05585,
+          "skill_vs_persistence": 0.3907
+        },
+        "KVPS": {
+          "n": 8531,
+          "brier": 0.04647,
+          "skill_vs_persistence": 0.3854
+        },
+        "KCRG": {
+          "n": 8695,
+          "brier": 0.06305,
+          "skill_vs_persistence": 0.4028
+        },
+        "KSPG": {
+          "n": 8579,
+          "brier": 0.0491,
+          "skill_vs_persistence": 0.4405
+        },
+        "KISM": {
+          "n": 8715,
+          "brier": 0.04518,
+          "skill_vs_persistence": 0.4524
+        },
+        "KLEE": {
+          "n": 8558,
+          "brier": 0.05161,
+          "skill_vs_persistence": 0.45
+        },
+        "KBKV": {
+          "n": 8481,
+          "brier": 0.0782,
+          "skill_vs_persistence": 0.4361
+        },
+        "KOPF": {
+          "n": 8725,
+          "brier": 0.05251,
+          "skill_vs_persistence": 0.3987
+        },
+        "KTMB": {
+          "n": 8431,
+          "brier": 0.05438,
+          "skill_vs_persistence": 0.4241
+        },
+        "KFXE": {
+          "n": 8523,
+          "brier": 0.05633,
+          "skill_vs_persistence": 0.3853
+        },
+        "KSEF": {
+          "n": 8548,
+          "brier": 0.0623,
+          "skill_vs_persistence": 0.4292
+        },
+        "KOBE": {
+          "n": 7702,
+          "brier": 0.07234,
+          "skill_vs_persistence": 0.4129
+        },
+        "KMTH": {
+          "n": 8436,
+          "brier": 0.04301,
+          "skill_vs_persistence": 0.3497
+        },
+        "KTIX": {
+          "n": 4393,
+          "brier": 0.03147,
+          "skill_vs_persistence": 0.3909
+        }
+      },
+      "top_features": [
+        {
+          "name": "nb_unflyable_now",
+          "share_of_gain": 0.1896
+        },
+        {
+          "name": "cur_flyable",
+          "share_of_gain": 0.1844
+        },
+        {
+          "name": "hrs_since_unflyable",
+          "share_of_gain": 0.1586
+        },
+        {
+          "name": "cur_ceil",
+          "share_of_gain": 0.0545
+        },
+        {
+          "name": "cur_temp",
+          "share_of_gain": 0.0432
+        },
+        {
+          "name": "cur_spread",
+          "share_of_gain": 0.0373
+        },
+        {
+          "name": "hour_cos",
+          "share_of_gain": 0.0256
+        },
+        {
+          "name": "doy_cos",
+          "share_of_gain": 0.0235
+        },
+        {
+          "name": "cur_alti",
+          "share_of_gain": 0.0154
+        },
+        {
+          "name": "d_temp_6",
+          "share_of_gain": 0.0146
+        }
+      ]
+    },
+    "2": {
+      "flyable_rate": 0.9087,
+      "development_check_on_training_years": {
+        "n": 1684620,
+        "brier": 0.05895,
+        "auc": 0.8871,
+        "calibration_error": 0.002,
+        "vs": {
+          "persistence": {
+            "brier": 0.11014,
+            "skill": 0.4648
+          },
+          "climatology": {
+            "brier": 0.07805,
+            "skill": 0.2447
+          }
+        }
+      },
+      "test": {
+        "n": 336638,
+        "brier": 0.05902,
+        "auc": 0.8837,
+        "calibration_error": 0.0119,
+        "vs": {
+          "persistence": {
+            "brier": 0.10791,
+            "skill": 0.4531
+          },
+          "climatology": {
+            "brier": 0.08074,
+            "skill": 0.2691
+          }
+        }
+      },
+      "test_stations_with_taf": {
+        "n": 268473,
+        "brier": 0.05696,
+        "auc": 0.8826,
+        "calibration_error": 0.0116,
+        "vs": {
+          "taf": {
+            "brier": 0.06435,
+            "skill": 0.1149
+          },
+          "persistence": {
+            "brier": 0.10406,
+            "skill": 0.4526
+          },
+          "climatology": {
+            "brier": 0.07748,
+            "skill": 0.2649
+          }
+        }
+      },
+      "reliability": [
+        {
+          "band": "0.0-0.1",
+          "n": 1904,
+          "mean_predicted": 0.0556,
+          "observed_flyable": 0.0735
+        },
+        {
+          "band": "0.1-0.2",
+          "n": 1870,
+          "mean_predicted": 0.148,
+          "observed_flyable": 0.1385
+        },
+        {
+          "band": "0.2-0.3",
+          "n": 2571,
+          "mean_predicted": 0.2406,
+          "observed_flyable": 0.2365
+        },
+        {
+          "band": "0.3-0.4",
+          "n": 2456,
+          "mean_predicted": 0.3439,
+          "observed_flyable": 0.3624
+        },
+        {
+          "band": "0.4-0.5",
+          "n": 4437,
+          "mean_predicted": 0.4453,
+          "observed_flyable": 0.4742
+        },
+        {
+          "band": "0.5-0.6",
+          "n": 8023,
+          "mean_predicted": 0.5568,
+          "observed_flyable": 0.5975
+        },
+        {
+          "band": "0.6-0.7",
+          "n": 11198,
+          "mean_predicted": 0.6587,
+          "observed_flyable": 0.7005
+        },
+        {
+          "band": "0.7-0.8",
+          "n": 19526,
+          "mean_predicted": 0.7484,
+          "observed_flyable": 0.7799
+        },
+        {
+          "band": "0.8-0.9",
+          "n": 41793,
+          "mean_predicted": 0.853,
+          "observed_flyable": 0.8744
+        },
+        {
+          "band": "0.9-1.0",
+          "n": 242860,
+          "mean_predicted": 0.9719,
+          "observed_flyable": 0.9779
+        }
+      ],
+      "warnings": [
+        {
+          "warn_below": 0.5,
+          "warnings": 13238,
+          "unflyable_hours": 30728,
+          "caught": 0.3006,
+          "missed": 0.6994,
+          "false_alarms": 0.3022
+        },
+        {
+          "warn_below": 0.8,
+          "warnings": 51985,
+          "unflyable_hours": 30728,
+          "caught": 0.6547,
+          "missed": 0.3453,
+          "false_alarms": 0.613
+        }
+      ],
+      "warnings_persistence": {
+        "warn_below": 0.5,
+        "warnings": 30748,
+        "unflyable_hours": 30728,
+        "caught": 0.4092,
+        "missed": 0.5908,
+        "false_alarms": 0.591
+      },
+      "by_station": {
+        "KTPA": {
+          "n": 8734,
+          "brier": 0.04697,
+          "skill_vs_persistence": 0.5009
+        },
+        "KMCO": {
+          "n": 8766,
+          "brier": 0.04642,
+          "skill_vs_persistence": 0.4666
+        },
+        "KMIA": {
+          "n": 8770,
+          "brier": 0.04672,
+          "skill_vs_persistence": 0.458
+        },
+        "KFLL": {
+          "n": 8758,
+          "brier": 0.05185,
+          "skill_vs_persistence": 0.4345
+        },
+        "KLAL": {
+          "n": 8135,
+          "brier": 0.04753,
+          "skill_vs_persistence": 0.4015
+        },
+        "KSRQ": {
+          "n": 8533,
+          "brier": 0.0542,
+          "skill_vs_persistence": 0.4546
+        },
+        "KJAX": {
+          "n": 8776,
+          "brier": 0.05745,
+          "skill_vs_persistence": 0.4538
+        },
+        "KGNV": {
+          "n": 8633,
+          "brier": 0.07078,
+          "skill_vs_persistence": 0.475
+        },
+        "KRSW": {
+          "n": 8171,
+          "brier": 0.05682,
+          "skill_vs_persistence": 0.4718
+        },
+        "KDAB": {
+          "n": 8756,
+          "brier": 0.05269,
+          "skill_vs_persistence": 0.4332
+        },
+        "KMLB": {
+          "n": 8651,
+          "brier": 0.05328,
+          "skill_vs_persistence": 0.4564
+        },
+        "KPIE": {
+          "n": 8141,
+          "brier": 0.05939,
+          "skill_vs_persistence": 0.461
+        },
+        "KORL": {
+          "n": 8585,
+          "brier": 0.05576,
+          "skill_vs_persistence": 0.4875
+        },
+        "KSFB": {
+          "n": 8669,
+          "brier": 0.05581,
+          "skill_vs_persistence": 0.4764
+        },
+        "KTLH": {
+          "n": 8748,
+          "brier": 0.06292,
+          "skill_vs_persistence": 0.4792
+        },
+        "KPNS": {
+          "n": 8715,
+          "brier": 0.06813,
+          "skill_vs_persistence": 0.4167
+        },
+        "KEYW": {
+          "n": 8581,
+          "brier": 0.05223,
+          "skill_vs_persistence": 0.4247
+        },
+        "KVRB": {
+          "n": 8667,
+          "brier": 0.06062,
+          "skill_vs_persistence": 0.4578
+        },
+        "KFMY": {
+          "n": 8497,
+          "brier": 0.0524,
+          "skill_vs_persistence": 0.4852
+        },
+        "KLNA": {
+          "n": 5093,
+          "brier": 0.05822,
+          "skill_vs_persistence": 0.4232
+        },
+        "KBCT": {
+          "n": 4040,
+          "brier": 0.08572,
+          "skill_vs_persistence": 0.3772
+        },
+        "KDJT": {
+          "n": 8770,
+          "brier": 0.05282,
+          "skill_vs_persistence": 0.4295
+        },
+        "KAPF": {
+          "n": 7857,
+          "brier": 0.05973,
+          "skill_vs_persistence": 0.4727
+        },
+        "KOCF": {
+          "n": 8684,
+          "brier": 0.06856,
+          "skill_vs_persistence": 0.4722
+        },
+        "KFPR": {
+          "n": 8544,
+          "brier": 0.06077,
+          "skill_vs_persistence": 0.4429
+        },
+        "KSUA": {
+          "n": 7158,
+          "brier": 0.08989,
+          "skill_vs_persistence": 0.4108
+        },
+        "KPGD": {
+          "n": 8649,
+          "brier": 0.0607,
+          "skill_vs_persistence": 0.4744
+        },
+        "KECP": {
+          "n": 8701,
+          "brier": 0.06431,
+          "skill_vs_persistence": 0.4207
+        },
+        "KVPS": {
+          "n": 8523,
+          "brier": 0.05413,
+          "skill_vs_persistence": 0.4008
+        },
+        "KCRG": {
+          "n": 8691,
+          "brier": 0.06906,
+          "skill_vs_persistence": 0.4311
+        },
+        "KSPG": {
+          "n": 8570,
+          "brier": 0.05384,
+          "skill_vs_persistence": 0.4726
+        },
+        "KISM": {
+          "n": 8712,
+          "brier": 0.04984,
+          "skill_vs_persistence": 0.4862
+        },
+        "KLEE": {
+          "n": 8549,
+          "brier": 0.05689,
+          "skill_vs_persistence": 0.4853
+        },
+        "KBKV": {
+          "n": 8475,
+          "brier": 0.08663,
+          "skill_vs_persistence": 0.4819
+        },
+        "KOPF": {
+          "n": 8724,
+          "brier": 0.05599,
+          "skill_vs_persistence": 0.45
+        },
+        "KTMB": {
+          "n": 8425,
+          "brier": 0.05794,
+          "skill_vs_persistence": 0.4763
+        },
+        "KFXE": {
+          "n": 8508,
+          "brier": 0.06138,
+          "skill_vs_persistence": 0.4217
+        },
+        "KSEF": {
+          "n": 8543,
+          "brier": 0.06934,
+          "skill_vs_persistence": 0.4654
+        },
+        "KOBE": {
+          "n": 7652,
+          "brier": 0.07964,
+          "skill_vs_persistence": 0.4399
+        },
+        "KMTH": {
+          "n": 8429,
+          "brier": 0.04735,
+          "skill_vs_persistence": 0.3869
+        },
+        "KTIX": {
+          "n": 4055,
+          "brier": 0.03228,
+          "skill_vs_persistence": 0.4786
+        }
+      },
+      "top_features": [
+        {
+          "name": "nb_unflyable_now",
+          "share_of_gain": 0.203
+        },
+        {
+          "name": "cur_flyable",
+          "share_of_gain": 0.12
+        },
+        {
+          "name": "hrs_since_unflyable",
+          "share_of_gain": 0.066
+        },
+        {
+          "name": "cur_temp",
+          "share_of_gain": 0.0582
+        },
+        {
+          "name": "cur_spread",
+          "share_of_gain": 0.0529
+        },
+        {
+          "name": "cur_ceil",
+          "share_of_gain": 0.0497
+        },
+        {
+          "name": "doy_cos",
+          "share_of_gain": 0.0417
+        },
+        {
+          "name": "hour_cos",
+          "share_of_gain": 0.0413
+        },
+        {
+          "name": "temp_max_win",
+          "share_of_gain": 0.0278
+        },
+        {
+          "name": "hour_sin",
+          "share_of_gain": 0.0265
+        }
+      ]
+    },
+    "3": {
+      "flyable_rate": 0.9088,
+      "development_check_on_training_years": {
+        "n": 1679536,
+        "brier": 0.06235,
+        "auc": 0.87,
+        "calibration_error": 0.0015,
+        "vs": {
+          "persistence": {
+            "brier": 0.1215,
+            "skill": 0.4869
+          },
+          "climatology": {
+            "brier": 0.07806,
+            "skill": 0.2013
+          }
+        }
+      },
+      "test": {
+        "n": 335565,
+        "brier": 0.06237,
+        "auc": 0.8652,
+        "calibration_error": 0.0114,
+        "vs": {
+          "persistence": {
+            "brier": 0.11837,
+            "skill": 0.4731
+          },
+          "climatology": {
+            "brier": 0.08073,
+            "skill": 0.2275
+          }
+        }
+      },
+      "test_stations_with_taf": {
+        "n": 267802,
+        "brier": 0.06005,
+        "auc": 0.8646,
+        "calibration_error": 0.0113,
+        "vs": {
+          "taf": {
+            "brier": 0.06535,
+            "skill": 0.0811
+          },
+          "persistence": {
+            "brier": 0.11382,
+            "skill": 0.4724
+          },
+          "climatology": {
+            "brier": 0.07748,
+            "skill": 0.225
+          }
+        }
+      },
+      "reliability": [
+        {
+          "band": "0.0-0.1",
+          "n": 1165,
+          "mean_predicted": 0.0642,
+          "observed_flyable": 0.0979
+        },
+        {
+          "band": "0.1-0.2",
+          "n": 1481,
+          "mean_predicted": 0.1456,
+          "observed_flyable": 0.1384
+        },
+        {
+          "band": "0.2-0.3",
+          "n": 2519,
+          "mean_predicted": 0.2553,
+          "observed_flyable": 0.2628
+        },
+        {
+          "band": "0.3-0.4",
+          "n": 2186,
+          "mean_predicted": 0.3639,
+          "observed_flyable": 0.3683
+        },
+        {
+          "band": "0.4-0.5",
+          "n": 3000,
+          "mean_predicted": 0.454,
+          "observed_flyable": 0.467
+        },
+        {
+          "band": "0.5-0.6",
+          "n": 6918,
+          "mean_predicted": 0.5541,
+          "observed_flyable": 0.5723
+        },
+        {
+          "band": "0.6-0.7",
+          "n": 14000,
+          "mean_predicted": 0.6513,
+          "observed_flyable": 0.6889
+        },
+        {
+          "band": "0.7-0.8",
+          "n": 21801,
+          "mean_predicted": 0.7524,
+          "observed_flyable": 0.7845
+        },
+        {
+          "band": "0.8-0.9",
+          "n": 44569,
+          "mean_predicted": 0.8546,
+          "observed_flyable": 0.8777
+        },
+        {
+          "band": "0.9-1.0",
+          "n": 237926,
+          "mean_predicted": 0.9692,
+          "observed_flyable": 0.9748
+        }
+      ],
+      "warnings": [
+        {
+          "warn_below": 0.5,
+          "warnings": 10351,
+          "unflyable_hours": 30619,
+          "caught": 0.234,
+          "missed": 0.766,
+          "false_alarms": 0.3079
+        },
+        {
+          "warn_below": 0.8,
+          "warnings": 53070,
+          "unflyable_hours": 30619,
+          "caught": 0.6263,
+          "missed": 0.3737,
+          "false_alarms": 0.6386
+        }
+      ],
+      "warnings_persistence": {
+        "warn_below": 0.5,
+        "warnings": 30647,
+        "unflyable_hours": 30619,
+        "caught": 0.3518,
+        "missed": 0.6482,
+        "false_alarms": 0.6485
+      },
+      "by_station": {
+        "KTPA": {
+          "n": 8733,
+          "brier": 0.04928,
+          "skill_vs_persistence": 0.4961
+        },
+        "KMCO": {
+          "n": 8765,
+          "brier": 0.04853,
+          "skill_vs_persistence": 0.4882
+        },
+        "KMIA": {
+          "n": 8769,
+          "brier": 0.048,
+          "skill_vs_persistence": 0.4784
+        },
+        "KFLL": {
+          "n": 8757,
+          "brier": 0.0531,
+          "skill_vs_persistence": 0.4667
+        },
+        "KLAL": {
+          "n": 8119,
+          "brier": 0.0502,
+          "skill_vs_persistence": 0.4178
+        },
+        "KSRQ": {
+          "n": 8525,
+          "brier": 0.05848,
+          "skill_vs_persistence": 0.4708
+        },
+        "KJAX": {
+          "n": 8775,
+          "brier": 0.06131,
+          "skill_vs_persistence": 0.471
+        },
+        "KGNV": {
+          "n": 8630,
+          "brier": 0.07526,
+          "skill_vs_persistence": 0.5057
+        },
+        "KRSW": {
+          "n": 8118,
+          "brier": 0.06044,
+          "skill_vs_persistence": 0.4878
+        },
+        "KDAB": {
+          "n": 8755,
+          "brier": 0.05484,
+          "skill_vs_persistence": 0.4494
+        },
+        "KMLB": {
+          "n": 8647,
+          "brier": 0.05608,
+          "skill_vs_persistence": 0.4803
+        },
+        "KPIE": {
+          "n": 8121,
+          "brier": 0.062,
+          "skill_vs_persistence": 0.4899
+        },
+        "KORL": {
+          "n": 8582,
+          "brier": 0.05834,
+          "skill_vs_persistence": 0.512
+        },
+        "KSFB": {
+          "n": 8667,
+          "brier": 0.0588,
+          "skill_vs_persistence": 0.4945
+        },
+        "KTLH": {
+          "n": 8746,
+          "brier": 0.06731,
+          "skill_vs_persistence": 0.4929
+        },
+        "KPNS": {
+          "n": 8712,
+          "brier": 0.07293,
+          "skill_vs_persistence": 0.4337
+        },
+        "KEYW": {
+          "n": 8568,
+          "brier": 0.05509,
+          "skill_vs_persistence": 0.4151
+        },
+        "KVRB": {
+          "n": 8667,
+          "brier": 0.0638,
+          "skill_vs_persistence": 0.4769
+        },
+        "KFMY": {
+          "n": 8494,
+          "brier": 0.05529,
+          "skill_vs_persistence": 0.4934
+        },
+        "KLNA": {
+          "n": 5057,
+          "brier": 0.06099,
+          "skill_vs_persistence": 0.4372
+        },
+        "KBCT": {
+          "n": 3750,
+          "brier": 0.08898,
+          "skill_vs_persistence": 0.4115
+        },
+        "KDJT": {
+          "n": 8769,
+          "brier": 0.05571,
+          "skill_vs_persistence": 0.4468
+        },
+        "KAPF": {
+          "n": 7833,
+          "brier": 0.06224,
+          "skill_vs_persistence": 0.4797
+        },
+        "KOCF": {
+          "n": 8681,
+          "brier": 0.07337,
+          "skill_vs_persistence": 0.4961
+        },
+        "KFPR": {
+          "n": 8538,
+          "brier": 0.06308,
+          "skill_vs_persistence": 0.4684
+        },
+        "KSUA": {
+          "n": 7033,
+          "brier": 0.09512,
+          "skill_vs_persistence": 0.4494
+        },
+        "KPGD": {
+          "n": 8646,
+          "brier": 0.06503,
+          "skill_vs_persistence": 0.4985
+        },
+        "KECP": {
+          "n": 8697,
+          "brier": 0.0701,
+          "skill_vs_persistence": 0.4512
+        },
+        "KVPS": {
+          "n": 8519,
+          "brier": 0.06037,
+          "skill_vs_persistence": 0.4089
+        },
+        "KCRG": {
+          "n": 8689,
+          "brier": 0.0729,
+          "skill_vs_persistence": 0.465
+        },
+        "KSPG": {
+          "n": 8562,
+          "brier": 0.05744,
+          "skill_vs_persistence": 0.4882
+        },
+        "KISM": {
+          "n": 8711,
+          "brier": 0.05341,
+          "skill_vs_persistence": 0.4976
+        },
+        "KLEE": {
+          "n": 8544,
+          "brier": 0.05995,
+          "skill_vs_persistence": 0.4993
+        },
+        "KBKV": {
+          "n": 8466,
+          "brier": 0.09347,
+          "skill_vs_persistence": 0.5091
+        },
+        "KOPF": {
+          "n": 8721,
+          "brier": 0.05676,
+          "skill_vs_persistence": 0.4751
+        },
+        "KTMB": {
+          "n": 8419,
+          "brier": 0.05987,
+          "skill_vs_persistence": 0.495
+        },
+        "KFXE": {
+          "n": 8499,
+          "brier": 0.06551,
+          "skill_vs_persistence": 0.4531
+        },
+        "KSEF": {
+          "n": 8536,
+          "brier": 0.07379,
+          "skill_vs_persistence": 0.4816
+        },
+        "KOBE": {
+          "n": 7610,
+          "brier": 0.08433,
+          "skill_vs_persistence": 0.4557
+        },
+        "KMTH": {
+          "n": 8422,
+          "brier": 0.04982,
+          "skill_vs_persistence": 0.3919
+        },
+        "KTIX": {
+          "n": 3713,
+          "brier": 0.03137,
+          "skill_vs_persistence": 0.5322
+        }
+      },
+      "top_features": [
+        {
+          "name": "nb_unflyable_now",
+          "share_of_gain": 0.1683
+        },
+        {
+          "name": "cur_flyable",
+          "share_of_gain": 0.0873
+        },
+        {
+          "name": "cur_spread",
+          "share_of_gain": 0.0659
+        },
+        {
+          "name": "cur_temp",
+          "share_of_gain": 0.0633
+        },
+        {
+          "name": "doy_cos",
+          "share_of_gain": 0.0599
+        },
+        {
+          "name": "hour_cos",
+          "share_of_gain": 0.055
+        },
+        {
+          "name": "cur_ceil",
+          "share_of_gain": 0.0498
+        },
+        {
+          "name": "hour_sin",
+          "share_of_gain": 0.0423
+        },
+        {
+          "name": "hrs_since_unflyable",
+          "share_of_gain": 0.0373
+        },
+        {
+          "name": "doy_sin",
+          "share_of_gain": 0.0271
+        }
+      ]
+    }
+  },
+  "headline": {
+    "horizon_h": 1,
+    "skill_vs_persistence": 0.4177,
+    "skill_vs_climatology": 0.3353,
+    "skill_vs_official_forecast": 0.1687
+  },
+  "metrics": [
+    {
+      "id": "E1",
+      "name": "Forecaster vs \"no change\" (persistence)",
+      "value": 0.4177,
+      "baseline": 0.0,
+      "note": "Brier skill score, 1 hour ahead, 2024 test season (337,817 station-hours, 41 Florida airports). Above 0 beats the baseline; 1 would be perfect."
+    },
+    {
+      "id": "E1",
+      "name": "Forecaster vs typical weather for that hour (climatology)",
+      "value": 0.3353,
+      "baseline": 0.0,
+      "note": "Brier skill score, 1 hour ahead, 2024 test season (337,817 station-hours, 41 Florida airports). Above 0 beats the baseline; 1 would be perfect."
+    },
+    {
+      "id": "E1",
+      "name": "Forecaster vs the official airport forecast (TAF)",
+      "value": 0.1687,
+      "baseline": 0.0,
+      "note": "Brier skill score, 1 hour ahead, 2024 test season (337,817 station-hours, 41 Florida airports). Above 0 beats the baseline; 1 would be perfect. Airports with an official forecast only; the forecast was calibrated on the same training years."
+    },
+    {
+      "id": "E1",
+      "name": "Forecaster vs the official airport forecast, storm season only (June to September)",
+      "value": 0.1093,
+      "baseline": 0.0,
+      "note": "Brier skill score, 1 hour ahead, June to September 2024 only (114,164 station-hours, flyable 89% of the time). Against \"no change\" the skill is 0.4381, against typical weather 0.2181."
+    }
+  ],
+  "by_season": {
+    "storm_season_jun_to_sep": {
+      "0": {
+        "hours": 114473,
+        "flyable_rate": 0.8907,
+        "brier": 0.05839,
+        "skill_vs_persistence": 0.3636,
+        "skill_vs_climatology": 0.3717,
+        "skill_vs_official_forecast": 0.2378
+      },
+      "1": {
+        "hours": 114164,
+        "flyable_rate": 0.8908,
+        "brier": 0.07262,
+        "skill_vs_persistence": 0.4381,
+        "skill_vs_climatology": 0.2181,
+        "skill_vs_official_forecast": 0.1093
+      },
+      "2": {
+        "hours": 113858,
+        "flyable_rate": 0.8907,
+        "brier": 0.07813,
+        "skill_vs_persistence": 0.4759,
+        "skill_vs_climatology": 0.159,
+        "skill_vs_official_forecast": 0.0658
+      },
+      "3": {
+        "hours": 113601,
+        "flyable_rate": 0.8908,
+        "brier": 0.08104,
+        "skill_vs_persistence": 0.4928,
+        "skill_vs_climatology": 0.1282,
+        "skill_vs_official_forecast": 0.041
+      }
+    },
+    "rest_of_year": {
+      "0": {
+        "hours": 224627,
+        "flyable_rate": 0.9178,
+        "brier": 0.03488,
+        "skill_vs_persistence": 0.3581,
+        "skill_vs_climatology": 0.5323,
+        "skill_vs_official_forecast": 0.3269
+      },
+      "1": {
+        "hours": 223653,
+        "flyable_rate": 0.9179,
+        "brier": 0.04399,
+        "skill_vs_persistence": 0.3993,
+        "skill_vs_climatology": 0.4099,
+        "skill_vs_official_forecast": 0.2117
+      },
+      "2": {
+        "hours": 222780,
+        "flyable_rate": 0.9179,
+        "brier": 0.04925,
+        "skill_vs_persistence": 0.4331,
+        "skill_vs_climatology": 0.3392,
+        "skill_vs_official_forecast": 0.15
+      },
+      "3": {
+        "hours": 221964,
+        "flyable_rate": 0.918,
+        "brier": 0.05282,
+        "skill_vs_persistence": 0.4565,
+        "skill_vs_climatology": 0.2909,
+        "skill_vs_official_forecast": 0.1096
+      }
+    }
+  }
+}

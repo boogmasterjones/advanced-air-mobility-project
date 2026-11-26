@@ -187,6 +187,75 @@ Source: [rules page](https://drreacto.github.io/florida_poly_ai_hackathon/rules.
 11. eccodes install on both machines.
 12. Official range, battery and wind limits for any real aircraft (not published).
 
+## 12. Transfer time components (added 2026-11-22)
+
+Why this was added: our first time model said a helicopter beats an ambulance above about 15 road miles, half the Swiss study's 32. The published numbers below replaced our guesses in `data/aircraft_profiles.json`. "Abstract only" means we read the abstract, not the full paper, so the exact definition is less certain.
+
+**How the Swiss break-even was really measured** ([full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC8650228/), 645 transfers, 2019 to 2021):
+
+- Helicopter time was measured: emergency call to landing at the destination, median 59.9 min. Call to landing at the sending hospital was 22.1 min. [reported]
+- **Road time was not measured.** It was the map drive time plus a flat 10 minutes for preparation and handover. [reported]
+- So the 32-mile break-even compares a real helicopter mission with an optimistic road estimate. Our E6 check reproduces that comparison (and gets 36 miles), then also reports the break-even with realistic ground delays.
+
+**Helicopter air ambulance**
+
+| What | Value | Source |
+|---|---|---|
+| Dispatch to lift-off, interfacility flights | 13.2 min mean | Clark 2019, Colorado, PMID 31122584 (abstract only) [reported] |
+| Alert to landing at the sending hospital | 26 min median | German stroke transfers, n=7,528, [PMC12619459](https://pmc.ncbi.nlm.nih.gov/articles/PMC12619459/) [reported] |
+| Time on the ground at the sending hospital | 31 min mean | Svenson 2006, Wisconsin, PMID 16818167; Leicht 1986 agrees (abstracts only) [reported] |
+| Same, other definitions | 8 to about 42 min | "Bedside time" 8 min (Martin-Gill 2016, abstract only) up to about 42 min in German data ([PMC10598984](https://pmc.ncbi.nlm.nih.gov/articles/PMC10598984/)) [reported] |
+| Landing to handover at the receiving hospital | 9.2 min mean with a direct helipad | [PMC10598984](https://pmc.ncbi.nlm.nih.gov/articles/PMC10598984/) [reported] |
+
+**Ground ambulance, hospital to hospital**
+
+| What | Value | Source |
+|---|---|---|
+| Ambulance request to arrival at the sending hospital | 20.5 min median | Prabhakaran 2021, Chicago stroke, n=191, PMID 34598828 (abstract only) [reported] |
+| Ambulance time at the sending hospital | 26 min median | same study [reported] |
+| Notification to departure (both of the above together) | 15 min median | Dutch stroke transfers, n=125, [PMC10472962](https://pmc.ncbi.nlm.nih.gov/articles/PMC10472962) [reported] |
+| Handoff at the receiving hospital | none found | we keep 3 min [assumption] |
+
+US and European figures differ a lot (46 min against 15 min before departure), so the engine draws these delays with a wide spread.
+
+**Other air-versus-ground findings (they do not agree with each other):**
+
+- Vanderbilt stroke transfers: air predicted faster only beyond 40 miles (Kunte 2021, PMID 33744719, abstract only). [reported]
+- North Carolina heart attack transfers: time at the sending hospital was 63 to 72 min by air against 38 to 43 by ground, and air was slower overall in every drive-time band ([PMC3600977](https://pmc.ncbi.nlm.nih.gov/articles/PMC3600977)). [reported]
+- Ontario trauma: no distance threshold; decision to arrival 120 min by land against 150 by air (Karanicolas 2006, PMID 16917457, abstract only). [reported]
+
+**What this means for us:** air is not automatically faster for short hospital-to-hospital trips. Most of the time is spent waiting and at the bedside, not travelling. No data exists for air taxis, so the simulated air taxi uses the helicopter figures, labeled as an assumption.
+
+## 13. Rush-hour road slowdown (added 2026-11-22)
+
+Why this was added: the first version multiplied drive times by hour-of-day factors we made up (up to 1.45 at 5 PM, everywhere in the state). These published figures replaced them in `data/congestion.json`.
+
+**Travel Time Index** (peak travel time divided by free-flow travel time):
+
+| Area | Urban Mobility Report, 2024 data | FHWA Urban Congestion Report, Jul to Sep 2025 |
+|---|---|---|
+| Miami urban area | 1.45 | 1.37 |
+| Tampa and St. Petersburg | 1.29 | 1.29 |
+| Orlando | 1.23 | 1.18 |
+| Jacksonville | 1.24 | 1.14 |
+| Cape Coral | 1.18 | not listed |
+| Sarasota and Bradenton | 1.18 | not listed |
+| Pensacola | 1.11 | not listed |
+| 393 smaller areas (group average) | 1.12 | not listed |
+
+- We use the [Urban Mobility Report](https://static.tti.tamu.edu/tti.tamu.edu/documents/mobility-report-2025.pdf) (Texas A&M Transportation Institute, 2025 edition). Its free-flow is the overnight speed, which is the closest match to a router's no-traffic time. [reported]
+- The [FHWA report](https://ops.fhwa.dot.gov/perf_measurement/ucr/reports/fy2025_q4.pdf) covers National Highway System roads only and uses a daytime off-peak reference, so its values run lower. [reported]
+- Peak windows in the Urban Mobility Report: 6 to 10 a.m. and 3 to 7 p.m. It gives one index for both peaks, not one per hour. [reported]
+- **Rural roads:** FDOT's statewide rural Planning Time Index is 1.12 at the peak hour and 1.12 across the day ([FDOT Source Book](https://fdotsourcebook.com/assets/download/performance-measures/2023-data/planning-time-index-2025-1793408398.xlsx)), so there is no measurable peak effect. [reported]
+- FDOT's urban Planning Time Index (a bad-day bound, the 95th-percentile travel time) is much higher: 1.60 statewide at the peak hour, 1.87 in Miami-Dade, 1.97 in Hillsborough. We do not use it for typical times. [reported]
+
+**Ambulances against general traffic:**
+
+- Lights and sirens made transports 3.1 min (47%) shorter for short trips and 5.3 min (28%) shorter for longer ones in Multnomah County, Oregon (48,308 transports, [Fleischman 2013](https://pmc.ncbi.nlm.nih.gov/articles/PMC4288957)). Rush hour slowed trips without lights and sirens and had no significant effect with them. [reported]
+- Interfacility critical-care transports were 19.5% shorter with lights and sirens in one urban system (Jansson 2020, PMID 32741576, abstract only). [reported]
+
+**What this means for us:** the drive time is multiplied by the metro area's index only for the share of the route inside that area, only on weekdays 6 to 10 a.m. and 3 to 7 p.m. The circles that mark each metro area are our assumption. We do not apply a lights-and-sirens discount, because interfacility transfers often run without them and the two studies cover single systems. Still no live traffic.
+
 ## Sources
 
 - [Hackathon rules](https://drreacto.github.io/florida_poly_ai_hackathon/rules.html)

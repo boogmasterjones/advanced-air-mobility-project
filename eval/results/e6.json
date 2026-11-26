@@ -1,0 +1,36 @@
+{
+  "id": "E6",
+  "generated_at": "2026-11-22T23:36:34+00:00",
+  "reference": {
+    "road_miles": 31.9,
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8650228/",
+    "how_it_was_measured": "helicopter: emergency call to landing at the destination (measured); road: map drive time plus a flat 10 minutes (assumed)"
+  },
+  "road_model": {
+    "road_miles_per_straight_mile": 1.245,
+    "avg_mph": 41.2,
+    "from": "fitted to 407 OSRM routes",
+    "note": "free-flow, no traffic; traffic would lower every break-even"
+  },
+  "typical_miles_from_base_to_pickup": 8.3,
+  "breakeven_road_miles": {
+    "helicopter": {
+      "study_definition": 34.0,
+      "our_model": 6.5
+    },
+    "air_taxi_a": {
+      "study_definition": 35.0,
+      "our_model": 8.0
+    }
+  },
+  "verdict": "Compared the way the study did, our model puts the helicopter break-even at 34.0 road miles against the study's 32: it agrees with the study to within 25%. With the ground delays the app really uses (waiting for the ambulance and time at the sending hospital, from published transfer studies), the helicopter wins from 6.5 miles. The study allowed the road only 10 minutes for all of that.",
+  "metrics": [
+    {
+      "id": "E6",
+      "name": "Helicopter beats the road above this distance (miles), measured the study's way",
+      "value": 34.0,
+      "baseline": 31.9,
+      "note": "Compared the way the study did, our model puts the helicopter break-even at 34.0 road miles against the study's 32: it agrees with the study to within 25%. With the ground delays the app really uses (waiting for the ambulance and time at the sending hospital, from published transfer studies), the helicopter wins from 6.5 miles. The study allowed the road only 10 minutes for all of that. Road times have no traffic. Sanity check only."
+    }
+  ]
+}
